@@ -1,32 +1,67 @@
 import { Request, Response } from 'express';
+import { get } from 'lodash';
 import moment from 'moment';
 import { parse } from 'url';
 
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
-  const tableListDataSource: API.RuleListItem[] = [];
-
-  for (let i = 0; i < pageSize; i += 1) {
-    const index = (current - 1) * 10 + i;
-    tableListDataSource.push({
-      key: index,
-      disabled: i % 6 === 0,
-      href: 'https://ant.design',
-      avatar: [
-        'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
-        'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
-      ][i % 2],
-      name: `TradeCode ${index}`,
-      owner: '曲丽丽',
-      desc: '这是一段描述',
-      callNo: Math.floor(Math.random() * 1000),
-      status: Math.floor(Math.random() * 10) % 4,
-      updatedAt: moment().format('YYYY-MM-DD'),
-      createdAt: moment().format('YYYY-MM-DD'),
-      progress: Math.ceil(Math.random() * 100),
-    });
+  const tableListDataSource: API.TableColumns[] = []
+  const getRandomInt = (range: number) => {
+    return Math.floor(Math.random() * range)
   }
-  tableListDataSource.reverse();
+
+  for (let i = 0; i < pageSize; i++) {
+    tableListDataSource.push({
+      key: i,
+      issueID: i,
+      issueTitle: '实验器材损坏',
+      issueDescription: '今天上午在实验室使用仪器的时候发现仪器损坏balabalabalablabalabalabalabalablabalabalabalabalablabalabalabalabalablabala',
+      category: getRandomInt(3),
+      priority: getRandomInt(3),
+      remainingTime: Date.now(),
+      estimatedTime: Date.now() + getRandomInt(3600000000),
+      updatedTime: Date.now() + getRandomInt(3600000000),
+      status: 0,
+      object: '大数据学院楼-204-椅子0015',
+      failureType: 1,
+      manufacturer: '西昊 XiHao',
+      picture: ['https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg'],
+      processDetails: {
+        // stage: getRandomInt(5),
+        stage: 3,
+        submit: {
+          processerID: 1,
+          success: true,
+        },
+        approval: {
+          processerID: 1,
+          success: true,
+          result: 'pass',
+          comments: 'BDI equipment'
+        },
+        dispatch: {
+          processerID: 1,
+          success: true,
+          result: 'pass',
+          comments: 'dispatcher HHX'
+        },
+        repairment: {
+          processerID: 1,
+          success: true,
+          result: 'done',
+          cause: 'somebody pour some water on it.',
+          solution: 'have to change motherboard',
+        },
+        acceptance: {
+          processerID: 1,
+          success: true,
+          rating: 5,
+          comments: 'what a good repairman'
+        }
+      }
+    })
+  }
+  // tableListDataSource.reverse();
   return tableListDataSource;
 };
 
@@ -39,7 +74,7 @@ function getRule(req: Request, res: Response, u: string) {
   }
   const { current = 1, pageSize = 10 } = req.query;
   const params = parse(realUrl, true).query as unknown as API.PageParams &
-    API.RuleListItem & {
+    API.TableColumns & {
       sorter: any;
       filter: any;
     };
@@ -89,9 +124,6 @@ function getRule(req: Request, res: Response, u: string) {
     }
   }
 
-  if (params.name) {
-    dataSource = dataSource.filter((data) => data?.name?.includes(params.name || ''));
-  }
   const result = {
     data: dataSource,
     total: tableListDataSource.length,

@@ -11,6 +11,7 @@ import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+const testingPath = '/repair';
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
@@ -28,7 +29,7 @@ export async function getInitialState(): Promise<{
       });
       return msg.data;
     } catch (error) {
-      history.push(loginPath);
+      history.push(testingPath);
     }
     return undefined;
   };
@@ -52,16 +53,16 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
   console.log(initialState?.settings);
   return {
     rightContentRender: () => <RightContent />,
-    waterMarkProps: {
-      content: initialState?.currentUser?.name,
-    },
+    // waterMarkProps: {
+    //   content: initialState?.currentUser?.name,
+    // },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
-        history.push(loginPath);
-      }
+      // if (!initialState?.currentUser && location.pathname !== testingPath) {
+      //   history.push(testingPath);
+      // }
     },
     layoutBgImgList: [
       {
