@@ -15,7 +15,7 @@ const { Item } = ProDescriptions;
 export type ProcessDrawerProps = {
     drawerOpen: boolean;
     onClose: () => void;
-    value: API.TableColumns;
+    value: Partial<API.TableColumns>;
     responsive: boolean;
 };
 

@@ -2,7 +2,6 @@ import {
     ModalForm,
     ProCard,
     ProDescriptions,
-    ProForm,
     ProFormGroup,
     ProFormRadio,
     ProFormSelect,
@@ -16,13 +15,13 @@ import { Button, Form, message, Tag, Image, Space, Divider } from 'antd'
 import React, { useState } from 'react'
 import type { ReactNode } from 'react'
 
-import { priorityList, stepLabel, failureTypeLabel } from '../struct'
+import { priorityList, stepLabel } from '../struct'
 import styles from '../index.less'
 import { getNextProcesser } from '@/services/api'
 
 export type ModalProps = {
     currentStage: number;
-    value: API.TableColumns;
+    value: Partial<API.TableColumns>;
     responsive: boolean;
 }
 
