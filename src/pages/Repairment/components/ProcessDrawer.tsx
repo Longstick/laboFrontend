@@ -1,12 +1,10 @@
 import { getApporver } from '@/services/api';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ProCard, ProDescriptions } from '@ant-design/pro-components';
 
 import { Drawer, Steps } from 'antd';
 import { FormattedMessage } from '@umijs/max';
 
-import React, { useRef, useState } from 'react';
-import RcResizeObserver from 'rc-resize-observer';
+import React from 'react';
 import styles from '../index.less';
 import ApprovalModal from './ApprovalModal';
 import { stepLabel } from '../struct';
@@ -17,7 +15,7 @@ const { Item } = ProDescriptions;
 export type ProcessDrawerProps = {
     drawerOpen: boolean;
     onClose: () => void;
-    value: Partial<API.TableColumns>;
+    value: API.TableColumns;
     responsive: boolean;
 };
 

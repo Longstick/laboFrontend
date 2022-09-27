@@ -1,4 +1,4 @@
-import { addRule, removeRule, rule, updateRule } from '@/services/ant-design-pro/api';
+import { removeRule } from '@/services/ant-design-pro/api';
 import { issueTableRule } from '@/services/api'
 
 import {
@@ -12,7 +12,7 @@ import {
     ProCard,
 } from '@ant-design/pro-components';
 
-import { Button, message, Statistic, Typography, Tag, Select } from 'antd';
+import { Button, message, Statistic, Typography, Tag } from 'antd';
 import { FormattedMessage, useIntl } from '@umijs/max';
 import type { ProColumns, ActionType, } from '@ant-design/pro-components';
 
