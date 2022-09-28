@@ -11,13 +11,15 @@ import {
 import type { ProDescriptionsItemProps } from '@ant-design/pro-components'
 import { FormattedMessage, useIntl } from '@umijs/max'
 
-import { Button, Form, message, Tag, Image, Space, Divider } from 'antd'
+import { Button, Form, message, Tag, Image, Space, Divider, Steps } from 'antd'
 import React, { useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { priorityList, stepLabel } from '../struct'
 import styles from '../index.less'
 import { getNextProcesser } from '@/services/api'
+import { InboxOutlined } from '@ant-design/icons'
+const { Step } = Steps
 
 export type ModalProps = {
     currentStage: number;
@@ -151,86 +153,8 @@ const ApprovalModal: React.FC<ModalProps> = props => {
         </>
     )
 
-    const dispatchForm = () => {
-        // 维修方式对应不同表单项
-        let columns = (<></>)
-        switch (approach) {
-            case 0: {
-                columns = (
-                    <ProFormGroup>
-                        <ProFormText
-                            width='md'
-                            name='manufacturer'
-                            required
-                            label={intl.formatMessage({
-                                id: 'pages.repairment.dispatchModal.manufacturer',
-                                defaultMessage: "repairment manufacturer",
-                            })}
-                            rules={[{
-                                required: true,
-                                message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                            }]}
-                        />
-                        <ProFormText
-                            width='md'
-                            name=''
-                            required
-                            label={intl.formatMessage({
-                                id: 'pages.repairment.dispatchModal.trackingNumber',
-                                defaultMessage: "tracking number",
-                            })}
-                            rules={[{
-                                required: true,
-                                message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                            }]} />
-                    </ProFormGroup>
-                )
-                break
-            }
-            case 1: {
-                columns = (
-                    <ProFormSelect
-                        width='md'
-                        name="repairStaffStudent"
-                        required
-                        label={intl.formatMessage({
-                            id: 'pages.repairment.dispatchModal.repairStaff',
-                            defaultMessage: 'repair staff'
-                        })}
-                        rules={[{
-                            required: true,
-                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                        }]}
-                        request={getNextProcesser}
-                    />
-                )
-                break
-            }
-            case 2: {
-                columns = (
-                    <ProFormSelect
-                        width='md'
-                        name="repairStaffTeacher"
-                        required
-                        label={intl.formatMessage({
-                            id: 'pages.repairment.dispatchModal.repairStaff',
-                            defaultMessage: 'repair staff'
-                        })}
-                        rules={[{
-                            required: true,
-                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                        }]}
-                        valueEnum={{
-                            0: 'Li Ju',
-                            1: 'Liu Chengjian',
-                            2: 'Li Fajun',
-                        }}
-                    />)
-                break
-            }
-        }
-
-        return (<>
+    const dispatchForm = (
+        <>
             {/* 维修方式选择 */}
             <ProFormRadio.Group
                 width='md'
@@ -266,8 +190,74 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 }}
             />
 
-            {/* 维修方式对应不同的表单 */}
-            {columns}
+            {/* 维修方式对应不同的表单项 */}
+            {{
+                0:
+                    <ProFormGroup>
+                        <ProFormText
+                            width='md'
+                            name='manufacturer'
+                            required
+                            label={intl.formatMessage({
+                                id: 'pages.repairment.dispatchModal.manufacturer',
+                                defaultMessage: "repairment manufacturer",
+                            })}
+                            rules={[{
+                                required: true,
+                                message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                            }]}
+                        />
+                        <ProFormText
+                            width='md'
+                            name=''
+                            required
+                            label={intl.formatMessage({
+                                id: 'pages.repairment.dispatchModal.trackingNumber',
+                                defaultMessage: "tracking number",
+                            })}
+                            rules={[{
+                                required: true,
+                                message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                            }]} />
+                    </ProFormGroup>,
+
+
+                1:
+                    <ProFormSelect
+                        width='md'
+                        name="repairStaffStudent"
+                        required
+                        label={intl.formatMessage({
+                            id: 'pages.repairment.dispatchModal.repairStaff',
+                            defaultMessage: 'repair staff'
+                        })}
+                        rules={[{
+                            required: true,
+                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                        }]}
+                        request={getNextProcesser}
+                    />,
+
+                2:
+                    <ProFormSelect
+                        width='md'
+                        name="repairStaffTeacher"
+                        required
+                        label={intl.formatMessage({
+                            id: 'pages.repairment.dispatchModal.repairStaff',
+                            defaultMessage: 'repair staff'
+                        })}
+                        rules={[{
+                            required: true,
+                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                        }]}
+                        valueEnum={{
+                            0: 'Li Ju',
+                            1: 'Liu Chengjian',
+                            2: 'Li Fajun',
+                        }}
+                    />
+            }[approach]}
 
             {/* 备注信息 */}
             <ProFormTextArea
@@ -291,23 +281,36 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 }}
             />
         </>)
-    }
 
+    const repairmentForm = (
+        <>
+            <Steps>
+                <Step
+                    title='签收'
+                    subTitle='qianshou'
+                    icon={<InboxOutlined />}
+                />
+                <Step
+                    title='报价'
+                    description={<a href='https://www.baidu.com'>want some help?</a>}
+                    icon={<InboxOutlined />}
+                />
+                <Step
+                    title='签收'
+                    description={<a href='https://www.baidu.com'>want some help?</a>}
+                    icon={<InboxOutlined />}
+                />
 
-    // const repairmentForm = 
+            </Steps>
+        </>
+    )
 
+    const changeModal = {
+        1: ApprovalForm,
+        2: dispatchForm,
+        3: repairmentForm,
+    }[props.currentStage]
 
-
-
-
-
-    const changeModal = () => {
-        switch (props.currentStage) {
-            case 1: return ApprovalForm
-            case 2: return dispatchForm()
-            default: return <></>
-        }
-    }
 
     return (
         <ModalForm
@@ -335,7 +338,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
             <Divider />
             <ProCard>
-                {changeModal()}
+                {changeModal}
             </ProCard>
 
         </ModalForm>

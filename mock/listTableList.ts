@@ -31,30 +31,30 @@ const genList = (current: number, pageSize: number) => {
         stage: 3,
         submit: {
           processerID: 1,
-          success: true,
+          status: 'finish',
         },
         approval: {
           processerID: 1,
-          success: true,
+          status: 'finish',
           result: 'pass',
           comments: 'BDI equipment'
         },
         dispatch: {
           processerID: 1,
-          success: true,
+          status: 'process',
           result: 'pass',
           comments: 'dispatcher HHX'
         },
         repairment: {
           processerID: 1,
-          success: true,
+          status: 'process',
           result: 'done',
           cause: 'somebody pour some water on it.',
           solution: 'have to change motherboard',
         },
         acceptance: {
           processerID: 1,
-          success: true,
+          status: 'process',
           rating: 5,
           comments: 'what a good repairman'
         }

@@ -1,4 +1,5 @@
 declare namespace API {
+  // declare type Status = 'error' | 'process' | 'finish' | 'wait';
   type TableColumns = {
     key: number;
     issueID: number;
@@ -17,30 +18,30 @@ declare namespace API {
     processDetails: {
       stage: number;
       submit?: {
-        success?: boolean;
+        status?: Status;
         processerID?: number;
       };
       approval?: {
-        success?: boolean;
+        status?: Status;
         processerID?: number;
         result?: string;
         comments?: string;
       };
       dispatch?: {
-        success?: boolean;
+        status?: Status;
         processerID?: number;
         result?: string;
         comments?: string;
       };
       repairment?: {
-        success?: boolean;
+        status?: Status;
         processerID?: number;
         result?: string;
         cause?: string;
         solution?: string;
       };
       acceptance?: {
-        success?: boolean;
+        status?: Status;
         processerID?: number;
         rating?: number;
         comments?: string;
