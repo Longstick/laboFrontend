@@ -26,6 +26,7 @@ const genList = (current: number, pageSize: number) => {
       failureType: 1,
       manufacturer: '西昊 XiHao',
       picture: ['https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg'],
+      trackingNumber: '123231',
       processDetails: {
         // stage: getRandomInt(5),
         stage: 3,
@@ -51,6 +52,7 @@ const genList = (current: number, pageSize: number) => {
           result: 'done',
           cause: 'somebody pour some water on it.',
           solution: 'have to change motherboard',
+          stage: 1
         },
         acceptance: {
           processerID: 1,

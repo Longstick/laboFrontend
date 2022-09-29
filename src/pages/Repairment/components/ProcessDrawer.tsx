@@ -238,7 +238,13 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                         value={props.value}
                         responsive={props.responsive}
                     >
-                        {ProcessDetailColumns[current].label}
+                        {current === 3 ?
+                            <FormattedMessage 
+                                id='pages.repairment.repairmentModal.progressEntry'
+                                defaultMessage='Process Entry'
+                            />
+                            : ProcessDetailColumns[current].label
+                        }
                     </ApprovalModal>
                 </>),
                 'error': (<>

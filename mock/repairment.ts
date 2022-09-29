@@ -11,11 +11,10 @@ const getApporver = (req: Request, res: Response) => {
         phoneNumber: '13537536685',
         updateTime: '2022-09-23 12:00:00',
     }
-    const result = {
+    return res.json({
         data: dataSource,
         success: true,
-    }
-    return res.json(result)
+    })
 }
 
 const getNextProcesser = (req: Request, res: Response) => {
@@ -44,7 +43,15 @@ const getNextProcesser = (req: Request, res: Response) => {
     })
 }
 
+const getTrackingNumber = (req:Request, res: Response) => {
+    return res.json({
+        data:{ trackingNumber: '123123123123' },
+        success: true,
+    })
+}
+
 export default {
     'GET /api/getApporver': getApporver,
     'GET /api/getNextProcesser': getNextProcesser,
+    'GET /api/getTrackingNumber': getTrackingNumber,
 }

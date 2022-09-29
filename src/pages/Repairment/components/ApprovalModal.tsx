@@ -6,7 +6,8 @@ import {
     ProFormRadio,
     ProFormSelect,
     ProFormText,
-    ProFormTextArea
+    ProFormTextArea,
+    ProFormUploadButton
 } from '@ant-design/pro-components'
 import type { ProDescriptionsItemProps } from '@ant-design/pro-components'
 import { FormattedMessage, useIntl } from '@umijs/max'
@@ -17,8 +18,8 @@ import type { ReactNode } from 'react'
 
 import { priorityList, stepLabel } from '../struct'
 import styles from '../index.less'
-import { getNextProcesser } from '@/services/api'
-import { InboxOutlined } from '@ant-design/icons'
+import { getNextProcesser, getTrackingNumber } from '@/services/api'
+import { ExportOutlined, ImportOutlined, ToolOutlined, TransactionOutlined } from '@ant-design/icons'
 const { Step } = Steps
 
 export type ModalProps = {
@@ -29,6 +30,7 @@ export type ModalProps = {
 
 const ApprovalModal: React.FC<ModalProps> = props => {
 
+    const [repairmentstage, setrepairmentstage] = useState(0)
     const [approach, setApproach] = useState<number>(0)
     const waitTime = (time: number) => {
         return new Promise(resolve => {
@@ -48,6 +50,8 @@ const ApprovalModal: React.FC<ModalProps> = props => {
     const onApproachSelect = (e: any) => {
         setApproach(e.target.value)
     }
+
+
     const [form] = Form.useForm()
     const intl = useIntl();
     const issueColumns: ProDescriptionsItemProps[] = [
@@ -171,15 +175,15 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 }]}
                 options={[
                     {
-                        label: 'manufacturer',
+                        label: <FormattedMessage id="pages.repairment.dispatchModal.manufacturer" defaultMessage='manufacturer'/>,
                         value: 0,
                     },
                     {
-                        label: 'student',
+                        label: <FormattedMessage id="pages.repairment.dispatchModal.student" defaultMessage='student'/>,
                         value: 1,
                     },
                     {
-                        label: 'teacher',
+                        label: <FormattedMessage id="pages.repairment.dispatchModal.teacher" defaultMessage='teacher'/>,
                         value: 2,
                     },
                 ]}
@@ -199,7 +203,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                             name='manufacturer'
                             required
                             label={intl.formatMessage({
-                                id: 'pages.repairment.dispatchModal.manufacturer',
+                                id: 'pages.repairment.dispatchModal.Manufacturer',
                                 defaultMessage: "repairment manufacturer",
                             })}
                             rules={[{
@@ -284,24 +288,69 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
     const repairmentForm = (
         <>
-            <Steps>
+            <Steps
+                current={repairmentstage}
+            >
                 <Step
                     title='签收'
-                    subTitle='qianshou'
-                    icon={<InboxOutlined />}
+                    icon={<ImportOutlined />}
                 />
                 <Step
                     title='报价'
-                    description={<a href='https://www.baidu.com'>want some help?</a>}
-                    icon={<InboxOutlined />}
+                    icon={<TransactionOutlined />}
                 />
                 <Step
-                    title='签收'
-                    description={<a href='https://www.baidu.com'>want some help?</a>}
-                    icon={<InboxOutlined />}
+                    title='维修'
+                    icon={<ToolOutlined />}
                 />
-
+                <Step
+                    title='发出'
+                    icon={<ExportOutlined />}
+                />
             </Steps>
+            <br />
+
+            {{
+                0: <>
+                    <ProDescriptions 
+                        columns={[{
+                            title: <FormattedMessage id='pages.repairment.dispatchModal.trackingNumber' defaultMessage='tracking number' />,
+                            dataIndex: 'trackingNumber',
+                        }]}
+                        request={getTrackingNumber}
+                    />
+                    <ProFormGroup>
+                        <ProFormText
+                            width='md'
+                            name='123'
+                            required
+                            label={intl.formatMessage({
+                                id: 'pages.repairment.dispatchModal.manufacturer',
+                                defaultMessage: "repairment manufacturer",
+                            })}
+                            rules={[{
+                                required: true,
+                                message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                            }]}
+                        />
+                        <ProFormUploadButton 
+                            name="upload"
+                            label="Upload"
+                            required
+                            rules={[{
+                                required: true,
+                                message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                            }]}
+                            max={3}
+                            fieldProps={{
+                              name: 'file',
+                              listType: 'picture-card',
+                            }}
+                            action="/upload.do"
+                            extra="支持最多三张照片"                    
+                        />
+                    </ProFormGroup></>
+            }[repairmentstage]}
         </>
     )
 

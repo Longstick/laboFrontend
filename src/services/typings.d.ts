@@ -15,7 +15,8 @@ declare namespace API {
     failureType: number;
     manufacturer: string;
     picture: string[];
-    processDetails: {
+    trackingNumber: string;
+    processDetails?: {
       stage: number;
       submit?: {
         status?: Status;
@@ -39,6 +40,7 @@ declare namespace API {
         result?: string;
         cause?: string;
         solution?: string;
+        stage?: number;
       };
       acceptance?: {
         status?: Status;

@@ -116,8 +116,13 @@ export default {
   "pages.repairment.searchTable.options.check": '查看',
   'pages.repairment.dispatchModal.repairStaff': '维修负责人',
   'pages.repairment.dispatchModal.repairmentApproach': '维修方式',
-  'pages.repairment.dispatchModal.manufacturer': '维修厂商',
+  'pages.repairment.dispatchModal.Manufacturer': '维修厂商',
+  'pages.repairment.dispatchModal.manufacturer': '厂商维修',
+  "pages.repairment.dispatchModal.student": '学生维修',
+  "pages.repairment.dispatchModal.teacher": '教职维修',
   'pages.repairment.dispatchModal.trackingNumber': '快递单号',
+  'pages.repairment.repairmentModal.progressEntry': '进度录入',
+
   'component.textarea.placeholder': '请在此输入',
   "component.formItem.required": '这是必填项',
 };
