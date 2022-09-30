@@ -129,9 +129,18 @@ export default {
   'pages.repairment.repairmentModal.deliveryCompany': '快递公司',
   'pages.repairment.issue.shippingAddress': '收货地址',
   "pages.repairment.repairmentModal.deliveryDetails": '快递信息',
-  'pages.repairment.repairmentModal.consigneePhone': '收货人电话',
+  'pages.repairment.repairmentModal.consigneePhone': '收货人手机号',
+  "pages.repairment.repairmentModal.receivingPhotos": '签收照片',
+  "pages.repairment.repairmentModal.quotationDocument": '报价文件',
+  "pages.repairment.repairmentModal.receiptProblem" : '签收有疑问？',
+  "pages.repairment.repairmentModal.quotationProblem": '报价有疑问？',
+  'pages.repairment.repairmentModal.confirm receipt': '',
+  'pages.repairment.repairmentModal.sendQuotation': '',
+  'pages.repairment.repairmentModal.repair complete': '',
 
+
+  'component.button.confirm': '确定',
   'component.textarea.placeholder': '请在此输入',
   "component.formItem.required": '这是必填项',
-  "component.uploadPic.limit3": '最多上传三张照片',
+  "component.uploadPic.limit3": '最多上传三张照片，图片格式支持 .jpg / .png / .jpeg',
 };

@@ -13,11 +13,11 @@ import {
 import type { ProDescriptionsItemProps } from '@ant-design/pro-components'
 import { FormattedMessage, useIntl } from '@umijs/max'
 
-import { Button, Form, message, Tag, Image, Space, Steps } from 'antd'
+import { Button, Form, message, Tag, Image, Space, Steps, Popover } from 'antd'
 import React, { useState } from 'react'
 import type { ReactNode } from 'react'
 
-import { failureTypeLabel, priorityList, stepLabel } from '../struct'
+import { failureTypeLabel, priorityList, stepLabel, popContent } from '../struct'
 import styles from '../index.less'
 import { getStaff, getTrackingNumber } from '@/services/api'
 import { ExportOutlined, ImportOutlined, ToolOutlined, TransactionOutlined } from '@ant-design/icons'
@@ -33,7 +33,7 @@ export type ModalProps = {
 
 const ApprovalModal: React.FC<ModalProps> = props => {
 
-    const [repairmentstage, setrepairmentstage] = useState<number>(1)
+    const [repairmentstage, setrepairmentstage] = useState<number>(2)
     const [approach, setApproach] = useState<number>(0)
     const waitTime = (time: number) => {
         return new Promise(resolve => {
@@ -67,6 +67,11 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             dataIndex: 'object',
         },
         {
+            title: <FormattedMessage id='pages.repairment.issue.issueDescription' defaultMessage='Description' />,
+            dataIndex: 'issueDescription',
+            span: 2,
+        },
+        {
             title: <FormattedMessage id="pages.repairment.issue.failureType" defaultMessage='Failure Type' />,
             dataIndex: 'failureType',
             valueEnum: failureTypeLabel,
@@ -77,9 +82,18 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             dataIndex: 'manufacturer',
         },
         {
-            title: <FormattedMessage id='pages.repairment.issue.issueDescription' defaultMessage='Description' />,
-            dataIndex: 'issueDescription',
-            span: 2,
+            title: <FormattedMessage id='pages.repairment.issue.priority' defaultMessage='Priority' />,
+            dataIndex: 'priority',
+            render: (_, item) => (
+                <Tag color={priorityList[item.priority].color}>
+                    {priorityList[item.priority].text}
+                </Tag>
+            )
+        },
+        {
+            title: <FormattedMessage id='pages.repairment.issue.estimatedTime' defaultMessage='Estimated Time' />,
+            dataIndex: 'estimatedTime',
+            valueType: 'dateTime',
         },
         {
             title: <FormattedMessage id='pages.repairment.issue.picture' defaultMessage='Picture' />,
@@ -104,26 +118,11 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 )
             }
         },
-        {
-            title: <FormattedMessage id='pages.repairment.issue.priority' defaultMessage='Priority' />,
-            dataIndex: 'priority',
-            render: (_, item) => (
-                <Tag color={priorityList[item.priority].color}>
-                    {priorityList[item.priority].text}
-                </Tag>
-            )
-        },
-        {
-            title: <FormattedMessage id='pages.repairment.issue.estimatedTime' defaultMessage='Estimated Time' />,
-            dataIndex: 'estimatedTime',
-            valueType: 'dateTime',
-        },
     ]
 
     const ApprovalForm = (
         <>
             <ProFormTextArea
-                // width='lg'
                 required
                 name="approvalComments"
                 label={intl.formatMessage({
@@ -134,19 +133,17 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                     id: 'component.textarea.placeholder',
                     defaultMessage: 'Please enter your approval comments'
                 })}
-                rules={[
-                    {
-                        required: true,
-                        message: "this is a required field"
-                    }
-                ]}
+                rules={[{
+                    required: true,
+                    message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                }]}
                 fieldProps={{
                     // autoSize: { minRows: 2, maxRows: 6 },
                     showCount: true,
                 }}
             />
             <ProFormSelect
-                width='md'
+                colProps={{ sm: 12, xs: 16 }}
                 name="nextProcesser"
                 required
                 label={intl.formatMessage({
@@ -169,7 +166,6 @@ const ApprovalModal: React.FC<ModalProps> = props => {
         <>
             {/* 维修方式选择 */}
             <ProFormRadio.Group
-                width='md'
                 name="repairmentApproach"
                 required
                 radioType='button'
@@ -208,7 +204,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 0:
                     <ProFormGroup >
                         <ProFormText
-                            colProps={{ lg: 12, sm: 12 }}
+                            colProps={{ md: 12 }}
                             name='manufacturer'
                             required
                             label={intl.formatMessage({
@@ -221,7 +217,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                             }]}
                         />
                         <ProFormText
-                            colProps={{ lg: 12, sm: 12 }}
+                            colProps={{ md: 12 }}
                             // width='md'
                             name='trackingNumberInput'
                             required
@@ -238,7 +234,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
                 1:
                     <ProFormSelect
-                        width='md'
+                        colProps={{ sm: 12, xs: 16 }}
                         name="repairStaffStudent"
                         required
                         label={intl.formatMessage({
@@ -257,7 +253,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
                 2:
                     <ProFormSelect
-                        width='md'
+                        colProps={{ sm: 12, xs: 16 }}
                         name="repairStaffTeacher"
                         required
                         label={intl.formatMessage({
@@ -302,6 +298,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
         <>
             <Steps
                 current={repairmentstage}
+                labelPlacement='vertical'
             >
                 <Step
                     title='签收'
@@ -330,17 +327,10 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                 layout='vertical'
                                 // bordered
                                 size='small'
-                                title={(
-                                    <>
-                                        <FormattedMessage
-                                            id="pages.repairment.repairmentModal.deliveryDetails"
-                                            defaultMessage='Delivery Details'
-                                        />
-                                        &nbsp;&nbsp;
-                                        <a href="https://baidu.com" target='view_window'
-                                        >有疑问?</a>
-                                    </>
-                                )}
+                                title={<FormattedMessage
+                                    id="pages.repairment.repairmentModal.deliveryDetails"
+                                    defaultMessage='Delivery Details'
+                                />}
                                 labelStyle={{
                                     fontWeight: 'bolder'
                                 }}
@@ -374,7 +364,6 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                             <ProFormText
                                 name='consigneePhone'
                                 required
-                                // width='md'
                                 colProps={{ span: 24 }}
                                 label={intl.formatMessage({
                                     id: 'pages.repairment.repairmentModal.consigneePhone',
@@ -386,8 +375,10 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                 }]}
                             />
                             <ProFormUploadButton
-                                name="shippingPhoto"
-                                label={<FormattedMessage id="pages.repairment.repairmentModal.shippingPhoto" defaultMessage='shipping photo' />}
+                                name="receivingPhoto"
+                                label={<FormattedMessage id="pages.repairment.repairmentModal.receivingPhotos" 
+                                description='accept .jpg / .png / .jpeg'
+                                defaultMessage='receiving photos' />}
                                 required
                                 rules={[{
                                     required: true,
@@ -407,10 +398,18 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                     <ProFormGroup>
                         <ProFormUploadDragger
                             name="quotationDocument"
-                            label="quotationDocument"
+                            label={<FormattedMessage
+                                id="pages.repairment.repairmentModal.quotationDocument"
+                                defaultMessage="quotation document"
+                            />}
+                            description="accept .doc / .png / .docx types"
+                            rules={[{
+                                required: true,
+                                message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                            }]}
                         />
                         <ProFormSelect
-                            colProps={{ span: 12 }}
+                            colProps={{ sm: 12 }}
                             name="nextProcesser"
                             required
                             label={intl.formatMessage({
@@ -429,8 +428,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                         <ProFormText
                             name='consigneePhone'
                             required
-                            // width='md'
-                            colProps={{ span: 12 }}
+                            colProps={{ sm: 12 }}
                             label={intl.formatMessage({
                                 id: 'pages.repairment.repairmentModal.consigneePhone',
                                 defaultMessage: "consignee phone",
@@ -440,8 +438,8 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                 message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
                             }]}
                         />
-
                     </ProFormGroup>
+
             }[repairmentstage]}
         </>
     )
@@ -468,9 +466,57 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             }}
             onFinish={onFinish}
             grid
+            submitter={{
+                searchConfig: {
+                    submitText: ((props.currentStage === 3) ? {
+                        0: <FormattedMessage id='pages.repairment.repairmentModal.confirm receipt' defaultMessage='Confirm Receipt'/>,
+                        1: <FormattedMessage id='pages.repairment.repairmentModal.sendQuotation' defaultMessage='Send Quotation'/>,
+                        2: <FormattedMessage id='pages.repairment.repairmentModal.repair complete' defaultMessage='Repair Confirm'/>,
+                        3: <FormattedMessage id='component.button.sendingConfirm' defaultMessage='Sending Confirm'/>
+                    }[repairmentstage]:
+                        <FormattedMessage id='component.button.confirm' defaultMessage='Confirm'/>
+                    )
+                },
+                render: (prop, dom) => {
+                    return (props.currentStage === 3) ? {
+                        0: [
+                            <Popover 
+                                key='problemPopover' 
+                                title="签收常见问题"
+                                content={popContent[0]}
+                            >
+                                <Button key='receiptProblem' type='link'>
+                                    <FormattedMessage id="pages.repairment.repairmentModal.receiptProblem" defaultMessage='receipt problem' />
+                                </Button>
+                            </Popover>,
+                            ...dom
+                        ],
+                        1: [
+                            <Button key='quotationProblem' type='link'>
+                                <FormattedMessage id="pages.repairment.repairmentModal.quotationProblem" defaultMessage='quotation problem' />
+                            </Button>,
+                            ...dom
+                        ],
+                        2: [
+                            <Button key='urge'>
+                                <FormattedMessage 
+                                    id="pages.repairment.repairmentModal.urge"
+                                    defaultMessage='urge'
+                                />
+                            </Button>,
+                            ...dom
+                        ],
+                        3: [
+                            <Button key='123' type='link'>催促</Button>,
+                            ...dom
+                        ]
+                    }[repairmentstage]
+                        : dom
+                }
+            }}
         >
             <ProCard ghost direction='column'>
-                <ProCard >
+                <ProCard>
                     <ProDescriptions
                         columns={issueColumns}
                         column={{
