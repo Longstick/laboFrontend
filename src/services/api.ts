@@ -30,14 +30,17 @@ export async function getApporver(options?: { [key: string]: any }) {
 	})
 }
 
-export const getNextProcesser = async () => {
-	let params = await request('/api/getNextProcesser', {method: 'GET'})
-	return params.data
-}
+export const getStaff = async (params: string) => (
+	await request('/api/getStaff', {
+		method: 'GET',
+		params: params,
+})).data
+
 
 export const getTrackingNumber = async (options?: { [key: string]: any }) => {
-	return request('/api/getTrackingNumber', {
+	let params = await request('/api/getTrackingNumber', {
 		method: 'GET',
 		...(options || {}),
 	})
+	return params
 }

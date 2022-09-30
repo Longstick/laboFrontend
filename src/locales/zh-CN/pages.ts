@@ -75,6 +75,10 @@ export default {
   'pages.repairment.issue.status': '状态',
   "pages.repairment.issue.object": '故障对象',
   "pages.repairment.issue.failureType": '故障类型',
+  "pages.repairment.issue.failureType.badlyDamaged": '严重损毁',
+  "pages.repairment.issue.failureType.slightlyDamaged" : '轻微损坏',
+  "pages.repairment.issue.failureType.affectUse" : '影响使用',
+  "pages.repairment.issue.failureType.needImproved": '需要改进',
   "pages.repairment.issue.Manufacturer": '生产厂商',
   'pages.repairment.issue.picture': '相关图片',
   'pages.repairment.searchTable.tableOptions': '操作',
@@ -122,7 +126,12 @@ export default {
   "pages.repairment.dispatchModal.teacher": '教职维修',
   'pages.repairment.dispatchModal.trackingNumber': '快递单号',
   'pages.repairment.repairmentModal.progressEntry': '进度录入',
+  'pages.repairment.repairmentModal.deliveryCompany': '快递公司',
+  'pages.repairment.issue.shippingAddress': '收货地址',
+  "pages.repairment.repairmentModal.deliveryDetails": '快递信息',
+  'pages.repairment.repairmentModal.consigneePhone': '收货人电话',
 
   'component.textarea.placeholder': '请在此输入',
   "component.formItem.required": '这是必填项',
+  "component.uploadPic.limit3": '最多上传三张照片',
 };

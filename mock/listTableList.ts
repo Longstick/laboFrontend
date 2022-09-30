@@ -36,7 +36,7 @@ const genList = (current: number, pageSize: number) => {
         },
         approval: {
           processerID: 1,
-          status: 'finish',
+          status: 'process',
           result: 'pass',
           comments: 'BDI equipment'
         },
