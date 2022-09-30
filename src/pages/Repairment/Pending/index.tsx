@@ -256,7 +256,7 @@ const RepairmentTable: React.FC = () => {
         <RcResizeObserver
             key="resize-observer"
             onResize={(offset) => {
-                setResponsive(offset.width < 780);
+                setResponsive(offset.width <= 576);
             }}
         >
             <PageContainer>

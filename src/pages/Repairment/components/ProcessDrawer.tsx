@@ -191,7 +191,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     ]
 
     const processerInfo = (
-        <ProDescriptions<API.ProcesserInfo> request={getApporver} column={2} size="middle">
+        <ProDescriptions<API.ProcesserInfo> request={getApporver} column={{xs: 1, sm: 2, md: 2}} size="middle" labelStyle={{fontWeight:'bolder'}}>
             <Item
                 dataIndex="processer"
                 label={
@@ -228,7 +228,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 'finish': (<>
                     {processerInfo}
                     <ProCard className={styles.processDrawerStepDetails}>
-                        <ProDescriptions column={1} columns={ProcessDetailColumns[current].columns ?? {}} dataSource={detailsData ?? {}} />
+                        <ProDescriptions column={1} columns={ProcessDetailColumns[current].columns ?? {}} labelStyle={{fontWeight:'bolder'}} dataSource={detailsData ?? {}} />
                     </ProCard>
                 </>),
                 'process': (<>
@@ -259,7 +259,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     );
 
     return (
-        <Drawer width={600} open={props.drawerOpen} onClose={props.onClose} >
+        <Drawer width={ props.responsive ? '100%': 600} open={props.drawerOpen} onClose={props.onClose} >
             <Steps
                 direction="vertical"
                 current={props.value?.processDetails?.stage}
