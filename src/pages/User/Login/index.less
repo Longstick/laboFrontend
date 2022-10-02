@@ -1,135 +1,167 @@
-.LoginHeader{
+@import (reference) '~antd/es/style/themes/index';
+
+.LoginHeader {
     display: flex;
-    background-color: #fbfbfb;
-    height: 6vh;
     align-items: center;
+    height: 6vh;
+    background-color: #fbfbfb;
 }
 
 .BasicBody {
-    display:flex;
-    justify-content:center;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 94vh;
     /* background-image: url(../img/bkg.jpg); */
     background-color: #edf7fb;
     background-size: cover;
-    width: 100vw;
-    height: 94vh;
     /* color:white; */
 }
 
-.LoginPad{
-    border-radius:20px;
+.LoginPad {
+    // position: absolute;
+    display: flex;
     width: 850px;
-    height: 500px;
+    // height: 500px;
     /* padding:25px; */
     background-color: #fbfbfb;
-    position: absolute;
-    display: flex;
+    border-radius: 20px;
     /* right: 10vw; */
-    box-shadow: 0 3px 10px 0px rgba(0,0,0,0.05);
+    box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.05);
 }
 
-.LoginPad img{
-    width: 100%;
+@media only screen and (max-width: 768px) {
+    .LoginPad {
+        width: 450px;
+        background-color: #fbfbfb;
+        border-radius: 20px;
+        box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.05);
+    }
+
+    .LoginModule {
+        display: flex;
+        align-self: center;
+        height: 100%;
+        padding: 50px;
+        border-radius: 20px;
+    }
 }
 
-.LoginPadIllustration{
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    height: 100%;
-    width: 55%;
+// .LoginPad img {
+//     width: 100%;
+// }
+
+.LoginPadIllustration {
+    // width: 100%;
     display: flex;
+    height: 100%;
     /* background-color: rgb(88, 154, 154); */
     background-image: url(../../../img/illu.png);
-    background-size: contain;
+    background-size: cover;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
 }
 
-.LoginModule{
-    width: 45%;
+.LoginModule {
+    display: flex;
+    align-self: center;
+    height: 100%;
+    // background-color: #fbfbfb;
+    // width: 45%;
     padding: 50px;
-    align-self: center;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
-.HeaderLogo{
-    height: 60%;
+.FormLogo {
+    margin: 0 auto;
+    margin-bottom: 40px;
+    display: flex;
     align-self: center;
+    height: 50px;
+    // width: 50%;
+}
+
+.HeaderLogo {
+    align-self: center;
+    height: 60%;
     margin-left: 30px;
 }
 
-.LoginAssist{
+.LoginAssist {
     display: block;
     margin: 0 auto;
     /* margin-top: -10px; */
     /* width: 80%; */
 }
 
-.ForgetPass{
+.ForgetPass {
     float: right;
     margin-right: 10px;
 }
 
-.RememberMe{
-    margin-left:5px
+.RememberMe {
+    margin-left: 5px;
 }
 
-.LoginTitle{
+.LoginTitle {
     margin-bottom: 30px;
     text-align: center;
 }
 
-.SignupLink{
+.SignupLink {
     display: flex;
     justify-content: center;
 }
 
-.SignupPad{
-    border-radius:20px;
+.SignupPad {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 850px;
     height: 600px;
     background-color: #fbfbfb;
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 3px 10px 0px rgba(0,0,0,0.05);
+    border-radius: 20px;
+    box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.05);
 }
 
-.SignupIllustration{
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    height: 100%;
-    width: 50%;
+.SignupIllustration {
     display: flex;
+    width: 50%;
+    height: 100%;
     /* background-color: rgb(88, 154, 154); */
     background-image: url(../../../img/signup_illu.png);
-    background-size: cover;
     background-position: center;
+    background-size: cover;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
-.SignupModule{
+.SignupModule {
+    align-self: center;
     width: 50%;
     padding: 50px;
-    align-self: center;
-
 }
 
-.RadiusInput{
+.RadiusInput {
     /* width: 250px; */
     border-radius: 20px;
 }
 
-.LoginLink{
+.LoginLink {
     display: flex;
     justify-content: center;
 }
 
-.idRadio{
+.idRadio {
     display: flex;
     justify-content: center;
     /* align-items: center; */
     margin-bottom: 30px;
 }
 
-.SignupTipText{
+.SignupTipText {
     margin-left: 10px;
 }

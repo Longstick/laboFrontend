@@ -18,7 +18,7 @@ export type GlobalHeaderRightProps = {
  */
 const loginOut = async () => {
   // await outLogin();
-  window.sessionStorage.removeItem('token');
+  window.localStorage.removeItem('token');
   // const { search, pathname } = window.location;
   const urlParams = new URL(window.location.href).searchParams;
   /** 此方法会跳转到 redirect 参数所在的位置 */
@@ -63,9 +63,9 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     </span>
   );
 
-  // if (!initialState) {
-  //   return loading;
-  // }
+  if (!initialState) {
+    return loading;
+  }
 
   // const { currentUser } = initialState;
 
@@ -73,8 +73,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   //   return loading;
   // }
 
-  // const { userInfo } = initialState;
-
+  const { userInfo } = initialState;
 
   const menuItems: ItemType[] = [
     ...(menu
@@ -108,10 +107,9 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
-        {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-        <span className={`${styles.name} anticon`}>{currentUser.name}</span> */}
-        {/* {userInfo?.username} */}
-      </span>
+        <Avatar size="small" className={styles.avatar} alt="avatar" icon={<UserOutlined />} /> 
+        <span className={`${styles.name} anticon`}>{userInfo?.username}</span>
+        </span>
     </HeaderDropdown>
   );
 };

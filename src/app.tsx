@@ -3,18 +3,15 @@ import RightContent from '@/components/RightContent';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
-import { RequestConfig, RunTimeLayoutConfig, useModel } from '@umijs/max';
+import { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link } from '@umijs/max';
-import { Context } from 'react';
+import { message } from 'antd';
 import defaultSettings from '../config/defaultSettings';
-import InitialState from './.umi/plugin-initialState/@@initialState';
 import { errorConfig } from './requestErrorConfig';
-import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import { getUserInfo as queryUserInfo } from './services/api'
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
-const testingPath = '/repair';
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
@@ -53,7 +50,6 @@ const testingPath = '/repair';
 
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  currentUser?: API.CurrentUser;
   loading?: boolean;
   userInfo?: API.UserInfo;
   getUserInfo?: () => Promise<API.UserInfo | undefined>;
@@ -61,9 +57,9 @@ export async function getInitialState(): Promise<{
 }> {
 
   const isLoggin = () => {
-    const token = window.sessionStorage.getItem('token');
-    console.log(token)
+    const token = window.localStorage.getItem('token');
     if (token !== null) { return true; }
+    message.warning('请先登录！')
     return false;
   }
 
@@ -82,33 +78,15 @@ export async function getInitialState(): Promise<{
     return undefined;
   }
 
-  // const fetchUserInfo = async () => {
-  //   try {
-  //     const res = isLoggin();
-  //     if (!res) {
-  //       throw new Error('is not logged in');
-  //     }
-  //     const msg = await queryCurrentUser({
-  //       skipErrorHandler: true,
-  //     });
-  //     return msg.data;
-  //   } catch (error) {
-  //     history.push(loginPath);
-  //   }
-  //   return undefined;
-  // };
-
   if (window.location.pathname !== loginPath) {
     const userInfo = await getUserInfo();
     return {
-      // fetchUserInfo,
       getUserInfo,
       userInfo,
       settings: defaultSettings,
     }
   }
   return {
-    // fetchUserInfo,
     getUserInfo,
     settings: defaultSettings,
   };
@@ -124,7 +102,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
+      if (!initialState?.userInfo && location.pathname !== loginPath) {
         history.push(loginPath);
       }
     },
@@ -191,16 +169,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
  * @doc https://umijs.org/docs/max/request#配置
  */
 
-// 请求前拦截器，添加Auth头
-const authHeaderInterceptor = (url: string, options: RequestConfig) => {
-  const authHeader = { Authorization: window.sessionStorage.getItem('token') };
-  return {
-    url: `${url}`,
-    options: { ...options, interceptors: true, headers: authHeader },
-  };
-};
-
 export const request = {
   ...errorConfig,
-  requestInterceptors: [authHeaderInterceptor],
 };

@@ -28,6 +28,7 @@ import {
 import styles from '../index.less'
 import { getStaff, getTrackingNumber } from '@/services/api'
 import { ExportOutlined, ImportOutlined, ToolOutlined, TransactionOutlined } from '@ant-design/icons'
+import { waitTime } from "@/services/utils";
 
 const { Step } = Steps
 const { Title } = Typography
@@ -45,13 +46,6 @@ const ApprovalModal: React.FC<ModalProps> = props => {
     const [currentuser, setuser] = useState<boolean>(true)
     const [isurged, clickUrge] = useState<boolean>(false)
     const [approach, setApproach] = useState<number>(0)
-    const waitTime = (time: number) => {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve(true)
-            }, time)
-        })
-    }
 
     const addStage = () => {
         if (repairmentstage < 3) {

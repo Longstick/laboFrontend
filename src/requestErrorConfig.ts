@@ -87,10 +87,19 @@ export const errorConfig: RequestConfig = {
 
   // 请求拦截器
   requestInterceptors: [
-    (config: RequestOptions) => {
-      // 拦截请求配置，进行个性化处理。
-      const url = config?.url?.concat('?token = 123');
-      return { ...config, url };
+    // (config: RequestOptions) => {
+    //   // 拦截请求配置，进行个性化处理。
+    //   const url = config?.url?.concat('?token = 123');
+    //   return { ...config, url };
+    // },
+
+  // 首部添加Auth
+    (url: string, options: RequestConfig) => {
+      const authHeader = { Authorization: window.localStorage.getItem('token') };
+      return {
+        url: `${url}`,
+        options: { ...options, interceptors: true, headers: authHeader },
+      }
     },
   ],
 
@@ -99,7 +108,8 @@ export const errorConfig: RequestConfig = {
     (response) => {
       // 拦截响应数据，进行个性化处理
       const { data } = response as unknown as ResponseStructure;
-      if (!data.success) {
+      if (!data.code && !data.success) {
+        console.log('请求失败！:', data)
         message.error('请求失败！');
       }
       return response;

@@ -263,8 +263,6 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             <Steps
                 direction="vertical"
                 current={props.value?.processDetails?.stage}
-            // status='error'
-
             >
                 <Step
                     title={stepLabel[0]}
