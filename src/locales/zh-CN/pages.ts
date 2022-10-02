@@ -148,6 +148,7 @@ export default {
   "pages.repairment.repairmentModal.quotationUploadDesc": '支持 .doc / .pdf / .docx / .txt 类型文件',
   "pages.repairment.repairmentModal.pleaseWait": '请等待维修人员维修完成，稍安勿躁~',
   'pages.repairment.repairmentModal.senderPhone': '发货人手机号',
+  'pages.repairment.repairmentModal.sender': '发货人',
   "pages.repairment.repairmentModal.sendingPhotos": '发出照片',
 
   'component.button.confirm': '确定',

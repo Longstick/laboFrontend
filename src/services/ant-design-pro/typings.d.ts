@@ -22,13 +22,7 @@ declare namespace API {
     address?: string;
     phone?: string;
   };
-
-  type LoginResult = {
-    status?: string;
-    type?: string;
-    currentAuthority?: string;
-  };
-
+  
   type PageParams = {
     current?: number;
     pageSize?: number;
@@ -59,13 +53,6 @@ declare namespace API {
   type FakeCaptcha = {
     code?: number;
     status?: string;
-  };
-
-  type LoginParams = {
-    username?: string;
-    password?: string;
-    autoLogin?: boolean;
-    type?: string;
   };
 
   type ErrorResponse = {

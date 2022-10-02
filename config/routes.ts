@@ -9,14 +9,25 @@
  * @doc https://umijs.org/docs/guides/routes
  */
 export default [
+    {
+        path: '/user',
+        layout: false,
+        routes: [
+            {
+                name: 'login',
+                path: '/user/login',
+                component: './User/Login',
+            },
+        ],
+    },
     // {
-    //     path: '/user',
+    //     path: '/testuser',
     //     layout: false,
     //     routes: [
     //         {
     //             name: 'login',
-    //             path: '/user/login',
-    //             component: './User/Login',
+    //             path: '/testuser/login',
+    //             component: './User/Login_test',
     //         },
     //     ],
     // },

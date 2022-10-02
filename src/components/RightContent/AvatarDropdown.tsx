@@ -17,19 +17,21 @@ export type GlobalHeaderRightProps = {
  * 退出登录，并且将当前的 url 保存
  */
 const loginOut = async () => {
-  await outLogin();
-  const { search, pathname } = window.location;
+  // await outLogin();
+  window.sessionStorage.removeItem('token');
+  // const { search, pathname } = window.location;
   const urlParams = new URL(window.location.href).searchParams;
   /** 此方法会跳转到 redirect 参数所在的位置 */
   const redirect = urlParams.get('redirect');
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/user/login' && !redirect) {
-    history.replace({
-      pathname: '/user/login',
-      search: stringify({
-        redirect: pathname + search,
-      }),
-    });
+    // history.replace({
+    //   pathname: '/user/login',
+    //   search: stringify({
+    //     redirect: pathname + search,
+    //   }),
+    // });
+    history.push({pathname: '/user/login'})
   }
 };
 
@@ -61,15 +63,18 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     </span>
   );
 
-  if (!initialState) {
-    return loading;
-  }
+  // if (!initialState) {
+  //   return loading;
+  // }
 
-  const { currentUser } = initialState;
+  // const { currentUser } = initialState;
 
-  if (!currentUser || !currentUser.name) {
-    return loading;
-  }
+  // if (!currentUser || !currentUser.name) {
+  //   return loading;
+  // }
+
+  // const { userInfo } = initialState;
+
 
   const menuItems: ItemType[] = [
     ...(menu
@@ -103,8 +108,9 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
-        <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-        <span className={`${styles.name} anticon`}>{currentUser.name}</span>
+        {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
+        <span className={`${styles.name} anticon`}>{currentUser.name}</span> */}
+        {/* {userInfo?.username} */}
       </span>
     </HeaderDropdown>
   );

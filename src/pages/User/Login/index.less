@@ -1,48 +1,135 @@
-@import (reference) '~antd/es/style/themes/index';
-
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: auto;
-  background: @layout-body-background;
+.LoginHeader{
+    display: flex;
+    background-color: #fbfbfb;
+    height: 6vh;
+    align-items: center;
 }
 
-.lang {
-  width: 100%;
-  height: 40px;
-  line-height: 44px;
-  text-align: right;
-  :global(.ant-dropdown-trigger) {
-    margin-right: 24px;
-  }
-}
-
-.content {
-  flex: 1;
-  padding: 32px 0;
-}
-
-@media (min-width: @screen-md-min) {
-  .container {
-    background-image: url('https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/V-_oS6r-i7wAAAAAAAAAAAAAFl94AQBr');
+.BasicBody {
+    display:flex;
+    justify-content:center;
+    align-items: center;
+    /* background-image: url(../img/bkg.jpg); */
+    background-color: #edf7fb;
     background-size: cover;
-  }
-
-  .content {
-    padding: 32px 0 24px;
-  }
+    width: 100vw;
+    height: 94vh;
+    /* color:white; */
 }
 
-.icon {
-  margin-left: 8px;
-  color: rgba(0, 0, 0, 0.2);
-  font-size: 24px;
-  vertical-align: middle;
-  cursor: pointer;
-  transition: color 0.3s;
+.LoginPad{
+    border-radius:20px;
+    width: 850px;
+    height: 500px;
+    /* padding:25px; */
+    background-color: #fbfbfb;
+    position: absolute;
+    display: flex;
+    /* right: 10vw; */
+    box-shadow: 0 3px 10px 0px rgba(0,0,0,0.05);
+}
 
-  &:hover {
-    color: @primary-color;
-  }
+.LoginPad img{
+    width: 100%;
+}
+
+.LoginPadIllustration{
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    height: 100%;
+    width: 55%;
+    display: flex;
+    /* background-color: rgb(88, 154, 154); */
+    background-image: url(../../../img/illu.png);
+    background-size: contain;
+}
+
+.LoginModule{
+    width: 45%;
+    padding: 50px;
+    align-self: center;
+}
+
+.HeaderLogo{
+    height: 60%;
+    align-self: center;
+    margin-left: 30px;
+}
+
+.LoginAssist{
+    display: block;
+    margin: 0 auto;
+    /* margin-top: -10px; */
+    /* width: 80%; */
+}
+
+.ForgetPass{
+    float: right;
+    margin-right: 10px;
+}
+
+.RememberMe{
+    margin-left:5px
+}
+
+.LoginTitle{
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.SignupLink{
+    display: flex;
+    justify-content: center;
+}
+
+.SignupPad{
+    border-radius:20px;
+    width: 850px;
+    height: 600px;
+    background-color: #fbfbfb;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 10px 0px rgba(0,0,0,0.05);
+}
+
+.SignupIllustration{
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    /* background-color: rgb(88, 154, 154); */
+    background-image: url(../../../img/signup_illu.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.SignupModule{
+    width: 50%;
+    padding: 50px;
+    align-self: center;
+
+}
+
+.RadiusInput{
+    /* width: 250px; */
+    border-radius: 20px;
+}
+
+.LoginLink{
+    display: flex;
+    justify-content: center;
+}
+
+.idRadio{
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    margin-bottom: 30px;
+}
+
+.SignupTipText{
+    margin-left: 10px;
 }

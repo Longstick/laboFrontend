@@ -1,4 +1,30 @@
 declare namespace API {
+
+  type LoginParams = {
+    account?: string;
+    password?: string;
+    autoLogin?: boolean;
+    type?: string;
+  };
+
+  type LoginResult = {
+    code?: number;
+    data?: {
+      token: string;
+      identity: number;
+      auth: number;
+    };
+    msg?: string;
+  };
+
+  type UserInfo = {
+    account?: string;
+    username?: string;
+    phone?: string;
+    identity?: number;
+    auth?: number;
+  }
+
   // declare type Status = 'error' | 'process' | 'finish' | 'wait';
   type TableColumns = {
     key: number;

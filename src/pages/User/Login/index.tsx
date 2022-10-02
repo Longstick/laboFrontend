@@ -1,290 +1,149 @@
-import Footer from '@/components/Footer';
-import { login } from '@/services/ant-design-pro/api';
-import { getFakeCaptcha } from '@/services/ant-design-pro/login';
-import {
-  AlipayCircleOutlined,
-  LockOutlined,
-  MobileOutlined,
-  TaobaoCircleOutlined,
-  UserOutlined,
-  WeiboCircleOutlined,
-} from '@ant-design/icons';
-import {
-  LoginForm,
-  ProFormCaptcha,
-  ProFormCheckbox,
-  ProFormText,
-} from '@ant-design/pro-components';
-import { FormattedMessage, history, SelectLang, useIntl, useModel } from '@umijs/max';
-import { Alert, message, Tabs } from 'antd';
-import React, { useState } from 'react';
-import styles from './index.less';
+import React, { useState } from "react";
+import { Input, Form, Button, Layout, message, Typography, Checkbox } from 'antd';
 
-const LoginMessage: React.FC<{
-  content: string;
-}> = ({ content }) => {
-  return (
-    <Alert
-      style={{
-        marginBottom: 24,
-      }}
-      message={content}
-      type="error"
-      showIcon
-    />
-  );
-};
+import {
+    UserOutlined,
+    LockOutlined,
+} from '@ant-design/icons';
+import { FormattedMessage, useIntl, useModel, history } from '@umijs/max';
+import styles from './index.less'
+import logo from '../../../img/3.png'
+import { login } from '../../../services/api'
+
+const { Header, Content } = Layout;
+const { Title } = Typography;
+
+
 
 const Login: React.FC = () => {
-  const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
-  const [type, setType] = useState<string>('account');
-  const { initialState, setInitialState } = useModel('@@initialState');
+    const intl = useIntl()
+    const { initialState, setInitialState } = useModel("@@initialState")
 
-  const intl = useIntl();
-
-  const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
-    if (userInfo) {
-      await setInitialState((s) => ({
-        ...s,
-        currentUser: userInfo,
-      }));
+    const setUserInfo = async () => {
+        // const currentuser = await initialState?.fetchUserInfo?.()
+        const userInfo = await initialState?.getUserInfo?.()
+        await setInitialState((s)=>({
+            ...s,
+            userInfo: userInfo,
+        }));
     }
-  };
 
-  const handleSubmit = async (values: API.LoginParams) => {
-    try {
-      // 登录
-      const msg = await login({ ...values, type });
-      if (msg.status === 'ok') {
-        const defaultLoginSuccessMessage = intl.formatMessage({
-          id: 'pages.login.success',
-          defaultMessage: '登录成功！',
-        });
-        message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
-        return;
-      }
-      console.log(msg);
-      // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
-    } catch (error) {
-      const defaultLoginFailureMessage = intl.formatMessage({
-        id: 'pages.login.failure',
-        defaultMessage: '登录失败，请重试！',
-      });
-      console.log(error);
-      message.error(defaultLoginFailureMessage);
+    const onFinish = async (values: API.LoginParams) => {
+        try {
+            const res = await login(values);
+            if (res.code === 1) {
+                const defaultLoginSuccessMessage = intl.formatMessage({
+                    id: 'pages.login.success',
+                    defaultMessage: '登录成功！',
+                });
+                message.success(defaultLoginSuccessMessage);
+                window.sessionStorage.setItem('token', res.data?.token ?? '')
+                await setUserInfo()
+
+                const urlParams = new URL(window.location.href).searchParams;
+                history.push(urlParams.get('redirect') || '/');
+                return;
+            }
+        } catch (error) {
+            const defaultLoginFailureMessage = intl.formatMessage({
+                id: 'pages.login.failure',
+                defaultMessage: '登录失败，请重试！',
+            });
+            console.log(error);
+            message.error(defaultLoginFailureMessage);
+        }
     }
-  };
-  const { status, type: loginType } = userLoginState;
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.lang} data-lang>
-        {SelectLang && <SelectLang />}
-      </div>
-      <div className={styles.content}>
-        <LoginForm
-          logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
-          subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
-          initialValues={{
-            autoLogin: true,
-          }}
-          actions={[
-            <FormattedMessage
-              key="loginWith"
-              id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
-            />,
-            <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
-            <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
-            <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
-          ]}
-          onFinish={async (values) => {
-            await handleSubmit(values as API.LoginParams);
-          }}
-        >
-          <Tabs activeKey={type} onChange={setType} centered>
-            <Tabs.TabPane
-              key="account"
-              tab={intl.formatMessage({
-                id: 'pages.login.accountLogin.tab',
-                defaultMessage: '账户密码登录',
-              })}
-            />
-            <Tabs.TabPane
-              key="mobile"
-              tab={intl.formatMessage({
-                id: 'pages.login.phoneLogin.tab',
-                defaultMessage: '手机号登录',
-              })}
-            />
-          </Tabs>
+    return (
+        <Layout>
+            <Header className={styles.LoginHeader}>
+                <img src={logo} alt='' className={styles.HeaderLogo} />
+                {/* <Title level={2}>SZTU </Title> */}
+            </Header>
+            <Content className={styles.BasicBody}>
+                <div className={styles.LoginPad}>
+                    <div className={styles.LoginPadIllustration} />
+                    <div className={styles.LoginModule}>
+                        <Title
+                            level={4}
+                            style={{
+                                marginBottom: '30px',
+                                textAlign: 'center'
+                            }}
+                        >账号密码登录</Title>
+                        <Form
+                            name="LoginForm"
+                            onFinish={onFinish}
+                        >
 
-          {status === 'error' && loginType === 'account' && (
-            <LoginMessage
-              content={intl.formatMessage({
-                id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误(admin/ant.design)',
-              })}
-            />
-          )}
-          {type === 'account' && (
-            <>
-              <ProFormText
-                name="username"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <UserOutlined className={styles.prefixIcon} />,
-                }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.username.placeholder',
-                  defaultMessage: '用户名: admin or user',
-                })}
-                rules={[
-                  {
-                    required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.username.required"
-                        defaultMessage="请输入用户名!"
-                      />
-                    ),
-                  },
-                ]}
-              />
-              <ProFormText.Password
-                name="password"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined className={styles.prefixIcon} />,
-                }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
-                })}
-                rules={[
-                  {
-                    required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.password.required"
-                        defaultMessage="请输入密码！"
-                      />
-                    ),
-                  },
-                ]}
-              />
-            </>
-          )}
+                            <Form.Item
+                                name="account"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: '请输入账号'
+                                    }
+                                ]}
+                            >
+                                <Input
+                                    className={styles.RadiusInput}
+                                    size="large"
+                                    prefix={<UserOutlined />}
+                                    allowClear
+                                    placeholder="请输入账号"
+                                />
+                            </Form.Item>
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
-          {type === 'mobile' && (
-            <>
-              <ProFormText
-                fieldProps={{
-                  size: 'large',
-                  prefix: <MobileOutlined className={styles.prefixIcon} />,
-                }}
-                name="mobile"
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.phoneNumber.placeholder',
-                  defaultMessage: '手机号',
-                })}
-                rules={[
-                  {
-                    required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.phoneNumber.required"
-                        defaultMessage="请输入手机号！"
-                      />
-                    ),
-                  },
-                  {
-                    pattern: /^1\d{10}$/,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.phoneNumber.invalid"
-                        defaultMessage="手机号格式错误！"
-                      />
-                    ),
-                  },
-                ]}
-              />
-              <ProFormCaptcha
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined className={styles.prefixIcon} />,
-                }}
-                captchaProps={{
-                  size: 'large',
-                }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.captcha.placeholder',
-                  defaultMessage: '请输入验证码',
-                })}
-                captchaTextRender={(timing, count) => {
-                  if (timing) {
-                    return `${count} ${intl.formatMessage({
-                      id: 'pages.getCaptchaSecondText',
-                      defaultMessage: '获取验证码',
-                    })}`;
-                  }
-                  return intl.formatMessage({
-                    id: 'pages.login.phoneLogin.getVerificationCode',
-                    defaultMessage: '获取验证码',
-                  });
-                }}
-                name="captcha"
-                rules={[
-                  {
-                    required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.captcha.required"
-                        defaultMessage="请输入验证码！"
-                      />
-                    ),
-                  },
-                ]}
-                onGetCaptcha={async (phone) => {
-                  const result = await getFakeCaptcha({
-                    phone,
-                  });
-                  if (result === false) {
-                    return;
-                  }
-                  message.success('获取验证码成功！验证码为：1234');
-                }}
-              />
-            </>
-          )}
-          <div
-            style={{
-              marginBottom: 24,
-            }}
-          >
-            <ProFormCheckbox noStyle name="autoLogin">
-              <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录" />
-            </ProFormCheckbox>
-            <a
-              style={{
-                float: 'right',
-              }}
-            >
-              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
-            </a>
-          </div>
-        </LoginForm>
-      </div>
-      <Footer />
-    </div>
-  );
+                            <Form.Item>
+                                <Form.Item
+                                    name="password"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: '请输入密码'
+                                        }
+                                    ]}
+                                >
+                                    <Input.Password
+                                        className={styles.RadiusInput}
+                                        size="large"
+                                        allowClear
+                                        placeholder="请输入密码"
+                                        prefix={<LockOutlined />}
+                                    />
+                                </Form.Item>
+                                <div className={styles.LoginAssist}>
+                                    <Checkbox className={styles.RememberMe}>记住我</Checkbox>
+                                    <a href="https://www.baidu.com" className={styles.ForgetPass} target='view_window'>
+                                        忘记密码
+                                    </a>
+                                </div>
+
+                            </Form.Item>
+
+                            <Form.Item>
+                                <Button
+                                    type="primary"
+                                    shape="round"
+                                    size="large"
+                                    style={{
+                                        width: '100%',
+                                    }}
+                                    htmlType="submit"
+                                // onClick={onFinish}
+                                >登 录</Button>
+                            </Form.Item>
+                        </Form>
+
+                        <a
+                            href=""
+                            className={styles.SignupLink}
+                        >没有账号？点此注册</a>
+                    </div>
+                </div>
+            </Content>
+        </Layout>
+    )
 };
 
 export default Login;

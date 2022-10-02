@@ -49,7 +49,9 @@ const getTrackingNumber = (req: Request, res: Response) => {
         data: { 
             trackingNumber: 'sf123jj1239055000051',
             deliveryCompany: '顺丰',
-            shippingAddress: '深圳市坪山区深圳技术大学大数据与互联网学院C-1楼204实验室'
+            shippingAddress: '深圳市坪山区深圳技术大学大数据与互联网学院C-1楼204实验室',
+            senderPhone: '13537536685',
+            sender: '黄先生'
         },
         success: true,
     })

@@ -4,6 +4,7 @@ import {
     ProDescriptions,
     ProFormGroup,
     ProFormRadio,
+    ProFormRate,
     ProFormSelect,
     ProFormText,
     ProFormTextArea,
@@ -343,14 +344,14 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                     <ProCard
                         ghost
                         direction={props.responsive ? 'column' : 'row'}
-                        gutter={[16,16]}
+                        gutter={[24, 24]}
                     // split={props.responsive ? 'horizontal' : 'vertical'}
                     // split='vertical'
                     >
-                        <ProCard colSpan={{ md: 10 }} boxShadow style={{ borderRadius: 20}}>
+                        <ProCard colSpan={{ md: 10 }} boxShadow style={{ borderRadius: 20 }}>
                             <ProDescriptions
                                 // bordered
-                                // size='small'
+                                size='small'
                                 // column={{ xs: 1, sm: 1, md: 2 }}
                                 layout={props.responsive ? 'horizontal' : 'vertical'}
                                 column={1}
@@ -370,9 +371,15 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                     },
                                     {
                                         title: <FormattedMessage
-                                            id='pages.repairment.issue.shippingAddress'
-                                            defaultMessage='shipping address' />,
-                                        dataIndex: 'shippingAddress'
+                                            id='pages.repairment.repairmentModal.senderPhone'
+                                            defaultMessage='sender phone' />,
+                                        dataIndex: 'senderPhone'
+                                    },
+                                    {
+                                        title: <FormattedMessage
+                                            id='pages.repairment.repairmentModal.sender'
+                                            defaultMessage='sender' />,
+                                        dataIndex: 'sender'
                                     },
                                 ]}
                                 request={getTrackingNumber}
@@ -400,7 +407,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                     required: true,
                                     message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
                                 }]}
-                                max={5}
+                                max={3}
                                 fieldProps={{
                                     name: 'file',
                                     listType: 'picture-card',
@@ -487,9 +494,9 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                         ghost
                         direction={props.responsive ? 'column' : 'row'}
                         gutter={24}
-                        // split={!props.responsive ? 'vertical' : undefined}
+                    // split={!props.responsive ? 'vertical' : undefined}
                     >
-                        <ProCard ghost colSpan={{ md: 10, xs: 24 }}>
+                        <ProCard ghost colSpan={{ md: 12, xs: 24 }}>
                             <ProFormText
                                 // colProps={{ sm:24, md: 10 }}
                                 name='sendingTrackingNumber'
@@ -541,10 +548,111 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
 
     const acceptanceForm =
-        <ProCard>
-            123
-        </ProCard>
+        <ProCard
+            ghost
+            direction='column'
+            gutter={[24, 24]}
+        // split={props.responsive ? 'horizontal' : 'vertical'}
+        // split='vertical'
+        >
+            <ProCard boxShadow style={{ borderRadius: 20 }}>
+                <ProDescriptions
+                    size='small'
+                    // layout={props.responsive ? 'horizontal' : 'vertical'}
+                    layout='horizontal'
+                    column={2}
+                    title={<FormattedMessage
+                        id="pages.repairment.repairmentModal.deliveryDetails"
+                        defaultMessage='Delivery Details'
+                    />}
+                    labelStyle={{
+                        fontWeight: 'bolder'
+                    }}
+                    columns={[
+                        {
+                            title: <FormattedMessage
+                                id='pages.repairment.dispatchModal.trackingNumber'
+                                defaultMessage='tracking number' />,
+                            dataIndex: 'trackingNumber'
+                        },
+                        {
+                            title: <FormattedMessage
+                                id='pages.repairment.repairmentModal.senderPhone'
+                                defaultMessage='sender phone' />,
+                            dataIndex: 'senderPhone'
+                        },
+                        {
+                            title: <FormattedMessage
+                                id='pages.repairment.repairmentModal.sender'
+                                defaultMessage='sender' />,
+                            dataIndex: 'sender'
+                        },
+                    ]}
+                    request={getTrackingNumber}
+                />
+            </ProCard>
 
+            <ProCard ghost gutter={[24, 0]} direction={props.responsive ? 'column' : 'row'}>
+                <ProCard ghost>
+
+                    <ProFormText
+                        name='consigneePhone'
+                        required
+                        label={intl.formatMessage({
+                            id: 'pages.repairment.repairmentModal.consigneePhone',
+                            defaultMessage: "consignee phone",
+                        })}
+                        rules={[{
+                            required: true,
+                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                        }]}
+                    />
+                    <ProFormUploadButton
+                        name="receiptPhoto"
+                        label={<FormattedMessage id="pages.repairment.repairmentModal.receivingPhotos" defaultMessage='receipt photos' />}
+                        required
+                        rules={[{
+                            required: true,
+                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                        }]}
+                        max={3}
+                        fieldProps={{
+                            name: 'file',
+                            listType: 'picture-card',
+                            multiple: true,
+                        }}
+                        action="/upload.do"
+                        extra={<FormattedMessage id="component.uploadPic.limit3" defaultMessage='up to 3 photos' />}
+                    />
+
+                </ProCard>
+                <ProCard ghost colSpan={{ md: 12 }}>
+                    <ProFormRate
+                        name="rating"
+                        label={<FormattedMessage id="pages.repairment.issue.acceptance.rating" defaultMessage='rating' />}
+                        required
+                        rules={[{
+                            required: true,
+                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                        }]}
+                    />
+                    <ProFormTextArea
+                        name='comments'
+                        label={<FormattedMessage id="pages.repairment.issue.acceptance.comments" defaultMessage='comments' />}
+                        required
+                        rules={[{
+                            required: true,
+                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                        }]}
+                        fieldProps={{
+                            rows: 5,
+                            maxLength: 1000,
+                            showCount: true,
+                        }}
+                    />
+                </ProCard>
+            </ProCard>
+        </ProCard>
 
 
     const changeModal = {
@@ -565,6 +673,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             }
             modalProps={{
                 destroyOnClose: true,
+                maskClosable: false,
             }}
             onFinish={onFinish}
             grid
@@ -660,9 +769,6 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 <Button onClick={addStage}>
                     &gt;
                 </Button>
-
-
-
 
             </ProCard>
             <ProCard>

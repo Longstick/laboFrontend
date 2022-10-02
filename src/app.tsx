@@ -3,11 +3,14 @@ import RightContent from '@/components/RightContent';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
-import type { RunTimeLayoutConfig } from '@umijs/max';
+import { RequestConfig, RunTimeLayoutConfig, useModel } from '@umijs/max';
 import { history, Link } from '@umijs/max';
+import { Context } from 'react';
 import defaultSettings from '../config/defaultSettings';
+import InitialState from './.umi/plugin-initialState/@@initialState';
 import { errorConfig } from './requestErrorConfig';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import { getUserInfo as queryUserInfo } from './services/api'
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -16,36 +19,100 @@ const testingPath = '/repair';
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
+// export async function getInitialState(): Promise<{
+//   settings?: Partial<LayoutSettings>;
+//   currentUser?: API.CurrentUser;
+//   loading?: boolean;
+//   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+// }> {
+//   const fetchUserInfo = async () => {
+//     try {
+//       const msg = await queryCurrentUser({
+//         skipErrorHandler: true,
+//       });
+//       return msg.data;
+//     } catch (error) {
+//       history.push(loginPath);
+//     }
+//     return undefined;
+//   };
+//   // 如果不是登录页面，执行
+//   if (window.location.pathname !== loginPath) {
+//     const currentUser = await fetchUserInfo();
+//     return {
+//       fetchUserInfo,
+//       currentUser,
+//       settings: defaultSettings,
+//     };
+//   }
+//   return {
+//     fetchUserInfo,
+//     settings: defaultSettings,
+//   };
+// }
+
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
   loading?: boolean;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  userInfo?: API.UserInfo;
+  getUserInfo?: () => Promise<API.UserInfo | undefined>;
+  isLoggin?: () => boolean;
 }> {
-  const fetchUserInfo = async () => {
+
+  const isLoggin = () => {
+    const token = window.sessionStorage.getItem('token');
+    console.log(token)
+    if (token !== null) { return true; }
+    return false;
+  }
+
+  const getUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser({
-        skipErrorHandler: true,
-      });
-      return msg.data;
-    } catch (error) {
-      history.push(testingPath);
+      if (!isLoggin()) {
+        throw new Error('is not logged in');
+      }
+      const msg = await queryUserInfo();
+      console.log(msg.data);
+      return msg.data;    
+    } 
+    catch (error) {
+      history.push(loginPath);
     }
     return undefined;
-  };
-  // 如果不是登录页面，执行
+  }
+
+  // const fetchUserInfo = async () => {
+  //   try {
+  //     const res = isLoggin();
+  //     if (!res) {
+  //       throw new Error('is not logged in');
+  //     }
+  //     const msg = await queryCurrentUser({
+  //       skipErrorHandler: true,
+  //     });
+  //     return msg.data;
+  //   } catch (error) {
+  //     history.push(loginPath);
+  //   }
+  //   return undefined;
+  // };
+
   if (window.location.pathname !== loginPath) {
-    const currentUser = await fetchUserInfo();
+    const userInfo = await getUserInfo();
     return {
-      fetchUserInfo,
-      currentUser,
+      // fetchUserInfo,
+      getUserInfo,
+      userInfo,
       settings: defaultSettings,
-    };
+    }
   }
   return {
-    fetchUserInfo,
+    // fetchUserInfo,
+    getUserInfo,
     settings: defaultSettings,
   };
+
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
@@ -53,16 +120,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
   console.log(initialState?.settings);
   return {
     rightContentRender: () => <RightContent />,
-    // waterMarkProps: {
-    //   content: initialState?.currentUser?.name,
-    // },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
-      // if (!initialState?.currentUser && location.pathname !== testingPath) {
-      //   history.push(testingPath);
-      // }
+      if (!initialState?.currentUser && location.pathname !== loginPath) {
+        history.push(loginPath);
+      }
     },
     layoutBgImgList: [
       {
@@ -86,11 +150,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     ],
     links: isDev
       ? [
-          <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>OpenAPI 文档</span>
-          </Link>,
-        ]
+        <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
+          <LinkOutlined />
+          <span>OpenAPI 文档</span>
+        </Link>,
+      ]
       : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
@@ -126,6 +190,17 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
  * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
  * @doc https://umijs.org/docs/max/request#配置
  */
+
+// 请求前拦截器，添加Auth头
+const authHeaderInterceptor = (url: string, options: RequestConfig) => {
+  const authHeader = { Authorization: window.sessionStorage.getItem('token') };
+  return {
+    url: `${url}`,
+    options: { ...options, interceptors: true, headers: authHeader },
+  };
+};
+
 export const request = {
   ...errorConfig,
+  requestInterceptors: [authHeaderInterceptor],
 };
