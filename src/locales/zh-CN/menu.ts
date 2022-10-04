@@ -50,6 +50,6 @@ export default {
   'menu.editor.mind': '脑图编辑器',
   'menu.editor.koni': '拓扑编辑器',
   'menu.Repairment': '设备维修管理',
-  'menu.Repairment.My Pending': '我的待处理',
-
+  'menu.Repairment.My To-do List': '我的待办',
+  'menu.Repairment.All Issues': '全部工单',
 };

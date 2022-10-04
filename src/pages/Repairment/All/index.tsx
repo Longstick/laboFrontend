@@ -57,6 +57,7 @@ const RepairmentTable: React.FC = () => {
         setCheckDrawer(true);
         console.log(checkDrawerState)
     }
+
     const intl = useIntl();
 
     const statusList = {
@@ -211,44 +212,14 @@ const RepairmentTable: React.FC = () => {
             search: false,
             width: 120,
             fixed: 'right',
-            render: (_, record) => {
-                switch (record.status) {
-                    case 0: {
-                        return (
-                            <Button
-                                type="link"
-                                // ghost
-                                // shape="circle"
-                                onClick={() => {
-                                    setProcessDrawer(true);
-                                    setCurrentRow(record);
-                                }}
-                            ><FormattedMessage id="pages.repairment.searchTable.options.process" defaultMessage='Process' />
-                            </Button>)
-                    }
-                    case 1: {
-                        return (
-                            <Button
-                                type="link"
-                                // ghost
-                                // shape="circle"
-                                onClick={onCheckClick}
-                            ><FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
-                            </Button>)
-                    }
-                    case 2: {
-                        return (
-                            <Button
-                                type="link"
-                                // ghost
-                                // shape="circle"
-                                onClick={onCheckClick}
-                            ><FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
-                            </Button>)
-                    }
-                    default: { return <></>; }
-                }
-            }
+            render: (_, record) => 
+                <Button
+                    type="link"
+                    // ghost
+                    // shape="circle"
+                    onClick={onCheckClick}
+                ><FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
+                </Button>
         },
     ];
 
@@ -273,8 +244,8 @@ const RepairmentTable: React.FC = () => {
                     <ProCard>
                         <Statistic
                             title={intl.formatMessage({
-                                id: 'pages.repairment.statisticsData.newIssueToday',
-                                defaultMessage: 'New Pending Issue Today'
+                                id: 'pages.repairment.all.statisticsData.newIssuesToday',
+                                defaultMessage: 'New Issues Today'
                             })}
                             value={15} />
                     </ProCard>
@@ -282,8 +253,8 @@ const RepairmentTable: React.FC = () => {
                     <ProCard>
                         <Statistic
                             title={intl.formatMessage({
-                                id: 'pages.repairment.statisticsData.totalIssue',
-                                defaultMessage: 'Total Issue'
+                                id: 'pages.repairment.all.statisticsData.totalIssues',
+                                defaultMessage: 'Total Issues'
                             })}
                             value={7502} />
                     </ProCard>
@@ -291,8 +262,8 @@ const RepairmentTable: React.FC = () => {
                     <ProCard>
                         <Statistic
                             title={intl.formatMessage({
-                                id: 'pages.repairment.statisticsData.highPriority',
-                                defaultMessage: 'High Priority Issue'
+                                id: 'pages.repairment.all.statisticsData.highPriority',
+                                defaultMessage: 'High Priority Issues'
                             })}
                             value={344} />
                     </ProCard>
@@ -300,8 +271,8 @@ const RepairmentTable: React.FC = () => {
                     <ProCard>
                         <Statistic
                             title={intl.formatMessage({
-                                id: 'pages.repairment.statisticsData.overdueIssue',
-                                defaultMessage: 'Overdue Issue'
+                                id: 'pages.repairment.all.statisticsData.overdueIssue',
+                                defaultMessage: 'Overdue Issues'
                             })} value={75} />
                     </ProCard>
                 </ProCard.Group>
@@ -310,7 +281,7 @@ const RepairmentTable: React.FC = () => {
                 <Title level={5} style={{ marginBottom: 10 }}>
                     <FormattedMessage
                         id="pages.repairment.searchTable.title"
-                        defaultMessage='Pending Issue'
+                        defaultMessage='To-do Issue'
                     />
                 </Title>
                 <ProTable<API.TableColumns, API.PageParams>

@@ -108,10 +108,10 @@ export default {
   "pages.repairment.issue.reject": '打回',
   'pages.repairment.issue.nextProcesser': '下一流程处理人',
 
-  "pages.repairment.searchTable.title": '待处理工单',
+  "pages.repairment.searchTable.title": '待办工单',
   'pages.repairment.statisticsData.title': '数据统计',
-  'pages.repairment.statisticsData.newIssueToday': '今日新增待处理',
-  'pages.repairment.statisticsData.totalIssue': '累计待处理',
+  'pages.repairment.statisticsData.newIssueToday': '今日新增待办',
+  'pages.repairment.statisticsData.totalIssue': '累计待办',
   'pages.repairment.statisticsData.highPriority': '高优先级',
   'pages.repairment.statisticsData.overdueIssue': '已逾期',
   'pages.repairment.searchTable.outputAll': '导出所有',
@@ -150,6 +150,12 @@ export default {
   'pages.repairment.repairmentModal.senderPhone': '发货人手机号',
   'pages.repairment.repairmentModal.sender': '发货人',
   "pages.repairment.repairmentModal.sendingPhotos": '发出照片',
+
+  'pages.repairment.all.statisticsData.newIssuesToday': '今日新增工单',
+  'pages.repairment.all.statisticsData.totalIssues': '总计工单',
+  'pages.repairment.all.statisticsData.highPriority': '高优先级',
+  'pages.repairment.all.statisticsData.overdueIssue': '已逾期',
+
 
   'component.button.confirm': '确定',
   'component.textarea.placeholder': '请在此输入',

@@ -2,7 +2,7 @@ import { getApporver } from '@/services/api';
 import { ProCard, ProDescriptions } from '@ant-design/pro-components';
 
 import { Drawer, Steps } from 'antd';
-import { FormattedMessage } from '@umijs/max';
+import { FormattedMessage, useModel } from '@umijs/max';
 
 import React from 'react';
 import styles from '../index.less';
@@ -13,10 +13,10 @@ const { Step } = Steps;
 const { Item } = ProDescriptions;
 
 export type ProcessDrawerProps = {
-    drawerOpen: boolean;
-    onClose: () => void;
-    value: Partial<API.TableColumns>;
-    responsive: boolean;
+    drawerOpen?: boolean;
+    onClose?: () => void;
+    value?: Partial<API.TableColumns>;
+    responsive?: boolean;
 };
 
 const rejectdata = {
@@ -25,6 +25,8 @@ const rejectdata = {
 }
 
 const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
+
+    const { initialState } = useModel("@@initialState")
 
     const ProcessDetailColumns = {
         0: {
@@ -191,7 +193,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     ]
 
     const processerInfo = (
-        <ProDescriptions<API.ProcesserInfo> request={getApporver} column={{xs: 1, sm: 2, md: 2}} size="middle" labelStyle={{fontWeight:'bolder'}}>
+        <ProDescriptions<API.ProcesserInfo> request={getApporver} column={{ xs: 1, sm: 2, md: 2 }} size="middle" labelStyle={{ fontWeight: 'bolder' }}>
             <Item
                 dataIndex="processer"
                 label={
@@ -228,24 +230,24 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 'finish': (<>
                     {processerInfo}
                     <ProCard className={styles.processDrawerStepDetails}>
-                        <ProDescriptions column={1} columns={ProcessDetailColumns[current].columns ?? {}} labelStyle={{fontWeight:'bolder'}} dataSource={detailsData ?? {}} />
+                        <ProDescriptions column={1} columns={ProcessDetailColumns[current].columns ?? {}} labelStyle={{ fontWeight: 'bolder' }} dataSource={detailsData ?? {}} />
                     </ProCard>
                 </>),
                 'process': (<>
                     {processerInfo}
-                    <ApprovalModal
+                    { initialState?.userInfo?.identity === props.value?.currentProcesser && <ApprovalModal
                         currentStage={current}
                         value={props.value}
                         responsive={props.responsive}
                     >
                         {current === 3 ?
-                            <FormattedMessage 
+                            <FormattedMessage
                                 id='pages.repairment.repairmentModal.progressEntry'
                                 defaultMessage='Process Entry'
                             />
                             : ProcessDetailColumns[current].label
                         }
-                    </ApprovalModal>
+                    </ApprovalModal>}
                 </>),
                 'error': (<>
                     {processerInfo}
@@ -259,7 +261,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     );
 
     return (
-        <Drawer width={ props.responsive ? '100%': 600} open={props.drawerOpen} onClose={props.onClose} >
+        <Drawer width={props.responsive ? '100%' : 600} open={props.drawerOpen} onClose={props.onClose} >
             <Steps
                 direction="vertical"
                 current={props.value?.processDetails?.stage}
@@ -267,31 +269,31 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 <Step
                     title={stepLabel[0]}
                     description={stepItem(0, {
-                        title: props.value.issueTitle,
-                        description: props.value.issueDescription,
-                        ...props.value.processDetails?.submit
+                        title: props.value?.issueTitle,
+                        description: props.value?.issueDescription,
+                        ...props.value?.processDetails?.submit
                     })}
-                    status={props.value.processDetails?.submit?.status}
+                    status={props.value?.processDetails?.submit?.status}
                 />
                 <Step
                     title={stepLabel[1]}
-                    description={stepItem(1, props.value.processDetails?.approval)}
-                    status={props.value.processDetails?.approval?.status}
+                    description={stepItem(1, props.value?.processDetails?.approval)}
+                    status={props.value?.processDetails?.approval?.status}
                 />
                 <Step
                     title={stepLabel[2]}
-                    description={stepItem(2, props.value.processDetails?.dispatch)}
-                    status={props.value.processDetails?.dispatch?.status}
+                    description={stepItem(2, props.value?.processDetails?.dispatch)}
+                    status={props.value?.processDetails?.dispatch?.status}
                 />
                 <Step
                     title={stepLabel[3]}
-                    description={stepItem(3, props.value.processDetails?.repairment)}
-                    status={props.value.processDetails?.repairment?.status}
+                    description={stepItem(3, props.value?.processDetails?.repairment)}
+                    status={props.value?.processDetails?.repairment?.status}
                 />
                 <Step
                     title={stepLabel[4]}
-                    description={stepItem(4, props.value.processDetails?.acceptance)}
-                    status={props.value.processDetails?.acceptance?.status}
+                    description={stepItem(4, props.value?.processDetails?.acceptance)}
+                    status={props.value?.processDetails?.acceptance?.status}
                 />
             </Steps>
         </Drawer>

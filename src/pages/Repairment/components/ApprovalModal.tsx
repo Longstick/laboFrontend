@@ -32,12 +32,11 @@ import { waitTime } from "@/services/utils";
 
 const { Step } = Steps
 const { Title } = Typography
-const { Divider } = ProCard
 
 export type ModalProps = {
-    currentStage: number;
-    value: Partial<API.TableColumns>;
-    responsive: boolean;
+    currentStage?: number;
+    value?: Partial<API.TableColumns>;
+    responsive?: boolean;
 }
 
 const ApprovalModal: React.FC<ModalProps> = props => {
@@ -654,12 +653,12 @@ const ApprovalModal: React.FC<ModalProps> = props => {
         2: dispatchForm,
         3: repairmentForm,
         4: acceptanceForm,
-    }[props.currentStage]
+    }[props.currentStage ?? 0]
 
     return (
         <ModalForm
             form={form}
-            title={stepLabel[props.currentStage]}
+            title={stepLabel[props.currentStage ?? 0]}
             trigger={
                 <Button type="primary" size="large">
                     {props.children}
@@ -732,7 +731,6 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                 </Button> :
                                 dom
                             ,
-                            // ...dom
                         ],
                         3: dom
                     }[repairmentstage]

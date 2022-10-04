@@ -48,6 +48,7 @@ declare namespace API {
     manufacturer: string;
     picture: string[];
     trackingNumber: string;
+    currentProcesser: number;
     processDetails?: {
       stage: number;
       submit?: {

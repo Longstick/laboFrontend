@@ -73,13 +73,19 @@ export default [
         routes: [
             {
                 path: '/repair',
-                redirect: '/repair/pending',
+                redirect: '/repair/allissues',
             },
             {
-                path: '/repair/pending',
-                name: 'My Pending',
-                component: './Repairment/Pending',
-            }
+                path: '/repair/allissues',
+                name: 'All Issues',
+                component: './Repairment/All',
+            },
+            {
+                path: '/repair/mytodo',
+                name: 'My To-do List',
+                component: './Repairment/Todo',
+            },
+            
         ]
     },
     {
