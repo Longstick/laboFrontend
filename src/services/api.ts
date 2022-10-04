@@ -4,7 +4,7 @@
 import { request } from '@umijs/max';
 
 export const login = async (body: API.LoginParams, options?: { [key: string]: any }) => {
-	return request<API.LoginResult>('http://1.13.198.41:3000/api/user/login', {
+	return request<API.PostResult>('http://1.13.198.41:3000/api/user/login', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -14,8 +14,37 @@ export const login = async (body: API.LoginParams, options?: { [key: string]: an
 	});
 }
 
+export const signupInSchool = async (body: API.LoginParams, options?: { [key: string]: any }) => {
+	return request<API.PostResult>('http://1.13.198.41:3000/api/user/schoolRegister', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		data: body,
+		...(options || {}),
+	});
+}
 
-export const getUserInfo = async ( options?: { [key: string]: any }) => {
+export const signupOutSchool = async (body: API.LoginParams, options?: { [key: string]: any }) => {
+	return request<API.PostResult>('http://1.13.198.41:3000/api/user/register', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		data: body,
+		...(options || {}),
+	});
+}
+
+export const getCaptcha = async (email: string, options?: { [key: string]: any }) => {
+	return request<API.PostResult>('http://1.13.198.41:3000/api/user/getCode', {
+		method: 'GET',
+		params: email,
+	})
+}
+
+
+export const getUserInfo = async (options?: { [key: string]: any }) => {
 	return request<{
 		data: API.UserInfo
 	}>('http://1.13.198.41:3000/api/user/getUserInfo', {

@@ -12,6 +12,7 @@ import { getUserInfo as queryUserInfo } from './services/api'
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+const signupPath = '/user/signup';
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
@@ -78,7 +79,7 @@ export async function getInitialState(): Promise<{
     return undefined;
   }
 
-  if (window.location.pathname !== loginPath) {
+  if (window.location.pathname !== loginPath && window.location.pathname !== signupPath) {
     const userInfo = await getUserInfo();
     return {
       getUserInfo,

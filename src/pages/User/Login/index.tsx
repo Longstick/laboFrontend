@@ -5,8 +5,8 @@ import {
     UserOutlined,
     LockOutlined,
 } from '@ant-design/icons';
-import { FormattedMessage, useIntl, useModel, history } from '@umijs/max';
-import styles from './index.less'
+import { FormattedMessage, useIntl, useModel, history, SelectLang } from '@umijs/max';
+import styles from '../index.less'
 import logo from '../../../img/3.png'
 import { login } from '../../../services/api'
 import { waitTime } from "@/services/utils";
@@ -76,10 +76,11 @@ const Login: React.FC = () => {
             }}
         >
             <Layout>
-                <Header className={styles.LoginHeader}>
+                {/* <Header className={styles.LoginHeader}>
                     <img src={logo} alt='' className={styles.HeaderLogo} />
-                    {/* <Title level={2}>SZTU </Title> */}
-                </Header>
+                    <Title level={2}>SZTU </Title>
+                </Header> */}
+                
                 <Content className={styles.BasicBody}>
                     <ProCard ghost direction='row' className={styles.LoginPad}>
                         {!responsive &&
@@ -98,10 +99,12 @@ const Login: React.FC = () => {
                             <Form
                                 name="LoginForm"
                                 onFinish={onFinish}
+                                layout='vertical'
+                                requiredMark={false}
                             >
 
                                 <Form.Item
-                                    name="account"
+                                    name="email"
                                     rules={[
                                         {
                                             required: true,
@@ -114,7 +117,7 @@ const Login: React.FC = () => {
                                         size="large"
                                         prefix={<UserOutlined />}
                                         allowClear
-                                        placeholder="请输入账号"
+                                        placeholder="请输入邮箱"
                                     />
                                 </Form.Item>
 
@@ -148,7 +151,7 @@ const Login: React.FC = () => {
                                 <Form.Item>
                                     <Button
                                         type="primary"
-                                        shape="round"
+                                        // shape="round"
                                         size="large"
                                         style={{
                                             width: '100%',
@@ -161,7 +164,7 @@ const Login: React.FC = () => {
                             </Form>
 
                             <a
-                                href=""
+                                href="/user/signup"
                                 className={styles.SignupLink}
                             >没有账号？点此注册</a>
                         </ProCard>

@@ -7,20 +7,26 @@ declare namespace API {
     type?: string;
   };
 
-  type LoginResult = {
+  type PostResult = {
     code?: number;
-    data?: {
-      token: string;
-      identity: number;
-      auth: number;
-    };
+    data?: any;
     msg?: string;
-  };
+  }
+
+  type SignupParams = {
+    account?: string;
+    username?: string;
+    phone?: string;
+    email?: string;
+    code?: string;
+    password?: string;
+  }
 
   type UserInfo = {
     account?: string;
     username?: string;
     phone?: string;
+    email?: string;
     identity?: number;
     auth?: number;
   }
