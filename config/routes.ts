@@ -85,7 +85,16 @@ export default [
                 name: 'My To-do List',
                 component: './Repairment/Todo',
             },
-            
+            {
+                path: '/repair/mycompleted',
+                name: 'My Completed List',
+                component: './Repairment/Completed',
+            },
+            {
+                path: '/repair/mysubmission',
+                name: 'My Submission List',
+                component: './Repairment/Submission',
+            },
         ]
     },
     {

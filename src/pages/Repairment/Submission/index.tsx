@@ -21,7 +21,7 @@ import RcResizeObserver from 'rc-resize-observer';
 
 import ProcessDrawer from '../components/ProcessDrawer';
 import styles from '../index.less';
-import { priorityList, statusList } from '../struct';
+import { priorityList } from '../struct';
 
 const { Title } = Typography;
 
@@ -45,7 +45,6 @@ const handleRemove = async (selectedRows: API.TableColumns[]) => {
 const RepairmentTable: React.FC = () => {
     const [responsive, setResponsive] = useState<boolean>(false);
     const [currentRow, setCurrentRow] = useState<API.TableColumns>();
-    const [activeKey, setActiveKey] = useState<string>('tab1')
     const [selectedRowsState, setSelectedRows] = useState<API.TableColumns[]>([]);
     const [processDrawerOpen, setProcessDrawer] = useState<boolean>(false);
     const actionRef = useRef<ActionType>();
@@ -55,6 +54,36 @@ const RepairmentTable: React.FC = () => {
     }
 
     const intl = useIntl();
+
+    const statusList = {
+        0: {
+            text: (<FormattedMessage
+                id="pages.repairment.issue.status.processing"
+                defaultMessage='Processing'
+            />),
+            status: 'Default',
+        },
+        1: {
+            text: (<FormattedMessage
+                id="pages.repairment.issue.status.done"
+                defaultMessage='Done'
+            />),
+            status: 'Success',
+        },
+        2: {
+            text: (<FormattedMessage
+                id="pages.repairment.issue.status.error"
+                defaultMessage='Error'
+            />),
+            status: 'Error',
+        }
+    }
+
+    const categoryList = {
+        0: '电脑',
+        1: '实验设备',
+        2: '灯',
+    }
 
     const columns: ProColumns<API.TableColumns>[] = [
         {
@@ -96,11 +125,7 @@ const RepairmentTable: React.FC = () => {
             />),
             dataIndex: 'categoryList',
             hideInTable: true,
-            valueEnum: {
-                0: '电脑',
-                1: '实验设备',
-                2: '灯',
-            },
+            valueEnum: categoryList,
             valueType: 'select',
             fieldProps: {
                 dropdownMatchSelectWidth: false,
@@ -262,7 +287,8 @@ const RepairmentTable: React.FC = () => {
                     actionRef={actionRef}
                     request={issueTableRule}
                     tableLayout='fixed'
-                    rowKey='key'
+                    rowKey={'key'}
+                    // cardBordered
                     scroll={{ x: 1200 }}
                     rowSelection={{
                         onChange: (_, selectedRows) => {
@@ -280,21 +306,6 @@ const RepairmentTable: React.FC = () => {
                         // showHiddenNum: true,
                     }}
                     toolbar={{
-                        multipleLine: true,
-                        tabs: {
-                            activeKey,
-                            onChange: (key) => setActiveKey(key as string),
-                            items: [
-                                {
-                                    key: 'tab1',
-                                    tab: '标签一',
-                                },
-                                {
-                                    key: 'tab2',
-                                    tab: '标签二',
-                                },
-                            ],
-                        },
                         actions: [
                             <Button type="primary" key="outputAll">
                                 <FormattedMessage

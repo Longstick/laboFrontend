@@ -155,6 +155,7 @@ export default {
   'pages.repairment.all.statisticsData.totalIssues': '总计工单',
   'pages.repairment.all.statisticsData.highPriority': '高优先级',
   'pages.repairment.all.statisticsData.overdueIssue': '已逾期',
+  "pages.repairment.all.searchTable.title": '全部工单',
 
 
   'component.button.confirm': '确定',

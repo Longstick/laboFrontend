@@ -20,7 +20,7 @@ const genList = (current: number, pageSize: number) => {
         estimatedTime: Date.now() + getRandomInt(3600000000),
         updatedTime: Date.now() + getRandomInt(3600000000),
         status: 0,
-        currentProcesser: getRandomInt(2),
+        currentProcesser: 1,
         object: '大数据学院楼-204-椅子0015',
         failureType: 1,
         manufacturer: '西昊 XiHao',

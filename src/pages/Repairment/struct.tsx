@@ -29,6 +29,30 @@ export const priorityList = {
     }
 }
 
+export const statusList = {
+    0: {
+        text: (<FormattedMessage
+            id="pages.repairment.issue.status.processing"
+            defaultMessage='Processing'
+        />),
+        status: 'Default',
+    },
+    1: {
+        text: (<FormattedMessage
+            id="pages.repairment.issue.status.done"
+            defaultMessage='Done'
+        />),
+        status: 'Success',
+    },
+    2: {
+        text: (<FormattedMessage
+            id="pages.repairment.issue.status.error"
+            defaultMessage='Error'
+        />),
+        status: 'Error',
+    }
+}
+
 export const stepLabel = {
     0: (<FormattedMessage id="pages.repairment.issue.submit" defaultMessage="Submit" />),
     1: (<FormattedMessage id="pages.repairment.issue.approval" defaultMessage="Approval" />),

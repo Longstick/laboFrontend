@@ -52,4 +52,6 @@ export default {
   'menu.Repairment': '设备维修管理',
   'menu.Repairment.My To-do List': '我的待办',
   'menu.Repairment.All Issues': '全部工单',
+  'menu.Repairment.My Submission List': '我的提交',
+  'menu.Repairment.My Completed List': '已处理',
 };

@@ -47,16 +47,12 @@ const RepairmentTable: React.FC = () => {
     const [currentRow, setCurrentRow] = useState<API.TableColumns>();
     const [selectedRowsState, setSelectedRows] = useState<API.TableColumns[]>([]);
     const [processDrawerOpen, setProcessDrawer] = useState<boolean>(false);
-    const [checkDrawerState, setCheckDrawer] = useState<boolean>(false);
     const actionRef = useRef<ActionType>();
 
     const onCloseProcessDrawer = () => {
         setProcessDrawer(false);
     }
-    const onCheckClick = () => {
-        setCheckDrawer(true);
-        console.log(checkDrawerState)
-    }
+
     const intl = useIntl();
 
     const statusList = {
@@ -211,44 +207,17 @@ const RepairmentTable: React.FC = () => {
             search: false,
             width: 120,
             fixed: 'right',
-            render: (_, record) => {
-                switch (record.status) {
-                    case 0: {
-                        return (
-                            <Button
-                                type="link"
-                                // ghost
-                                // shape="circle"
-                                onClick={() => {
-                                    setProcessDrawer(true);
-                                    setCurrentRow(record);
-                                }}
-                            ><FormattedMessage id="pages.repairment.searchTable.options.process" defaultMessage='Process' />
-                            </Button>)
-                    }
-                    case 1: {
-                        return (
-                            <Button
-                                type="link"
-                                // ghost
-                                // shape="circle"
-                                onClick={onCheckClick}
-                            ><FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
-                            </Button>)
-                    }
-                    case 2: {
-                        return (
-                            <Button
-                                type="link"
-                                // ghost
-                                // shape="circle"
-                                onClick={onCheckClick}
-                            ><FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
-                            </Button>)
-                    }
-                    default: { return <></>; }
-                }
-            }
+            render: (_, record) =>
+                <Button
+                    type="link"
+                    // ghost
+                    // shape="circle"
+                    onClick={() => {
+                        setProcessDrawer(true);
+                        setCurrentRow(record);
+                    }}
+                ><FormattedMessage id="pages.repairment.searchTable.options.process" defaultMessage='Process' />
+                </Button>
         },
     ];
 
@@ -267,7 +236,7 @@ const RepairmentTable: React.FC = () => {
                     })}
                     direction={responsive ? 'column' : 'row'}
                     ghost
-                    gutter={[24, 12]}
+                    gutter={[12, 12]}
                     className={styles.statisticsBaseCard}
                 >
                     <ProCard>
@@ -310,7 +279,7 @@ const RepairmentTable: React.FC = () => {
                 <Title level={5} style={{ marginBottom: 10 }}>
                     <FormattedMessage
                         id="pages.repairment.searchTable.title"
-                        defaultMessage='To-do Issue'
+                        defaultMessage='To-do Issues'
                     />
                 </Title>
                 <ProTable<API.TableColumns, API.PageParams>
