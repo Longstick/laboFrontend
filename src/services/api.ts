@@ -64,7 +64,7 @@ export const getUserInfo = async (options?: { [key: string]: any }) => {
 // 	});
 // }
 
-/** 工单表获取规则列表 GET /api/rule */
+/** 工单表获取数据 GET /api/rule */
 export async function issueTableRule(
 	params: {
 		// query
@@ -72,6 +72,7 @@ export async function issueTableRule(
 		current?: number;
 		/** 页面的容量 */
 		pageSize?: number;
+		activeKey?: string;
 	},
 	options?: { [key: string]: any },
 ) {

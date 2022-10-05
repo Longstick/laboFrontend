@@ -156,7 +156,7 @@ export default {
   'pages.repairment.all.statisticsData.highPriority': '高优先级',
   'pages.repairment.all.statisticsData.overdueIssue': '已逾期',
   "pages.repairment.all.searchTable.title": '全部工单',
-
+  'pages.repairment.searchTable.createNew': '新建工单',
 
   'component.button.confirm': '确定',
   'component.textarea.placeholder': '请在此输入',

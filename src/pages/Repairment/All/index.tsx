@@ -1,9 +1,7 @@
 import { removeRule } from '@/services/ant-design-pro/api';
 import { issueTableRule } from '@/services/api'
 
-import {
-
-} from '@ant-design/icons';
+import { PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 import {
     FooterToolbar,
@@ -12,8 +10,8 @@ import {
     ProCard,
 } from '@ant-design/pro-components';
 
-import { Button, message, Statistic, Typography, Tag } from 'antd';
-import { FormattedMessage, useIntl } from '@umijs/max';
+import { Button, message, Statistic, Typography, Tag, Badge, Space } from 'antd';
+import { FormattedMessage, useIntl, useModel } from '@umijs/max';
 import type { ProColumns, ActionType, } from '@ant-design/pro-components';
 
 import React, { useRef, useState } from 'react';
@@ -45,9 +43,10 @@ const handleRemove = async (selectedRows: API.TableColumns[]) => {
 const RepairmentTable: React.FC = () => {
     const [responsive, setResponsive] = useState<boolean>(false);
     const [currentRow, setCurrentRow] = useState<API.TableColumns>();
-    const [activeKey, setActiveKey] = useState<string>('tab1')
+    const [activeKey, setActiveKey] = useState<string>('all')
     const [selectedRowsState, setSelectedRows] = useState<API.TableColumns[]>([]);
     const [processDrawerOpen, setProcessDrawer] = useState<boolean>(false);
+    const { initialState } = useModel('@@initialState');
     const actionRef = useRef<ActionType>();
 
     const onCloseProcessDrawer = () => {
@@ -55,6 +54,20 @@ const RepairmentTable: React.FC = () => {
     }
 
     const intl = useIntl();
+
+    const renderBadge = (count: number, active = false) => {
+        return (
+            <Badge
+                count={count}
+                style={{
+                    marginBlockStart: -2,
+                    marginInlineStart: 4,
+                    color: active ? '#1890FF' : '#999',
+                    backgroundColor: active ? '#E6F7FF' : '#eee',
+                }}
+            />
+        );
+    };
 
     const columns: ProColumns<API.TableColumns>[] = [
         {
@@ -191,7 +204,11 @@ const RepairmentTable: React.FC = () => {
                         setProcessDrawer(true);
                         setCurrentRow(record);
                     }}
-                ><FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
+                >
+                    {record.currentProcesser === initialState?.userInfo?.identity ?
+                        <FormattedMessage id="pages.repairment.searchTable.options.process" defaultMessage='Process' /> :
+                        <FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
+                    }
                 </Button>
         },
     ];
@@ -257,10 +274,12 @@ const RepairmentTable: React.FC = () => {
                         defaultMessage='All Issues'
                     />
                 </Title>
+
+
                 <ProTable<API.TableColumns, API.PageParams>
                     columns={columns}
                     actionRef={actionRef}
-                    request={issueTableRule}
+                    request={(params) => issueTableRule({ ...params, activeKey })}
                     tableLayout='fixed'
                     rowKey='key'
                     scroll={{ x: 1200 }}
@@ -268,9 +287,6 @@ const RepairmentTable: React.FC = () => {
                         onChange: (_, selectedRows) => {
                             setSelectedRows(selectedRows);
                         },
-                    }}
-                    options={{
-                        search: true,
                     }}
                     search={{
                         optionRender: false,
@@ -280,29 +296,50 @@ const RepairmentTable: React.FC = () => {
                         // showHiddenNum: true,
                     }}
                     toolbar={{
+                        search: true,
                         multipleLine: true,
-                        tabs: {
-                            activeKey,
-                            onChange: (key) => setActiveKey(key as string),
-                            items: [
-                                {
-                                    key: 'tab1',
-                                    tab: '标签一',
-                                },
-                                {
-                                    key: 'tab2',
-                                    tab: '标签二',
-                                },
-                            ],
-                        },
                         actions: [
-                            <Button type="primary" key="outputAll">
+                            <Button type="primary" key="New" size='large' icon={<PlusOutlined />}>
+                                <FormattedMessage
+                                    id='pages.repairment.searchTable.createNew'
+                                    defaultMessage='Create New'
+                                />
+                            </Button>,
+                            <Button type="primary" key="outputAll" size='large'>
                                 <FormattedMessage
                                     id='pages.repairment.searchTable.outputAll'
                                     defaultMessage='Output All'
                                 />
-                            </Button>,
-                        ]
+                            </Button>
+                        ],
+
+                        tabs: {
+                            activeKey,
+                            onChange: (key) => {
+                                setActiveKey(key as string)
+                                actionRef.current?.reloadAndRest?.();
+                            },
+                            items: [
+                                {
+                                    key: 'all',
+                                    tab: '全部'
+                                },
+                                {
+                                    key: 'to-do',
+                                    tab: <span>我的待办{renderBadge(15, activeKey === 'to-do')}</span>
+                                },
+                                {
+                                    key: 'myCompleted',
+                                    tab: '我的已办'
+                                },
+                                {
+                                    key: 'mySubmission',
+                                    tab: '我的提交'
+                                },
+                            ],
+
+                        },
+
                     }}
                 />
 
