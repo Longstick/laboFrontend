@@ -1,16 +1,11 @@
-import { removeRule } from '@/services/ant-design-pro/api';
 import { issueTableRule } from '@/services/api'
-
-import { PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-
 import {
-    FooterToolbar,
     PageContainer,
     ProTable,
     ProCard,
 } from '@ant-design/pro-components';
 
-import { Button, message, Statistic, Typography, Tag, Badge, Space } from 'antd';
+import { Button, Typography, Tag, Badge, Space } from 'antd';
 import { FormattedMessage, useIntl, useModel } from '@umijs/max';
 import type { ProColumns, ActionType, } from '@ant-design/pro-components';
 
@@ -18,27 +13,12 @@ import React, { useRef, useState } from 'react';
 import RcResizeObserver from 'rc-resize-observer';
 
 import ProcessDrawer from '../components/ProcessDrawer';
+import CreateNew from '../components/CreateNew';
 import styles from '../index.less';
-import { priorityList, statusList } from '../struct';
+import { priorityList, staticGroup, statusList } from '../struct';
 
 const { Title } = Typography;
-
-const handleRemove = async (selectedRows: API.TableColumns[]) => {
-    const hide = message.loading('正在删除');
-    if (!selectedRows) return true;
-    try {
-        await removeRule({
-            key: selectedRows.map((row) => row.key),
-        });
-        hide();
-        message.success('Deleted successfully and will refresh soon');
-        return true;
-    } catch (error) {
-        hide();
-        message.error('Delete failed, please try again');
-        return false;
-    }
-};
+const { Divider } = ProCard
 
 const RepairmentTable: React.FC = () => {
     const [responsive, setResponsive] = useState<boolean>(false);
@@ -231,40 +211,7 @@ const RepairmentTable: React.FC = () => {
                     gutter={[12, 12]}
                     className={styles.statisticsBaseCard}
                 >
-                    <ProCard>
-                        <Statistic
-                            title={intl.formatMessage({
-                                id: 'pages.repairment.all.statisticsData.newIssuesToday',
-                                defaultMessage: 'New Issues Today'
-                            })}
-                            value={34} />
-                    </ProCard>
-                    {/* <Divider type={responsive ? 'horizontal' : 'vertical'} /> */}
-                    <ProCard>
-                        <Statistic
-                            title={intl.formatMessage({
-                                id: 'pages.repairment.all.statisticsData.totalIssues',
-                                defaultMessage: 'Total Issues'
-                            })}
-                            value={10245} />
-                    </ProCard>
-                    {/* <Divider type={responsive ? 'horizontal' : 'vertical'} /> */}
-                    <ProCard>
-                        <Statistic
-                            title={intl.formatMessage({
-                                id: 'pages.repairment.all.statisticsData.highPriority',
-                                defaultMessage: 'High Priority Issues'
-                            })}
-                            value={842} />
-                    </ProCard>
-                    {/* <Divider type={responsive ? 'horizontal' : 'vertical'} /> */}
-                    <ProCard>
-                        <Statistic
-                            title={intl.formatMessage({
-                                id: 'pages.repairment.all.statisticsData.overdueIssue',
-                                defaultMessage: 'Overdue Issues'
-                            })} value={86} />
-                    </ProCard>
+                    {staticGroup[activeKey]}
                 </ProCard.Group>
 
 
@@ -298,20 +245,24 @@ const RepairmentTable: React.FC = () => {
                     toolbar={{
                         search: true,
                         multipleLine: true,
-                        actions: [
-                            <Button type="primary" key="New" size='large' icon={<PlusOutlined />}>
-                                <FormattedMessage
-                                    id='pages.repairment.searchTable.createNew'
-                                    defaultMessage='Create New'
-                                />
-                            </Button>,
-                            <Button type="primary" key="outputAll" size='large'>
-                                <FormattedMessage
-                                    id='pages.repairment.searchTable.outputAll'
-                                    defaultMessage='Output All'
-                                />
-                            </Button>
-                        ],
+                        title:
+                            <Space>
+                                <CreateNew key='createNew' />
+                                <Button key="outputAll" type='primary'>
+                                    <FormattedMessage
+                                        id='pages.repairment.searchTable.outputAll'
+                                        defaultMessage='Output All'
+                                    />
+                                </Button>
+                                <Button
+                                    key="outputSelected"
+                                    disabled={selectedRowsState.length === 0}
+                                >
+                                    <FormattedMessage
+                                        id="pages.repairment.searchTable.outputSelected"
+                                        defaultMessage='Output Selected'
+                                    />
+                                </Button></Space>,
 
                         tabs: {
                             activeKey,
@@ -343,7 +294,7 @@ const RepairmentTable: React.FC = () => {
                     }}
                 />
 
-                {selectedRowsState?.length > 0 && (
+                {/* {selectedRowsState?.length > 0 && (
                     <FooterToolbar
                         extra={
                             <div>
@@ -354,18 +305,6 @@ const RepairmentTable: React.FC = () => {
                             </div>
                         }
                     >
-                        <Button
-                            onClick={async () => {
-                                await handleRemove(selectedRowsState);
-                                setSelectedRows([]);
-                                actionRef.current?.reloadAndRest?.();
-                            }}
-                        >
-                            <FormattedMessage
-                                id="pages.searchTable.batchDeletion"
-                                defaultMessage="Batch deletion"
-                            />
-                        </Button>
                         <Button type="primary">
                             <FormattedMessage
                                 id="pages.searchTable.batchApproval"
@@ -373,7 +312,7 @@ const RepairmentTable: React.FC = () => {
                             />
                         </Button>
                     </FooterToolbar>
-                )}
+                )} */}
 
                 <ProcessDrawer
                     responsive={responsive}

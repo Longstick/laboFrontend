@@ -21,7 +21,7 @@ import RcResizeObserver from 'rc-resize-observer';
 
 import ProcessDrawer from '../components/ProcessDrawer';
 import styles from '../index.less';
-import { priorityList } from '../struct';
+import { priorityList, staticGroup } from '../struct';
 
 const { Title } = Typography;
 
@@ -239,40 +239,7 @@ const RepairmentTable: React.FC = () => {
                     gutter={[12, 12]}
                     className={styles.statisticsBaseCard}
                 >
-                    <ProCard>
-                        <Statistic
-                            title={intl.formatMessage({
-                                id: 'pages.repairment.statisticsData.newIssueToday',
-                                defaultMessage: 'New To-do Issues Today'
-                            })}
-                            value={15} />
-                    </ProCard>
-                    {/* <Divider type={responsive ? 'horizontal' : 'vertical'} /> */}
-                    <ProCard>
-                        <Statistic
-                            title={intl.formatMessage({
-                                id: 'pages.repairment.statisticsData.totalIssue',
-                                defaultMessage: 'Total Issues'
-                            })}
-                            value={7502} />
-                    </ProCard>
-                    {/* <Divider type={responsive ? 'horizontal' : 'vertical'} /> */}
-                    <ProCard>
-                        <Statistic
-                            title={intl.formatMessage({
-                                id: 'pages.repairment.statisticsData.highPriority',
-                                defaultMessage: 'High Priority Issues'
-                            })}
-                            value={344} />
-                    </ProCard>
-                    {/* <Divider type={responsive ? 'horizontal' : 'vertical'} /> */}
-                    <ProCard>
-                        <Statistic
-                            title={intl.formatMessage({
-                                id: 'pages.repairment.statisticsData.overdueIssue',
-                                defaultMessage: 'Overdue Issues'
-                            })} value={75} />
-                    </ProCard>
+                    {staticGroup['to-do']}
                 </ProCard.Group>
 
 

@@ -111,7 +111,7 @@ export default {
   "pages.repairment.searchTable.title": '待办工单',
   'pages.repairment.statisticsData.title': '数据统计',
   'pages.repairment.statisticsData.newIssueToday': '今日新增待办',
-  'pages.repairment.statisticsData.totalIssue': '累计待办',
+  'pages.repairment.statisticsData.totalTodoIssues': '累计待办',
   'pages.repairment.statisticsData.highPriority': '高优先级',
   'pages.repairment.statisticsData.overdueIssue': '已逾期',
   'pages.repairment.searchTable.outputAll': '导出所有',
@@ -155,12 +155,12 @@ export default {
   'pages.repairment.all.statisticsData.totalIssues': '总计工单',
   'pages.repairment.all.statisticsData.highPriority': '高优先级',
   'pages.repairment.all.statisticsData.overdueIssue': '已逾期',
-  "pages.repairment.all.searchTable.title": '全部工单',
+  "pages.repairment.all.searchTable.title": '工单表格',
   'pages.repairment.searchTable.createNew': '新建工单',
 
   'component.button.confirm': '确定',
   'component.textarea.placeholder': '请在此输入',
-  "component.formItem.required": '这是必填项',
+  "component.formItem.required": '此为必填项，请填写',
   "component.uploadPic.limit3": '最多上传三张照片，图片格式支持 .jpg / .png / .jpeg',
   
 };

@@ -1,6 +1,7 @@
+/* eslint-disable react/jsx-key */
 import { ProCard } from "@ant-design/pro-components";
-import { FormattedMessage } from "@umijs/max"
-import { Typography } from "antd";
+import { FormattedMessage, FormattedTimeParts, useIntl } from "@umijs/max"
+import { Typography, Statistic } from "antd";
 import React from "react"
 
 const { Title, Paragraph, Text } = Typography
@@ -85,7 +86,7 @@ export const popContent = {
             </Paragraph>
 
             <Title level={5}>
-            签收图片上传失败？
+                签收图片上传失败？
             </Title>
             <Paragraph>
                 如果您的报价文件一直上传失败，我们建议您：<br />
@@ -123,4 +124,98 @@ export const popContent = {
             </Paragraph>
         </ProCard>
     )
+}
+
+export const staticGroup = {
+    'all': [
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.all.statisticsData.newIssuesToday' defaultMessage="New Issues Today" />}
+                value={34} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.all.statisticsData.totalIssues' defaultMessage="Total Issues" />}
+                value={10245} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.all.statisticsData.highPriority' defaultMessage='High Priority' />}
+                value={842} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.all.statisticsData.overdueIssue' defaultMessage="Overdue" />}
+                value={86} />
+        </ProCard>
+    ],
+
+    'to-do': [
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.statisticsData.newIssueToday' defaultMessage="New To-do Issues Today" />}
+                value={15} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.statisticsData.totalTodoIssues' defaultMessage="Total To-do Issues" />}
+                value={7502} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.statisticsData.highPriority' defaultMessage='High Priority' />}
+                value={344} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.statisticsData.overdueIssue' defaultMessage='Overdue' />}
+                value={75} />
+        </ProCard>
+    ],
+
+    'myCompleted': [
+        <ProCard>
+            <Statistic
+                title='今日提交'
+                value={1} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title='累计提交'
+                value={70} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title='已完成'
+                value={65} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title='已逾期'
+                value={2} />
+        </ProCard>
+    ],
+
+    'mySubmission': [
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.statisticsData.newIssueToday' defaultMessage="New To-do Issues Today" />}
+                value={15} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.statisticsData.totalTodoIssues' defaultMessage="Total To-do Issues" />}
+                value={7502} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.statisticsData.highPriority' defaultMessage='High Priority' />}
+                value={344} />
+        </ProCard>,
+        <ProCard>
+            <Statistic
+                title={<FormattedMessage id='pages.repairment.statisticsData.overdueIssue' defaultMessage='Overdue' />}
+                value={75} />
+        </ProCard>
+    ]
 }

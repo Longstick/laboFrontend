@@ -73,28 +73,28 @@ export default [
         routes: [
             {
                 path: '/repair',
-                redirect: '/repair/allissues',
+                redirect: '/repair/issuesystem',
             },
             {
-                path: '/repair/allissues',
+                path: '/repair/issuesystem',
                 name: 'All Issues',
-                component: './Repairment/All',
+                component: './Repairment/IssueTable',
             },
-            {
-                path: '/repair/mytodo',
-                name: 'My To-do List',
-                component: './Repairment/Todo',
-            },
-            {
-                path: '/repair/mycompleted',
-                name: 'My Completed List',
-                component: './Repairment/Completed',
-            },
-            {
-                path: '/repair/mysubmission',
-                name: 'My Submission List',
-                component: './Repairment/Submission',
-            },
+            // {
+            //     path: '/repair/mytodo',
+            //     name: 'My To-do List',
+            //     component: './Repairment/Todo',
+            // },
+            // {
+            //     path: '/repair/mycompleted',
+            //     name: 'My Completed List',
+            //     component: './Repairment/Completed',
+            // },
+            // {
+            //     path: '/repair/mysubmission',
+            //     name: 'My Submission List',
+            //     component: './Repairment/Submission',
+            // },
         ]
     },
     {
