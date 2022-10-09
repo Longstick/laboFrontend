@@ -16,6 +16,7 @@ import ProcessDrawer from '../components/ProcessDrawer';
 import CreateNew from '../components/CreateNew';
 import styles from '../index.less';
 import { priorityList, staticGroup, statusList } from '../struct';
+import ButtonGroup from 'antd/lib/button/button-group';
 
 const { Title } = Typography;
 const { Divider } = ProCard
@@ -26,6 +27,7 @@ const RepairmentTable: React.FC = () => {
     const [activeKey, setActiveKey] = useState<string>('all')
     const [selectedRowsState, setSelectedRows] = useState<API.TableColumns[]>([]);
     const [processDrawerOpen, setProcessDrawer] = useState<boolean>(false);
+    const [canSelect, setSelect] = useState<boolean>(false);
     const { initialState } = useModel('@@initialState');
     const actionRef = useRef<ActionType>();
 
@@ -37,15 +39,16 @@ const RepairmentTable: React.FC = () => {
 
     const renderBadge = (count: number, active = false) => {
         return (
-            <Badge
-                count={count}
-                style={{
-                    marginBlockStart: -2,
-                    marginInlineStart: 4,
-                    color: active ? '#1890FF' : '#999',
-                    backgroundColor: active ? '#E6F7FF' : '#eee',
-                }}
-            />
+            count === 0 ? <></> :
+                <Badge
+                    count={count}
+                    style={{
+                        marginBlockStart: -2,
+                        marginInlineStart: 4,
+                        color: active ? '#1890FF' : '#999',
+                        backgroundColor: active ? '#E6F7FF' : '#eee',
+                    }}
+                />
         );
     };
 
@@ -200,12 +203,57 @@ const RepairmentTable: React.FC = () => {
                 setResponsive(offset.width <= 576);
             }}
         >
-            <PageContainer>
+            <PageContainer
+                onTabChange={(key) => {
+                    setActiveKey(key as string)
+                    actionRef.current?.reloadAndRest?.();
+                }}
+                tabList={[
+                    {
+                        key: 'all',
+                        tab: '全部'
+                    },
+                    {
+                        key: 'to-do',
+                        tab: <span>我的待办{renderBadge(15, activeKey === 'to-do')}</span>
+                    },
+                    {
+                        key: 'myCompleted',
+                        tab: <span>我的已处理{renderBadge(35, activeKey === 'myCompleted')}</span>
+                    },
+                    {
+                        key: 'mySubmission',
+                        tab: '我的提交'
+                    },
+                ]}
+                extra={(
+                    <Space size={16}>
+                        <CreateNew />
+                        <ButtonGroup>
+                            <Button
+                                key='outputAll'
+                                size='large'
+                            >导出全部</Button>
+
+                            <Button
+                                key="outputSelected"
+                                size='large'
+                                disabled={selectedRowsState.length === 0}
+                            >
+                                <FormattedMessage
+                                    id="pages.repairment.searchTable.outputSelected"
+                                    defaultMessage='Output Selected'
+                                />
+                            </Button>
+                        </ButtonGroup>
+                    </Space>
+                )}
+            >
                 <ProCard.Group
-                    title={intl.formatMessage({
-                        id: 'pages.repairment.statisticsData.title',
-                        defaultMessage: 'Statistic Data'
-                    })}
+                    // title={intl.formatMessage({
+                    //     id: 'pages.repairment.statisticsData.title',
+                    //     defaultMessage: 'Statistic Data'
+                    // })}
                     direction={responsive ? 'column' : 'row'}
                     ghost
                     gutter={[12, 12]}
@@ -215,12 +263,12 @@ const RepairmentTable: React.FC = () => {
                 </ProCard.Group>
 
 
-                <Title level={5} style={{ marginBottom: 10 }}>
+                {/* <Title level={5} style={{ marginBottom: 10 }}>
                     <FormattedMessage
                         id="pages.repairment.all.searchTable.title"
                         defaultMessage='All Issues'
                     />
-                </Title>
+                </Title> */}
 
 
                 <ProTable<API.TableColumns, API.PageParams>
@@ -231,9 +279,7 @@ const RepairmentTable: React.FC = () => {
                     rowKey='key'
                     scroll={{ x: 1200 }}
                     rowSelection={{
-                        onChange: (_, selectedRows) => {
-                            setSelectedRows(selectedRows);
-                        },
+                        onChange: (_, selectedRows) => { setSelectedRows(selectedRows) },
                     }}
                     search={{
                         optionRender: false,
@@ -244,52 +290,54 @@ const RepairmentTable: React.FC = () => {
                     }}
                     toolbar={{
                         search: true,
-                        multipleLine: true,
-                        title:
-                            <Space>
-                                <CreateNew key='createNew' />
-                                <Button key="outputAll" type='primary'>
-                                    <FormattedMessage
-                                        id='pages.repairment.searchTable.outputAll'
-                                        defaultMessage='Output All'
-                                    />
-                                </Button>
-                                <Button
-                                    key="outputSelected"
-                                    disabled={selectedRowsState.length === 0}
-                                >
-                                    <FormattedMessage
-                                        id="pages.repairment.searchTable.outputSelected"
-                                        defaultMessage='Output Selected'
-                                    />
-                                </Button></Space>,
+                        // multipleLine: true,
+                        // title:
+                        //     <Space size={16}>
+                        //         <CreateNew key='createNew' />
+                        //         <ButtonGroup>
 
-                        tabs: {
-                            activeKey,
-                            onChange: (key) => {
-                                setActiveKey(key as string)
-                                actionRef.current?.reloadAndRest?.();
-                            },
-                            items: [
-                                {
-                                    key: 'all',
-                                    tab: '全部'
-                                },
-                                {
-                                    key: 'to-do',
-                                    tab: <span>我的待办{renderBadge(15, activeKey === 'to-do')}</span>
-                                },
-                                {
-                                    key: 'myCompleted',
-                                    tab: '我的已办'
-                                },
-                                {
-                                    key: 'mySubmission',
-                                    tab: '我的提交'
-                                },
-                            ],
+                        //             <Button
+                        //                 key='outputAll'
+                        //             >导出全部</Button>
 
-                        },
+                        //             <Button
+                        //                 key="outputSelected"
+                        //                 disabled={selectedRowsState.length === 0}
+                        //             >
+                        //                 <FormattedMessage
+                        //                     id="pages.repairment.searchTable.outputSelected"
+                        //                     defaultMessage='Output Selected'
+                        //                 />
+                        //             </Button>
+                        //         </ButtonGroup>
+                        //     </Space>,
+
+                        // tabs: {
+                        //     activeKey,
+                        //     onChange: (key) => {
+                        //         setActiveKey(key as string)
+                        //         actionRef.current?.reloadAndRest?.();
+                        //     },
+                        //     items: [
+                        //         {
+                        //             key: 'all',
+                        //             tab: '全部'
+                        //         },
+                        //         {
+                        //             key: 'to-do',
+                        //             tab: <span>我的待办{renderBadge(15, activeKey === 'to-do')}</span>
+                        //         },
+                        //         {
+                        //             key: 'myCompleted',
+                        //             tab: '我的已办'
+                        //         },
+                        //         {
+                        //             key: 'mySubmission',
+                        //             tab: '我的提交'
+                        //         },
+                        //     ],
+
+                        // },
 
                     }}
                 />

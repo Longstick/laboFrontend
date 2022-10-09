@@ -173,7 +173,7 @@ export const staticGroup = {
         </ProCard>
     ],
 
-    'myCompleted': [
+    'mySubmission': [
         <ProCard>
             <Statistic
                 title='今日提交'
@@ -196,26 +196,26 @@ export const staticGroup = {
         </ProCard>
     ],
 
-    'mySubmission': [
+    'myCompleted': [
         <ProCard>
             <Statistic
-                title={<FormattedMessage id='pages.repairment.statisticsData.newIssueToday' defaultMessage="New To-do Issues Today" />}
-                value={15} />
+                title='今日已处理'
+                value={3} />
         </ProCard>,
         <ProCard>
             <Statistic
-                title={<FormattedMessage id='pages.repairment.statisticsData.totalTodoIssues' defaultMessage="Total To-do Issues" />}
-                value={7502} />
+                title='累计已处理'
+                value={155} />
         </ProCard>,
         <ProCard>
             <Statistic
-                title={<FormattedMessage id='pages.repairment.statisticsData.highPriority' defaultMessage='High Priority' />}
-                value={344} />
+                title='高优先级'
+                value={61} />
         </ProCard>,
         <ProCard>
             <Statistic
-                title={<FormattedMessage id='pages.repairment.statisticsData.overdueIssue' defaultMessage='Overdue' />}
-                value={75} />
+                title='已逾期'
+                value={7} />
         </ProCard>
     ]
 }

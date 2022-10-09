@@ -77,8 +77,13 @@ export default [
             },
             {
                 path: '/repair/issuesystem',
-                name: 'All Issues',
+                name: 'Issue System',
                 component: './Repairment/IssueTable',
+            },
+            {
+                path: '/repair/draftsbox',
+                name: 'Drafts Box',
+                component: './Repairment/DraftsBox',
             },
             // {
             //     path: '/repair/mytodo',

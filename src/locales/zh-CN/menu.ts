@@ -51,7 +51,8 @@ export default {
   'menu.editor.koni': '拓扑编辑器',
   'menu.Repairment': '设备维修管理',
   'menu.Repairment.My To-do List': '我的待办',
-  'menu.Repairment.All Issues': '全部工单',
+  'menu.Repairment.Issue System': '工单系统',
   'menu.Repairment.My Submission List': '我的提交',
   'menu.Repairment.My Completed List': '已处理',
+  'menu.Repairment.Drafts Box': '草稿箱',
 };

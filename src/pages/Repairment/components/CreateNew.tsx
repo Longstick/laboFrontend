@@ -9,28 +9,39 @@ import {
     ProFormGroup,
     ProFormDatePicker,
 } from '@ant-design/pro-components';
+import type { ProFormInstance } from '@ant-design/pro-components';
 
-import { Button } from 'antd';
+import { Button, message, Popconfirm } from 'antd';
 import { FormattedMessage } from '@umijs/max';
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 
-import { useForm } from 'antd/es/form/Form';
 import { waitTime } from '@/services/utils';
 import moment from 'moment';
 import { getStaff } from '@/services/api';
 
 const CreateNew: React.FC = () => {
-    const [form] = useForm()
+    const formRef = useRef<ProFormInstance>()
+    // 因为重写页脚button，还是选择老方法用一个state控制open
+    const [isOpen, setOpen] = useState<boolean>(false)
+
+    const onSave = async () => {
+        await waitTime(1000)
+        const value = formRef.current?.getFieldsFormatValue?.(true)
+        console.log(value)
+        setOpen(false)
+    }
 
     return (
         <ModalForm
-            form={form}
+            formRef={formRef}
             title='新建工单'
+            open={isOpen}
             trigger={
                 <Button
                     type='primary'
-                // shape='round'
+                    size='large'
+                    onClick={()=>{setOpen(true);}}
                 >新建工单</Button>
             }
             grid
@@ -39,12 +50,55 @@ const CreateNew: React.FC = () => {
             }}
             modalProps={{
                 destroyOnClose: true,
+                maskClosable: false,
+                onCancel: ()=>{setOpen(false)}
+            }}
+            submitter={{
+                searchConfig: {
+                    submitText: '提交'
+                },
+                render: (props, dom) => [
+
+                    <Button
+                        key='cancel'
+                        onClick={() => {setOpen(false)}}
+                    >取消</Button>,
+
+                    <Popconfirm
+                        key='cancelConfirm'
+                        title='确认暂存为草稿吗？'
+                        onConfirm={onSave}
+                    >
+                        <Button
+                            key='save'
+                        >暂存</Button>
+                    </Popconfirm>,
+
+                    <Button
+                        key='submit'
+                        type='primary'
+                        {...props.submitButtonProps}
+                        onClick={()=>{
+                            props.submit()
+                            console.log(props.submitButtonProps)
+                        }}
+                    >提交</Button>
+                ]
             }}
             onFinish={async value => {
-                await waitTime(2000)
-                console.log(value)
-                return true
+                setAvailable(true)
+                try{
+                    await waitTime(1000)
+                    message.success('提交成功！')
+                    setOpen(false)
+                    return true
+                } catch(e) {
+                    message.error('提交失败！')
+                    return false
+                }
+
             }}
+
         >
             <ProCard split='horizontal'>
                 <ProCard>
@@ -104,11 +158,11 @@ const CreateNew: React.FC = () => {
                             }]}
                             options={[
                                 {
-                                    label:'3',
+                                    label: '3',
                                     value: 3,
                                 }
                             ]}
-                            
+
                         />
                         <ProFormSelect
                             name='problemType'
@@ -121,7 +175,7 @@ const CreateNew: React.FC = () => {
                             }]}
                             options={[
                                 {
-                                    label:'1',
+                                    label: '1',
                                     value: 1,
                                 }
                             ]}
@@ -179,7 +233,8 @@ const CreateNew: React.FC = () => {
                             }]}
                             fieldProps={{
                                 disabledDate: (date) => {
-                                    return date <= moment().subtract(1, 'days')}
+                                    return date <= moment().subtract(1, 'days')
+                                }
                             }}
                         />
 
@@ -193,7 +248,7 @@ const CreateNew: React.FC = () => {
                                 message: '此为必填项，请填写'
                             }]}
                             request={getStaff}
-                            params={{staffType: 'all'}}
+                            params={{ staffType: 'all' }}
                         />
                     </ProFormGroup>
                 </ProCard>

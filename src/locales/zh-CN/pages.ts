@@ -109,7 +109,7 @@ export default {
   'pages.repairment.issue.nextProcesser': '下一流程处理人',
 
   "pages.repairment.searchTable.title": '待办工单',
-  'pages.repairment.statisticsData.title': '数据统计',
+  'pages.repairment.statisticsData.title': '相关数据',
   'pages.repairment.statisticsData.newIssueToday': '今日新增待办',
   'pages.repairment.statisticsData.totalTodoIssues': '累计待办',
   'pages.repairment.statisticsData.highPriority': '高优先级',
