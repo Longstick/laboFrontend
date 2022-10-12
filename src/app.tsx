@@ -60,7 +60,6 @@ export async function getInitialState(): Promise<{
   const isLoggin = () => {
     const token = window.localStorage.getItem('token');
     if (token !== null) { return true; }
-    message.warning('请先登录！')
     return false;
   }
 
@@ -74,9 +73,10 @@ export async function getInitialState(): Promise<{
       return msg.data;    
     } 
     catch (error) {
+      message.warning('请先登录！')
       history.push(loginPath);
+      return undefined;
     }
-    return undefined;
   }
 
   if (window.location.pathname !== loginPath && window.location.pathname !== signupPath) {
@@ -104,6 +104,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       const { location } = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.userInfo && location.pathname !== loginPath) {
+        message.warning('登录已过期，请先登录')
         history.push(loginPath);
       }
     },

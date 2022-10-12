@@ -86,7 +86,6 @@ const CreateNew: React.FC = () => {
                 ]
             }}
             onFinish={async value => {
-                setAvailable(true)
                 try{
                     await waitTime(1000)
                     message.success('提交成功！')

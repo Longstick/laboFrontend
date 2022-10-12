@@ -6,7 +6,7 @@ import {
 } from '@ant-design/pro-components';
 
 import { Button, Typography, Tag, Badge, Space } from 'antd';
-import { FormattedMessage, useIntl, useModel } from '@umijs/max';
+import { FormattedMessage, useModel } from '@umijs/max';
 import type { ProColumns, ActionType, } from '@ant-design/pro-components';
 
 import React, { useRef, useState } from 'react';
@@ -34,8 +34,6 @@ const RepairmentTable: React.FC = () => {
     const onCloseProcessDrawer = () => {
         setProcessDrawer(false);
     }
-
-    const intl = useIntl();
 
     const renderBadge = (count: number, active = false) => {
         return (
@@ -225,6 +223,10 @@ const RepairmentTable: React.FC = () => {
                         key: 'mySubmission',
                         tab: '我的提交'
                     },
+                    {
+                        key: 'drafts',
+                        tab: '草稿箱'
+                    }
                 ]}
                 extra={(
                     <Space size={16}>
@@ -249,27 +251,16 @@ const RepairmentTable: React.FC = () => {
                     </Space>
                 )}
             >
-                <ProCard.Group
-                    // title={intl.formatMessage({
-                    //     id: 'pages.repairment.statisticsData.title',
-                    //     defaultMessage: 'Statistic Data'
-                    // })}
-                    direction={responsive ? 'column' : 'row'}
-                    ghost
-                    gutter={[12, 12]}
-                    className={styles.statisticsBaseCard}
-                >
-                    {staticGroup[activeKey]}
-                </ProCard.Group>
-
-
-                {/* <Title level={5} style={{ marginBottom: 10 }}>
-                    <FormattedMessage
-                        id="pages.repairment.all.searchTable.title"
-                        defaultMessage='All Issues'
-                    />
-                </Title> */}
-
+                {activeKey !== 'drafts' &&
+                    <ProCard.Group
+                        direction={responsive ? 'column' : 'row'}
+                        ghost
+                        gutter={[12, 12]}
+                        className={styles.statisticsBaseCard}
+                    >
+                        {staticGroup[activeKey]}
+                    </ProCard.Group>
+                }
 
                 <ProTable<API.TableColumns, API.PageParams>
                     columns={columns}
