@@ -12,18 +12,14 @@ import {
     ProFormUploadButton,
     ProFormUploadDragger
 } from '@ant-design/pro-components'
-import type { ProDescriptionsItemProps } from '@ant-design/pro-components'
 import { FormattedMessage, useIntl } from '@umijs/max'
 
-import { Button, Form, message, Tag, Image, Space, Steps, Popover, Switch, Typography } from 'antd'
+import { Button, Form, message, Steps, Popover, Switch, Typography } from 'antd'
 import React, { useState } from 'react'
-import type { ReactNode } from 'react'
-
 import {
-    failureTypeLabel,
-    priorityList,
     stepLabel,
     popContent,
+    issueColumns,
 } from '../struct'
 
 import styles from '../index.less'
@@ -63,71 +59,8 @@ const ApprovalModal: React.FC<ModalProps> = props => {
         return true
     }
 
-
     const [form] = Form.useForm()
     const intl = useIntl();
-    const issueColumns: ProDescriptionsItemProps[] = [
-        {
-            title: <FormattedMessage id='pages.repairment.issue.issueTitle' defaultMessage='Issue Title' />,
-            dataIndex: 'issueTitle',
-        },
-        {
-            title: <FormattedMessage id="pages.repairment.issue.object" defaultMessage='Object' />,
-            dataIndex: 'object',
-        },
-        {
-            title: <FormattedMessage id='pages.repairment.issue.issueDescription' defaultMessage='Description' />,
-            dataIndex: 'issueDescription',
-            span: 2,
-        },
-        {
-            title: <FormattedMessage id="pages.repairment.issue.failureType" defaultMessage='Failure Type' />,
-            dataIndex: 'failureType',
-            valueEnum: failureTypeLabel,
-            valueType: 'select',
-        },
-        {
-            title: <FormattedMessage id="pages.repairment.issue.Manufacturer" defaultMessage='manufacturer' />,
-            dataIndex: 'manufacturer',
-        },
-        {
-            title: <FormattedMessage id='pages.repairment.issue.priority' defaultMessage='Priority' />,
-            dataIndex: 'priority',
-            render: (_, item) => (
-                <Tag color={priorityList[item.priority].color}>
-                    {priorityList[item.priority].text}
-                </Tag>
-            )
-        },
-        {
-            title: <FormattedMessage id='pages.repairment.issue.estimatedTime' defaultMessage='Estimated Time' />,
-            dataIndex: 'estimatedTime',
-            valueType: 'dateTime',
-        },
-        {
-            title: <FormattedMessage id='pages.repairment.issue.picture' defaultMessage='Picture' />,
-            dataIndex: 'picture',
-            span: 2,
-            render: (_, item) => {
-                const picGroup: ReactNode[] = []
-                for (let i = 0; i < item.picture.length; i++) {
-                    picGroup.push(
-                        <Image
-                            className={styles.approvalModalPicture}
-                            src={item.picture[i]}
-                            alt='123'
-                        />)
-                }
-                return (
-                    <Image.PreviewGroup>
-                        <Space>
-                            {picGroup}
-                        </Space>
-                    </Image.PreviewGroup>
-                )
-            }
-        },
-    ]
 
     const approvalForm =
         <>
@@ -149,6 +82,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 fieldProps={{
                     // autoSize: { minRows: 2, maxRows: 6 },
                     showCount: true,
+                    maxLength: 1000,
                 }}
             />
             <ProFormSelect
@@ -297,6 +231,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 }]}
                 fieldProps={{
                     // autoSize: { minRows: 2, maxRows: 6 },
+                    maxLength: 1000,
                     showCount: true,
                 }}
             />
@@ -467,6 +402,10 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                     required: true,
                                     message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
                                 }]}
+                                fieldProps={{
+                                    maxLength: 1000,
+                                    showCount: true,
+                                }}
                             />
                             <ProFormTextArea
                                 name='solution'
@@ -475,6 +414,10 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                     required: true,
                                     message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
                                 }]}
+                                fieldProps={{
+                                    maxLength: 1000,
+                                    showCount: true,
+                                }}
                             />
                         </>,
                 3:

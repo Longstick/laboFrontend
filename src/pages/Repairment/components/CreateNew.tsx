@@ -119,6 +119,7 @@ const CreateNew: React.FC = () => {
                         // colProps={{span: 24}}
                         fieldProps={{
                             showCount: true,
+                            maxLength: 1000,
                             // autoSize: {minRows:2, maxRows:6},
                         }}
                         rules={[{

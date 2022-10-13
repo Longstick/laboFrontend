@@ -18,16 +18,24 @@ function getRule(req: Request, res: Response, u: string) {
     };
 
   let tableListDataSource = []
+  
   for (let i = 0; i < 100; i++) {
+    let estimatedTime = Date.now() + getRandomInt(3600000000);
     tableListDataSource.push({
       key: i,
       issueID: i,
-      issueTitle: '实验器材损坏',
+      issueTitle: {
+        0: '实验器材损坏',
+        1: '电脑有问题',
+        2: '无法投屏，需要维修',
+        3: '今天上午在教室里发现麦克风用不了，坏掉了',
+        4: '单片机损坏，需要返厂维修',
+      }[getRandomInt(5)],
       issueDescription: '今天上午在实验室使用仪器的时候发现仪器损坏balabalabalablabalabalabalabalablabalabalabalabalablabalabalabalabalablabala',
       category: getRandomInt(3),
       priority: getRandomInt(3),
-      remainingTime: Date.now(),
-      estimatedTime: Date.now() + getRandomInt(3600000000),
+      remainingTime: estimatedTime,
+      estimatedTime: estimatedTime,
       updatedTime: Date.now() + getRandomInt(3600000000),
       status: 0,
       currentProcesser: activeKey === 'to-do' ? 1 : getRandomInt(2),
@@ -58,7 +66,7 @@ function getRule(req: Request, res: Response, u: string) {
         repairment: {
           processerID: 1,
           status: 'process',
-          result: 'done',
+          result: 'pass',
           cause: 'somebody pour some water on it.',
           solution: 'have to change motherboard',
           stage: 1

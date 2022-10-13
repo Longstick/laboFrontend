@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-key */
-import { ProCard } from "@ant-design/pro-components";
-import { FormattedMessage, FormattedTimeParts, useIntl } from "@umijs/max"
-import { Typography, Statistic } from "antd";
-import React from "react"
+import { ProCard, } from "@ant-design/pro-components";
+import type { ProDescriptionsItemProps } from "@ant-design/pro-components"
+import { FormattedMessage } from "@umijs/max"
+import { Typography, Statistic, Tag, Image, Space } from "antd";
+import type { ReactNode } from "react"
+import styles from "./index.less"
 
 const { Title, Paragraph, Text } = Typography
 
@@ -219,3 +221,69 @@ export const staticGroup = {
         </ProCard>
     ]
 }
+
+
+export const issueColumns: ProDescriptionsItemProps[] = [
+    {
+        title: <FormattedMessage id='pages.repairment.issue.issueTitle' defaultMessage='Issue Title' />,
+        dataIndex: 'issueTitle',
+        span: 2,
+
+    },
+    {
+        title: <FormattedMessage id="pages.repairment.issue.object" defaultMessage='Object' />,
+        dataIndex: 'object',
+        span: 2,
+    },
+    {
+        title: <FormattedMessage id='pages.repairment.issue.issueDescription' defaultMessage='Description' />,
+        dataIndex: 'issueDescription',
+        span: 2,
+    },
+    {
+        title: <FormattedMessage id="pages.repairment.issue.failureType" defaultMessage='Failure Type' />,
+        dataIndex: 'failureType',
+        valueEnum: failureTypeLabel,
+        valueType: 'select',
+    },
+    {
+        title: <FormattedMessage id="pages.repairment.issue.Manufacturer" defaultMessage='manufacturer' />,
+        dataIndex: 'manufacturer',
+    },
+    {
+        title: <FormattedMessage id='pages.repairment.issue.priority' defaultMessage='Priority' />,
+        dataIndex: 'priority',
+        render: (_, item) =>
+            <Tag color={priorityList[item.priority].color}>
+                {priorityList[item.priority].text}
+            </Tag>
+    },
+    {
+        title: <FormattedMessage id='pages.repairment.issue.estimatedTime' defaultMessage='Estimated Time' />,
+        dataIndex: 'estimatedTime',
+        valueType: 'dateTime',
+    },
+    {
+        title: <FormattedMessage id='pages.repairment.issue.picture' defaultMessage='Picture' />,
+        dataIndex: 'picture',
+        span: 2,
+        render: (_, item) => {
+            const picGroup: ReactNode[] = []
+            for (let i = 0; i < item.picture.length; i++) {
+                picGroup.push(
+                    <Image
+                        className={styles.approvalModalPicture}
+                        src={item.picture[i]}
+                        alt='123'
+                    />)
+            }
+            return (
+                <Image.PreviewGroup>
+                    <Space>
+                        {picGroup}
+                    </Space>
+                </Image.PreviewGroup>
+            )
+        }
+    },
+]

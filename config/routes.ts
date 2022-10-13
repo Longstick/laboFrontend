@@ -80,11 +80,6 @@ export default [
                 name: 'Issue System',
                 component: './Repairment/IssueTable',
             },
-            {
-                path: '/repair/draftsbox',
-                name: 'Drafts Box',
-                component: './Repairment/DraftsBox',
-            },
             // {
             //     path: '/repair/mytodo',
             //     name: 'My To-do List',

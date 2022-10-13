@@ -29,35 +29,8 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     const { initialState } = useModel("@@initialState")
 
     const ProcessDetailColumns = {
-        0: {
-            step: 'submit',
-            label: (stepLabel[0]),
-            columns: [
-                {
-                    title: (
-                        <FormattedMessage
-                            id='pages.repairment.issue.issueTitle'
-                            defaultMessage="Title"
-                        />
-                    ),
-                    key: 'title',
-                    dataIndex: 'title',
-                },
-                {
-                    title: (
-                        <FormattedMessage
-                            id='pages.repairment.issue.issueDescription'
-                            defaultMessage="Description"
-                        />
-                    ),
-                    key: 'description',
-                    dataIndex: 'description',
-                },
-            ]
-        },
         1: {
             step: 'approval',
-            label: (stepLabel[1]),
             columns: [
                 {
                     title: (
@@ -83,7 +56,6 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
         },
         2: {
             step: 'dispatch',
-            label: (stepLabel[2]),
             columns: [
                 {
                     title: (
@@ -109,7 +81,6 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
         },
         3: {
             step: 'repairment',
-            label: (stepLabel[3]),
             columns: [
                 {
                     title: (
@@ -146,7 +117,6 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
         },
         4: {
             step: 'acceptance',
-            label: (stepLabel[4]),
             columns: [
                 {
                     title: (
@@ -224,28 +194,31 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
         </ProDescriptions>
     );
 
-    const stepItem = (current: number, detailsData: any) => (
+    const stepItem = (step: number, detailsData: any) => (
         <ProCard>
             {{
                 'finish': (<>
                     {processerInfo}
-                    <ProCard className={styles.processDrawerStepDetails}>
-                        <ProDescriptions column={1} columns={ProcessDetailColumns[current].columns ?? {}} labelStyle={{ fontWeight: 'bolder' }} dataSource={detailsData ?? {}} />
-                    </ProCard>
+                    {step !== 0 &&
+                        <ProCard className={styles.processDrawerStepDetails}>
+
+                            <ProDescriptions column={1} columns={ProcessDetailColumns[step].columns ?? {}} labelStyle={{ fontWeight: 'bolder' }} dataSource={detailsData ?? {}} />
+                        </ProCard>
+                    }
                 </>),
                 'process': (<>
                     {processerInfo}
-                    { initialState?.userInfo?.identity === props.value?.currentProcesser && <ApprovalModal
-                        currentStage={current}
+                    {initialState?.userInfo?.identity === props.value?.currentProcesser && <ApprovalModal
+                        currentStage={step}
                         value={props.value}
                         responsive={props.responsive}
                     >
-                        {current === 3 ?
+                        {step === 3 ?
                             <FormattedMessage
                                 id='pages.repairment.repairmentModal.progressEntry'
                                 defaultMessage='Process Entry'
                             />
-                            : ProcessDetailColumns[current].label
+                            : stepLabel[step]
                         }
                     </ApprovalModal>}
                 </>),
@@ -269,8 +242,6 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 <Step
                     title={stepLabel[0]}
                     description={stepItem(0, {
-                        title: props.value?.issueTitle,
-                        description: props.value?.issueDescription,
                         ...props.value?.processDetails?.submit
                     })}
                     status={props.value?.processDetails?.submit?.status}

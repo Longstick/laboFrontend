@@ -5,7 +5,7 @@ import {
     ProCard,
 } from '@ant-design/pro-components';
 
-import { Button, Typography, Tag, Badge, Space } from 'antd';
+import { Button, Tag, Badge, Space } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
 import type { ProColumns, ActionType, } from '@ant-design/pro-components';
 
@@ -17,22 +17,23 @@ import CreateNew from '../components/CreateNew';
 import styles from '../index.less';
 import { priorityList, staticGroup, statusList } from '../struct';
 import ButtonGroup from 'antd/lib/button/button-group';
+import DetailModal from '../components/DetailModal';
 
-const { Title } = Typography;
-const { Divider } = ProCard
-
-const RepairmentTable: React.FC = () => {
+const IssueTable: React.FC = () => {
     const [responsive, setResponsive] = useState<boolean>(false);
     const [currentRow, setCurrentRow] = useState<API.TableColumns>();
     const [activeKey, setActiveKey] = useState<string>('all')
     const [selectedRowsState, setSelectedRows] = useState<API.TableColumns[]>([]);
     const [processDrawerOpen, setProcessDrawer] = useState<boolean>(false);
-    const [canSelect, setSelect] = useState<boolean>(false);
+    const [detailModalOpen, setModalOpen] = useState<boolean>(false);
     const { initialState } = useModel('@@initialState');
     const actionRef = useRef<ActionType>();
 
     const onCloseProcessDrawer = () => {
         setProcessDrawer(false);
+    }
+    const onCloseDetailModal = () => {
+        setModalOpen(false)
     }
 
     const renderBadge = (count: number, active = false) => {
@@ -174,23 +175,27 @@ const RepairmentTable: React.FC = () => {
             />),
             dataIndex: 'tableOptions',
             search: false,
-            width: 120,
+            // width: 120,
             fixed: 'right',
             render: (_, record) =>
-                <Button
-                    type="link"
-                    // ghost
-                    // shape="circle"
-                    onClick={() => {
-                        setProcessDrawer(true);
+                <Space size={24}>
+                    <a onClick={() => {
                         setCurrentRow(record);
+                        setModalOpen(true);
                     }}
-                >
-                    {record.currentProcesser === initialState?.userInfo?.identity ?
-                        <FormattedMessage id="pages.repairment.searchTable.options.process" defaultMessage='Process' /> :
-                        <FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
-                    }
-                </Button>
+                    >详细信息</a>
+
+                    <a onClick={() => {
+                        setCurrentRow(record);
+                        setProcessDrawer(true);
+                    }}
+                    >
+                        {record.currentProcesser === initialState?.userInfo?.identity ?
+                            <FormattedMessage id="pages.repairment.searchTable.options.process" defaultMessage='Process' /> :
+                            <FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
+                        }
+                    </a>
+                </Space>
         },
     ];
 
@@ -251,6 +256,7 @@ const RepairmentTable: React.FC = () => {
                     </Space>
                 )}
             >
+
                 {activeKey !== 'drafts' &&
                     <ProCard.Group
                         direction={responsive ? 'column' : 'row'}
@@ -281,55 +287,6 @@ const RepairmentTable: React.FC = () => {
                     }}
                     toolbar={{
                         search: true,
-                        // multipleLine: true,
-                        // title:
-                        //     <Space size={16}>
-                        //         <CreateNew key='createNew' />
-                        //         <ButtonGroup>
-
-                        //             <Button
-                        //                 key='outputAll'
-                        //             >导出全部</Button>
-
-                        //             <Button
-                        //                 key="outputSelected"
-                        //                 disabled={selectedRowsState.length === 0}
-                        //             >
-                        //                 <FormattedMessage
-                        //                     id="pages.repairment.searchTable.outputSelected"
-                        //                     defaultMessage='Output Selected'
-                        //                 />
-                        //             </Button>
-                        //         </ButtonGroup>
-                        //     </Space>,
-
-                        // tabs: {
-                        //     activeKey,
-                        //     onChange: (key) => {
-                        //         setActiveKey(key as string)
-                        //         actionRef.current?.reloadAndRest?.();
-                        //     },
-                        //     items: [
-                        //         {
-                        //             key: 'all',
-                        //             tab: '全部'
-                        //         },
-                        //         {
-                        //             key: 'to-do',
-                        //             tab: <span>我的待办{renderBadge(15, activeKey === 'to-do')}</span>
-                        //         },
-                        //         {
-                        //             key: 'myCompleted',
-                        //             tab: '我的已办'
-                        //         },
-                        //         {
-                        //             key: 'mySubmission',
-                        //             tab: '我的提交'
-                        //         },
-                        //     ],
-
-                        // },
-
                     }}
                 />
 
@@ -357,11 +314,18 @@ const RepairmentTable: React.FC = () => {
                     responsive={responsive}
                     drawerOpen={processDrawerOpen}
                     onClose={onCloseProcessDrawer}
-                    value={currentRow || {}}
+                    value={currentRow}
+                />
+
+                <DetailModal
+                    isOpen={detailModalOpen}
+                    onClose={onCloseDetailModal}
+                    responsive={responsive}
+                    value={currentRow}
                 />
             </PageContainer>
         </RcResizeObserver>
     );
 };
 
-export default RepairmentTable;
+export default IssueTable;
