@@ -37,7 +37,7 @@ function getRule(req: Request, res: Response, u: string) {
       remainingTime: estimatedTime,
       estimatedTime: estimatedTime,
       updatedTime: Date.now() + getRandomInt(3600000000),
-      status: 0,
+      status: getRandomInt(3),
       currentProcesser: activeKey === 'to-do' ? 1 : getRandomInt(2),
       object: '大数据学院楼-204-椅子0015',
       failureType: getRandomInt(3),
@@ -46,7 +46,7 @@ function getRule(req: Request, res: Response, u: string) {
       trackingNumber: '123231',
       processDetails: {
         // stage: getRandomInt(5),
-        stage: 3,
+        stage: 6,
         submit: {
           processerID: 1,
           status: 'finish',

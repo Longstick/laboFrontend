@@ -491,7 +491,11 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                     size='small'
                     // layout={props.responsive ? 'horizontal' : 'vertical'}
                     layout='horizontal'
-                    column={2}
+                    column={{
+                        xs: 1,
+                        sm: 2,
+                        md: 2,
+                    }}
                     title={<FormattedMessage
                         id="pages.repairment.repairmentModal.deliveryDetails"
                         defaultMessage='Delivery Details'

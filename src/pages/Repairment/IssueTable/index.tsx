@@ -3,11 +3,12 @@ import {
     PageContainer,
     ProTable,
     ProCard,
+    TableDropdown,
 } from '@ant-design/pro-components';
 
 import { Button, Tag, Badge, Space } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
-import type { ProColumns, ActionType, } from '@ant-design/pro-components';
+import type { ProColumns, ActionType, ColumnsState } from '@ant-design/pro-components';
 
 import React, { useRef, useState } from 'react';
 import RcResizeObserver from 'rc-resize-observer';
@@ -18,6 +19,7 @@ import styles from '../index.less';
 import { priorityList, staticGroup, statusList } from '../struct';
 import ButtonGroup from 'antd/lib/button/button-group';
 import DetailModal from '../components/DetailModal';
+import DraftsTable from '../components/DraftsTable';
 
 const IssueTable: React.FC = () => {
     const [responsive, setResponsive] = useState<boolean>(false);
@@ -26,6 +28,10 @@ const IssueTable: React.FC = () => {
     const [selectedRowsState, setSelectedRows] = useState<API.TableColumns[]>([]);
     const [processDrawerOpen, setProcessDrawer] = useState<boolean>(false);
     const [detailModalOpen, setModalOpen] = useState<boolean>(false);
+    const [columnsStateMap, setColumnsStateMap] = useState<Record<string, ColumnsState>>({
+        object: { show: false },
+        issueDescription: { show: false },
+    });
     const { initialState } = useModel('@@initialState');
     const actionRef = useRef<ActionType>();
 
@@ -80,6 +86,16 @@ const IssueTable: React.FC = () => {
             />),
             dataIndex: 'issueDescription',
             valueType: 'textarea',
+            ellipsis: true,
+            search: false,
+        },
+        {
+            key: 'object',
+            title: (<FormattedMessage
+                id="pages.repairment.issue.object"
+                defaultMessage='Object'
+            />),
+            dataIndex: 'object',
             ellipsis: true,
             search: false,
         },
@@ -175,29 +191,54 @@ const IssueTable: React.FC = () => {
             />),
             dataIndex: 'tableOptions',
             search: false,
-            // width: 120,
+            width: responsive ? 60 : 200 ,
             fixed: 'right',
-            render: (_, record) =>
-                <Space size={24}>
-                    <a onClick={() => {
-                        setCurrentRow(record);
-                        setModalOpen(true);
-                    }}
-                    >详细信息</a>
+            render: (text, record, _, action) =>
+                responsive ?
+                    <TableDropdown
+                        key="actionGroup"
+                        onSelect={() => action?.reload()}
+                        menus={[
+                            {
+                                key: 'detail',
+                                name: '详细信息',
+                                onClick: () => {
+                                    setCurrentRow(record);
+                                    setModalOpen(true);
+                                }
+                            },
+                            {
+                                key: 'dropdownProcess',
+                                name: record.currentProcesser === initialState?.userInfo?.identity ? '点击处理' : '查看流程',
+                                onClick: () => {
+                                    setCurrentRow(record);
+                                    setProcessDrawer(true);
+                                }
+                            },
+                        ]}
+                    />
+                    :
+                    <Space size={24}>
+                        <a onClick={() => {
+                            setCurrentRow(record);
+                            setModalOpen(true);
+                        }}
+                        >详细信息</a>
 
-                    <a onClick={() => {
-                        setCurrentRow(record);
-                        setProcessDrawer(true);
-                    }}
-                    >
-                        {record.currentProcesser === initialState?.userInfo?.identity ?
-                            <FormattedMessage id="pages.repairment.searchTable.options.process" defaultMessage='Process' /> :
-                            <FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
-                        }
-                    </a>
-                </Space>
+                        <a onClick={() => {
+                            setCurrentRow(record);
+                            setProcessDrawer(true);
+                        }}
+                        >
+                            {record.currentProcesser === initialState?.userInfo?.identity ?
+                                <FormattedMessage id="pages.repairment.searchTable.options.process" defaultMessage='Process' /> :
+                                <FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
+                            }
+                        </a>
+                    </Space>
         },
     ];
+
 
     return (
         <RcResizeObserver
@@ -257,40 +298,45 @@ const IssueTable: React.FC = () => {
                 )}
             >
 
-                {activeKey !== 'drafts' &&
-                    <ProCard.Group
-                        direction={responsive ? 'column' : 'row'}
-                        ghost
-                        gutter={[12, 12]}
-                        className={styles.statisticsBaseCard}
-                    >
-                        {staticGroup[activeKey]}
-                    </ProCard.Group>
-                }
+                {activeKey !== 'drafts' ?
+                    <>
+                        <ProCard.Group
+                            direction={responsive ? 'column' : 'row'}
+                            ghost
+                            gutter={[12, 12]}
+                            className={styles.statisticsBaseCard}
+                        >
+                            {staticGroup[activeKey]}
+                        </ProCard.Group>
 
-                <ProTable<API.TableColumns, API.PageParams>
-                    columns={columns}
-                    actionRef={actionRef}
-                    request={(params) => issueTableRule({ ...params, activeKey })}
-                    tableLayout='fixed'
-                    rowKey='key'
-                    scroll={{ x: 1200 }}
-                    rowSelection={{
-                        onChange: (_, selectedRows) => { setSelectedRows(selectedRows) },
-                    }}
-                    search={{
-                        optionRender: false,
-                        collapsed: false,
-                        filterType: 'light',
-                        labelWidth: 'auto',
-                        // showHiddenNum: true,
-                    }}
-                    toolbar={{
-                        search: true,
-                    }}
-                />
 
-                {/* {selectedRowsState?.length > 0 && (
+                        <ProTable<API.TableColumns, API.PageParams>
+                            columns={columns}
+                            actionRef={actionRef}
+                            request={(params) => issueTableRule({ ...params, activeKey })}
+                            tableLayout='fixed'
+                            rowKey='key'
+                            scroll={{ x: 1200 }}
+                            rowSelection={{
+                                onChange: (_, selectedRows) => { setSelectedRows(selectedRows) },
+                            }}
+                            search={{
+                                optionRender: false,
+                                collapsed: false,
+                                filterType: 'light',
+                                labelWidth: 'auto',
+                                // showHiddenNum: true,
+                            }}
+                            toolbar={{
+                                search: true,
+                            }}
+                            columnsState={{
+                                value: columnsStateMap,
+                                onChange: setColumnsStateMap,
+                            }}
+                        />
+
+                        {/* {selectedRowsState?.length > 0 && (
                     <FooterToolbar
                         extra={
                             <div>
@@ -310,19 +356,26 @@ const IssueTable: React.FC = () => {
                     </FooterToolbar>
                 )} */}
 
-                <ProcessDrawer
-                    responsive={responsive}
-                    drawerOpen={processDrawerOpen}
-                    onClose={onCloseProcessDrawer}
-                    value={currentRow}
-                />
+                        <ProcessDrawer
+                            responsive={responsive}
+                            drawerOpen={processDrawerOpen}
+                            onClose={onCloseProcessDrawer}
+                            value={currentRow}
+                        />
 
-                <DetailModal
-                    isOpen={detailModalOpen}
-                    onClose={onCloseDetailModal}
-                    responsive={responsive}
-                    value={currentRow}
-                />
+                        <DetailModal
+                            isOpen={detailModalOpen}
+                            onClose={onCloseDetailModal}
+                            responsive={responsive}
+                            value={currentRow}
+                        />
+                    </>
+
+                    :
+
+                    <DraftsTable />
+                }
+
             </PageContainer>
         </RcResizeObserver>
     );

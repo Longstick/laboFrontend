@@ -69,8 +69,8 @@ export default {
   'pages.repairment.issue.issueDescription': '描述',
   "pages.repairment.issue.categoryList": "分类",
   'pages.repairment.issue.priority': '优先级',
-  'pages.repairment.issue.remainingTime': '剩余时间',
-  'pages.repairment.issue.estimatedTime': '预期时间',
+  'pages.repairment.issue.remainingTime': '剩余时长',
+  'pages.repairment.issue.estimatedTime': '完成时限',
   'pages.repairment.issue.updatedTime': '更新时间',
   'pages.repairment.issue.status': '状态',
   "pages.repairment.issue.object": '故障对象',
@@ -107,7 +107,10 @@ export default {
   "pages.repairment.issue.acceptance": '验收',
   "pages.repairment.issue.reject": '打回',
   'pages.repairment.issue.nextProcesser': '下一流程处理人',
+  'pages.repairment.issue.reject.reason': '打回原因',
+  'pages.repairment.issue.reject.type': '打回类型',
 
+  
   "pages.repairment.searchTable.title": '待办工单',
   'pages.repairment.statisticsData.title': '相关数据',
   'pages.repairment.statisticsData.newIssueToday': '今日新增待办',

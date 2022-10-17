@@ -28,6 +28,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
 
     const { initialState } = useModel("@@initialState")
 
+    // 已完成流程详细
     const ProcessDetailColumns = {
         1: {
             step: 'approval',
@@ -143,6 +144,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
         },
     };
 
+    // 已打回流程的详细
     const rejectColumns = [
         {
             title: (<FormattedMessage id='pages.repairment.issue.reject.reason' defaultMessage='reject reason' />),
@@ -225,7 +227,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 'error': (<>
                     {processerInfo}
                     <ProCard className={styles.processDrawerRejectDetails}>
-                        <ProDescriptions column={1} columns={rejectColumns} dataSource={rejectdata} />
+                        <ProDescriptions column={1} columns={rejectColumns} dataSource={rejectdata} labelStyle={{ fontWeight: 'bolder' }}/>
                     </ProCard>
                 </>),
                 'wait': <></>,

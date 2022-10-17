@@ -137,7 +137,7 @@ const CreateNew: React.FC = () => {
                         fieldProps={{
                             multiple: true,
                         }}
-                        extra={<FormattedMessage id="component.uploadPic.limit3" defaultMessage='up to 3 photos' />}
+                        extra={<FormattedMessage id="component.uploadPic.limit3" defaultMessage='up to 6 photos' />}
                         rules={[{
                             required: true,
                             message: '此为必填项，请填写'
