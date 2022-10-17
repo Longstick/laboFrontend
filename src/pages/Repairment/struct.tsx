@@ -10,6 +10,7 @@ const { Title, Paragraph, Text } = Typography
 
 export const priorityList = {
     0: {
+        // value: 'high',
         color: 'red',
         text: (<FormattedMessage
             id="pages.repairment.issue.priority.high"
@@ -17,6 +18,7 @@ export const priorityList = {
         />)
     },
     1: {
+        // value: 'medium',
         color: 'warning',
         text: (<FormattedMessage
             id="pages.repairment.issue.priority.medium"
@@ -24,6 +26,7 @@ export const priorityList = {
         />)
     },
     2: {
+        // value: 'low',
         color: 'success',
         text: (<FormattedMessage
             id="pages.repairment.issue.priority.low"
@@ -223,7 +226,7 @@ export const staticGroup = {
 }
 
 
-export const issueColumns: ProDescriptionsItemProps[] = [
+export const issueDescColumns: ProDescriptionsItemProps[] = [
     {
         title: <FormattedMessage id='pages.repairment.issue.issueTitle' defaultMessage='Issue Title' />,
         dataIndex: 'issueTitle',

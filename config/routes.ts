@@ -69,33 +69,8 @@ export default [
         name: 'Repairment',
         icon: 'table',
         path: '/repair',
-        // access: 'canAdmin',
-        routes: [
-            {
-                path: '/repair',
-                redirect: '/repair/issuesystem',
-            },
-            {
-                path: '/repair/issuesystem',
-                name: 'Issue System',
-                component: './Repairment/IssueTable',
-            },
-            // {
-            //     path: '/repair/mytodo',
-            //     name: 'My To-do List',
-            //     component: './Repairment/Todo',
-            // },
-            // {
-            //     path: '/repair/mycompleted',
-            //     name: 'My Completed List',
-            //     component: './Repairment/Completed',
-            // },
-            // {
-            //     path: '/repair/mysubmission',
-            //     name: 'My Submission List',
-            //     component: './Repairment/Submission',
-            // },
-        ]
+        component: './Repairment',
+        
     },
     {
         path: '/',

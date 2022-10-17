@@ -1,3 +1,5 @@
+// 新建工单/编辑提交弹出框表单
+
 import {
     ProCard,
     ModalForm,
@@ -19,8 +21,14 @@ import React, { useState, useRef } from 'react';
 import { waitTime } from '@/services/utils';
 import moment from 'moment';
 import { getStaff } from '@/services/api';
+import { failureTypeLabel, priorityList } from '../struct';
 
-const CreateNew: React.FC = () => {
+export type CreateNewModalProps = {
+    type?: 'newButton' | 'editLink'
+    initialValue?: API.TableColumns
+}
+
+const CreateNew: React.FC<CreateNewModalProps> = props => {
     const formRef = useRef<ProFormInstance>()
     // 因为重写页脚button，还是选择老方法用一个state控制open
     const [isOpen, setOpen] = useState<boolean>(false)
@@ -28,7 +36,6 @@ const CreateNew: React.FC = () => {
     const onSave = async () => {
         await waitTime(1000)
         const value = formRef.current?.getFieldsFormatValue?.(true)
-        console.log(value)
         setOpen(false)
     }
 
@@ -37,12 +44,17 @@ const CreateNew: React.FC = () => {
             formRef={formRef}
             title='新建工单'
             open={isOpen}
+            initialValues={props.initialValue}
             trigger={
+                props.type === 'newButton' ?
                 <Button
                     type='primary'
                     size='large'
                     onClick={()=>{setOpen(true);}}
                 >新建工单</Button>
+                :
+                <a onClick={()=>{setOpen(true);}}
+                >编辑提交</a>
             }
             grid
             rowProps={{
@@ -53,11 +65,12 @@ const CreateNew: React.FC = () => {
                 maskClosable: false,
                 onCancel: ()=>{setOpen(false)}
             }}
+            
             submitter={{
                 searchConfig: {
                     submitText: '提交'
                 },
-                render: (props, dom) => [
+                render: (prop, dom) => [
 
                     <Button
                         key='cancel'
@@ -77,10 +90,9 @@ const CreateNew: React.FC = () => {
                     <Button
                         key='submit'
                         type='primary'
-                        {...props.submitButtonProps}
+                        {...prop.submitButtonProps}
                         onClick={()=>{
-                            props.submit()
-                            console.log(props.submitButtonProps)
+                            prop.submit()
                         }}
                     >提交</Button>
                 ]
@@ -88,7 +100,7 @@ const CreateNew: React.FC = () => {
             onFinish={async value => {
                 try{
                     await waitTime(1000)
-                    message.success('提交成功！')
+                    message.success('提交成功！')                    
                     setOpen(false)
                     return true
                 } catch(e) {
@@ -102,9 +114,9 @@ const CreateNew: React.FC = () => {
             <ProCard split='horizontal'>
                 <ProCard>
                     <ProFormText
-                        name='title'
+                        name='issueTitle'
                         label='工单标题'
-                        key='title'
+                        key='issueTitle'
                         colProps={{ span: 24 }}
                         rules={[{
                             required: true,
@@ -113,9 +125,9 @@ const CreateNew: React.FC = () => {
                     />
 
                     <ProFormTextArea
-                        name='description'
+                        name='issueDescription'
                         label='工单描述'
-                        key='description'
+                        key='issueDescription'
                         // colProps={{span: 24}}
                         fieldProps={{
                             showCount: true,
@@ -148,9 +160,9 @@ const CreateNew: React.FC = () => {
                 <ProCard>
                     <ProFormGroup>
                         <ProFormSelect
-                            name='workTarget'
+                            name='object'
                             label='工作对象'
-                            key='workTarget'
+                            key='object'
                             colProps={{ sm: 12 }}
                             rules={[{
                                 required: true,
@@ -165,20 +177,15 @@ const CreateNew: React.FC = () => {
 
                         />
                         <ProFormSelect
-                            name='problemType'
+                            name='failureType'
                             label='故障类型'
-                            key='problemType'
+                            key='failureType'
                             colProps={{ sm: 12 }}
                             rules={[{
                                 required: true,
                                 message: '此为必填项，请填写'
                             }]}
-                            options={[
-                                {
-                                    label: '1',
-                                    value: 1,
-                                }
-                            ]}
+                            valueEnum={failureTypeLabel}
                         />
                         <ProFormText
                             name='manufacturer'
@@ -197,22 +204,8 @@ const CreateNew: React.FC = () => {
                             label='优先级'
                             key='priority'
                             colProps={{ md: 6 }}
-                            options={[
-                                {
-                                    label: '高',
-                                    value: 'high',
-                                },
-                                {
-                                    label: '中',
-                                    value: 'medium',
-                                },
-                                {
-                                    label: '低',
-                                    value: 'low',
-                                },
-                            ]}
+                            valueEnum={priorityList}
                             radioType='button'
-                            // initialValue={problemtype}
                             fieldProps={{
                                 buttonStyle: 'solid',
                             }}

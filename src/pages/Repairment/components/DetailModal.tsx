@@ -1,7 +1,9 @@
+// 详细信息弹出框
+
 import React, { useState } from 'react';
 import { ProDescriptions } from '@ant-design/pro-components';
 import { Modal } from 'antd'  
-import { issueColumns } from '../struct';
+import { issueDescColumns } from '../struct';
 
 export type DetailModalProps = {
     isOpen?: boolean,
@@ -9,7 +11,7 @@ export type DetailModalProps = {
     responsive?: boolean,
     value?: Partial<API.TableColumns>,
 }
-
+ 
 const DetailModal: React.FC<DetailModalProps> = props => {
 
     return (
@@ -21,7 +23,7 @@ const DetailModal: React.FC<DetailModalProps> = props => {
             width={800}
         >
             <ProDescriptions
-                    columns={issueColumns}
+                    columns={issueDescColumns}
                     column={{
                         xs: 1,
                         sm: 2,

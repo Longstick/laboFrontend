@@ -33,24 +33,24 @@ declare namespace API {
 
   // declare type Status = 'error' | 'process' | 'finish' | 'wait';
   type TableColumns = {
-    key: number;
-    issueID: number;
-    issueTitle: string;
-    issueDescription: string;
-    category: any;
+    key?: number;
+    issueID?: number;
+    issueTitle?: string;
+    issueDescription?: string;
+    category?: any;
     priority: number;
     remainingTime: number;
     estimatedTime: number;
     updatedTime: number;
     status: number;
-    object: string;
-    failureType: number;
-    manufacturer: string;
-    picture: string[];
-    trackingNumber: string;
-    currentProcesser: number;
+    object?: string;
+    failureType?: number;
+    manufacturer?: string;
+    picture?: string[];
+    trackingNumber?: string;
+    currentProcesser?: number;
     processDetails?: {
-      stage: number;
+      stage?: number;
       submit?: {
         status?: Status;
         processerID?: number;

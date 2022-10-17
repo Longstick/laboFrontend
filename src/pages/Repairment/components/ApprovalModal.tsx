@@ -1,3 +1,6 @@
+// 流程处理/审批弹出框
+
+
 import {
     ModalForm,
     ProCard,
@@ -19,7 +22,7 @@ import React, { useState } from 'react'
 import {
     stepLabel,
     popContent,
-    issueColumns,
+    issueDescColumns,
 } from '../struct'
 
 import styles from '../index.less'
@@ -682,7 +685,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
         >
             <ProCard>
                 <ProDescriptions
-                    columns={issueColumns}
+                    columns={issueDescColumns}
                     column={{
                         xs: 1,
                         sm: 2,

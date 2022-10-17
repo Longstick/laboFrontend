@@ -1,3 +1,5 @@
+// 维修管理系统主体
+
 import { issueTableRule } from '@/services/api'
 import {
     PageContainer,
@@ -13,15 +15,15 @@ import type { ProColumns, ActionType, ColumnsState } from '@ant-design/pro-compo
 import React, { useRef, useState } from 'react';
 import RcResizeObserver from 'rc-resize-observer';
 
-import ProcessDrawer from '../components/ProcessDrawer';
-import CreateNew from '../components/CreateNew';
-import styles from '../index.less';
-import { priorityList, staticGroup, statusList } from '../struct';
+import ProcessDrawer from './components/ProcessDrawer';
+import CreateNew from './components/CreateNew';
+import styles from './index.less';
+import { priorityList, staticGroup, statusList } from './struct';
 import ButtonGroup from 'antd/lib/button/button-group';
-import DetailModal from '../components/DetailModal';
-import DraftsTable from '../components/DraftsTable';
+import DetailModal from './components/DetailModal';
+import DraftsTable from './components/DraftsTable';
 
-const IssueTable: React.FC = () => {
+const Repairment: React.FC = () => {
     const [responsive, setResponsive] = useState<boolean>(false);
     const [currentRow, setCurrentRow] = useState<API.TableColumns>();
     const [activeKey, setActiveKey] = useState<string>('all')
@@ -128,8 +130,8 @@ const IssueTable: React.FC = () => {
             valueEnum: priorityList,
             width: '8%',
             render: (_, record) =>
-                <Tag color={priorityList[record.priority].color}>
-                    {priorityList[record.priority].text}
+                <Tag color={priorityList[record?.priority??0].color}>
+                    {priorityList[record?.priority].text}
                 </Tag>,
             fieldProps: {
                 dropdownMatchSelectWidth: false,
@@ -191,7 +193,7 @@ const IssueTable: React.FC = () => {
             />),
             dataIndex: 'tableOptions',
             search: false,
-            width: responsive ? 60 : 200 ,
+            width: responsive ? 60 : 200,
             fixed: 'right',
             render: (text, record, _, action) =>
                 responsive ?
@@ -276,7 +278,9 @@ const IssueTable: React.FC = () => {
                 ]}
                 extra={(
                     <Space size={16}>
-                        <CreateNew />
+                        <CreateNew
+                            type='newButton'
+                        />
                         <ButtonGroup>
                             <Button
                                 key='outputAll'
@@ -381,4 +385,4 @@ const IssueTable: React.FC = () => {
     );
 };
 
-export default IssueTable;
+export default Repairment;

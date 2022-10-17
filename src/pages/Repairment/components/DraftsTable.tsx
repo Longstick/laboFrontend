@@ -1,3 +1,6 @@
+// 草稿箱表格系统
+
+
 import React, { useRef, useState } from 'react';
 import {
     PageContainer,
@@ -10,11 +13,13 @@ import { FormattedMessage, useModel } from '@umijs/max';
 import type { ProColumns, ActionType, ColumnsState } from '@ant-design/pro-components';
 import { priorityList, statusList } from '../struct';
 import { issueTableRule } from '@/services/api';
+import CreateNew from './CreateNew';
 
 
 const DraftsTable: React.FC = () => {
     const actionRef = useRef()
     const [selected, setSelectedRows] = useState<API.TableColumns[]>([])
+    const [operateRow, setOperateRow] = useState<API.TableColumns>()
     const [columnsStateMap, setColumnsStateMap] = useState<Record<string, ColumnsState>>(
 
     )
@@ -79,8 +84,8 @@ const DraftsTable: React.FC = () => {
             valueEnum: priorityList,
             width: '8%',
             render: (_, record) =>
-                <Tag color={priorityList[record.priority].color}>
-                    {priorityList[record.priority].text}
+                <Tag color={priorityList[record.priority??0].color}>
+                    {priorityList[record.priority??0].text}
                 </Tag>,
             fieldProps: {
                 dropdownMatchSelectWidth: false,
@@ -108,10 +113,10 @@ const DraftsTable: React.FC = () => {
             fixed: 'right',
             render: (_, record) =>
                 <Space size={24}>
-                    <a onClick={() => {
-
-                    }}
-                    >编辑提交</a>
+                    <CreateNew 
+                        type='editLink'
+                        initialValue={record}
+                    />
 
                     <a onClick={() => {
 
@@ -121,32 +126,34 @@ const DraftsTable: React.FC = () => {
         },
     ]
     return (
-        <ProTable
-            columns={draftsColumns}
-            actionRef={actionRef}
-            request={(params) => issueTableRule({ ...params, activeKey: 'drafts' })}
-            tableLayout='fixed'
-            rowKey='key'
-            scroll={{ x: 1200 }}
-            rowSelection={{
-                onChange: (_, selectedRows) => { setSelectedRows(selectedRows) },
-            }}
-            // search={{
-            //     optionRender: false,
-            //     collapsed: false,
-            //     filterType: 'light',
-            //     labelWidth: 'auto',
-            //     // showHiddenNum: true,
-            // }}
-            search={false}
-            // toolbar={{
-            //     search: true,
-            // }}
-            columnsState={{
-                value: columnsStateMap,
-                onChange: setColumnsStateMap,
-            }}
-        />
+        <>
+            <ProTable
+                columns={draftsColumns}
+                actionRef={actionRef}
+                request={(params) => issueTableRule({ ...params, activeKey: 'drafts' })}
+                tableLayout='fixed'
+                rowKey='key'
+                scroll={{ x: 1200 }}
+                rowSelection={{
+                    onChange: (_, selectedRows) => { setSelectedRows(selectedRows) },
+                }}
+                // search={{
+                //     optionRender: false,
+                //     collapsed: false,
+                //     filterType: 'light',
+                //     labelWidth: 'auto',
+                //     // showHiddenNum: true,
+                // }}
+                search={false}
+                // toolbar={{
+                //     search: true,
+                // }}
+                columnsState={{
+                    value: columnsStateMap,
+                    onChange: setColumnsStateMap,
+                }}
+            />
+        </>
     )
 }
 
