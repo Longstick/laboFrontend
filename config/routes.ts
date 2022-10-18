@@ -73,6 +73,25 @@ export default [
         
     },
     {
+        name: 'System',
+        icon: 'setting',
+        path: '/system',
+        routes:[
+            {
+                name: 'Character Management',
+                path: '/system/character',
+                icon: 'team',
+                component: './System/Character'
+            },
+            {
+                name: 'User Management',
+                path: '/system/user',
+                icon: 'user',
+                component: './System/UserManage'
+            },
+        ]        
+    },
+    {
         path: '/',
         redirect: '/welcome',
     },

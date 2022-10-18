@@ -90,4 +90,15 @@ declare namespace API {
     phoneNumber: string;
     updateTime: string;
   };
+
+  type CharacterTableColumnsType = {
+    name?: string;
+    sex?: 'male' | 'female';
+    ID?: string;
+    number?: string;
+    character?: string;
+    operate?: any;
+  };
 }
+
+  

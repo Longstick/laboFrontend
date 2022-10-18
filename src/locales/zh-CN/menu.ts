@@ -55,4 +55,8 @@ export default {
   'menu.Repairment.My Submission List': '我的提交',
   'menu.Repairment.My Completed List': '已处理',
   'menu.Repairment.Drafts Box': '草稿箱',
+  'menu.System': '系统维护管理',
+  'menu.System.Character Management': '角色管理',
+  'menu.System.User Management': '用户管理',
+  
 };
