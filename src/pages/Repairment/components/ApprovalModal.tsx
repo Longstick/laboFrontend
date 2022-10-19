@@ -26,7 +26,7 @@ import {
 } from '../struct'
 
 import styles from '../index.less'
-import { getStaff, getTrackingNumber } from '@/services/api'
+import { getStaff, getDeliveryInfo } from '@/services/api'
 import { ExportOutlined, ImportOutlined, ToolOutlined, TransactionOutlined } from '@ant-design/icons'
 import { waitTime } from "@/services/utils";
 
@@ -58,7 +58,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
     const onFinish = async (values: any) => {
         await waitTime(2000)
         console.log(values)
-        message.success('submit successfully!')
+        message.success('提交成功！')
         return true
     }
 
@@ -110,43 +110,39 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
     const dispatchForm =
         <>
-            {/* 维修方式选择 */}
-            <ProFormRadio.Group
-                name="repairmentApproach"
-                required
-                radioType='button'
-                label={intl.formatMessage({
-                    id: 'pages.repairment.dispatchModal.repairmentApproach',
-                    defaultMessage: 'repairment approach'
-                })}
-
-                options={[
-                    {
-                        label: <FormattedMessage id="pages.repairment.dispatchModal.manufacturer" defaultMessage='manufacturer' />,
-                        value: 0,
-                    },
-                    {
-                        label: <FormattedMessage id="pages.repairment.dispatchModal.student" defaultMessage='student' />,
-                        value: 1,
-                    },
-                    {
-                        label: <FormattedMessage id="pages.repairment.dispatchModal.teacher" defaultMessage='teacher' />,
-                        value: 2,
-                    },
-                ]}
-                initialValue={0}
-                fieldProps={{
-                    buttonStyle: 'solid',
-                }}
-            />
-
-            {/* 维修方式对应不同的表单项 */}
-            <ProFormDependency name={['repairmentApproach']}>
-                {({ repairmentApproach }) => {
-                    switch (repairmentApproach) {
-                        case 0:  
-                            return <ProFormGroup >
-                                <ProFormText
+            <ProFormGroup>
+                {/* 维修方式选择 */}
+                <ProFormRadio.Group
+                    name="repairStaff"
+                    colProps={{ md: 12 }}
+                    required
+                    radioType='button'
+                    label='维修人员'
+                    options={[
+                        {
+                            label: <FormattedMessage id="pages.repairment.dispatchModal.manufacturer" defaultMessage='manufacturer' />,
+                            value: 0,
+                        },
+                        {
+                            label: <FormattedMessage id="pages.repairment.dispatchModal.student" defaultMessage='student' />,
+                            value: 1,
+                        },
+                        {
+                            label: <FormattedMessage id="pages.repairment.dispatchModal.teacher" defaultMessage='teacher' />,
+                            value: 2,
+                        },
+                    ]}
+                    initialValue={0}
+                    fieldProps={{
+                        buttonStyle: 'solid',
+                    }}
+                />
+                {/* 维修方式对应不同的表单项 */}
+                <ProFormDependency name={['repairStaff']}>
+                    {({ repairStaff }) => {
+                        switch (repairStaff) {
+                            case 0:
+                                return <ProFormText
                                     colProps={{ md: 12 }}
                                     name='manufacturer'
                                     required
@@ -159,62 +155,92 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
                                     }]}
                                 />
-                                <ProFormText
-                                    colProps={{ md: 12 }}
-                                    // width='md'
-                                    name='trackingNumberInput'
+                            case 1:
+                                return <ProFormSelect
+                                    colProps={{ sm: 12 }}
+                                    name="repairStaffStudent"
                                     required
                                     label={intl.formatMessage({
-                                        id: 'pages.repairment.dispatchModal.trackingNumber',
-                                        defaultMessage: "tracking number",
+                                        id: 'pages.repairment.dispatchModal.repairStaff',
+                                        defaultMessage: 'repair staff'
                                     })}
                                     rules={[{
                                         required: true,
                                         message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                                    }]} />
-                            </ProFormGroup>
-                        case 1: 
-                            return <ProFormSelect
-                                colProps={{ sm: 12, xs: 16 }}
-                                name="repairStaffStudent"
-                                required
-                                label={intl.formatMessage({
-                                    id: 'pages.repairment.dispatchModal.repairStaff',
-                                    defaultMessage: 'repair staff'
-                                })}
-                                rules={[{
-                                    required: true,
-                                    message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                                }]}
-                                request={getStaff}
-                                params={{
-                                    staffType: 'student',
-                                }}
-                            />
-                        case 2: 
-                            return <ProFormSelect
-                                colProps={{ sm: 12, xs: 16 }}
-                                name="repairStaffTeacher"
-                                required
-                                label={intl.formatMessage({
-                                    id: 'pages.repairment.dispatchModal.repairStaff',
-                                    defaultMessage: 'repair staff'
-                                })}
-                                rules={[{
-                                    required: true,
-                                    message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                                }]}
-                                request={getStaff}
-                                params={{
-                                    staffType: 'teacher',
-                                }}
-                            />
-                        default: return <></>
+                                    }]}
+                                    request={getStaff}
+                                    params={{
+                                        staffType: 'student',
+                                    }}
+                                />
+                            case 2:
+                                return <ProFormSelect
+                                    colProps={{ sm: 12 }}
+                                    name="repairStaffTeacher"
+                                    required
+                                    label={intl.formatMessage({
+                                        id: 'pages.repairment.dispatchModal.repairStaff',
+                                        defaultMessage: 'repair staff'
+                                    })}
+                                    rules={[{
+                                        required: true,
+                                        message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                                    }]}
+                                    request={getStaff}
+                                    params={{
+                                        staffType: 'teacher',
+                                    }}
+                                />
+                            default: return <></>
+                        }
                     }
-                }
-                }
-            </ProFormDependency>
+                    }
+                </ProFormDependency>
+            </ProFormGroup>
 
+            <ProFormGroup>
+                <ProFormRadio.Group
+                    name="repairApproach"
+                    colProps={{ md: 12 }}
+                    required
+                    radioType='button'
+                    label='维修方式'
+
+                    options={[
+                        {
+                            label: '现场维修',
+                            value: 0,
+                        },
+                        {
+                            label: '邮寄维修',
+                            value: 1,
+                        },
+                    ]}
+                    initialValue={0}
+                    fieldProps={{
+                        buttonStyle: 'solid',
+                    }}
+                />
+
+                <ProFormDependency name={['repairApproach']}>
+                    {({ repairApproach }) =>
+                        repairApproach === 1 &&
+                        <ProFormText
+                            colProps={{ md: 12 }}
+                            // width='md'
+                            name='trackingNumberInput'
+                            required
+                            label={intl.formatMessage({
+                                id: 'pages.repairment.dispatchModal.trackingNumber',
+                                defaultMessage: "tracking number",
+                            })}
+                            rules={[{
+                                required: true,
+                                message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                            }]} />
+                    }
+                </ProFormDependency>
+            </ProFormGroup>
 
             {/* 备注信息 */}
             <ProFormTextArea
@@ -308,7 +334,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         dataIndex: 'sender'
                                     },
                                 ]}
-                                request={getTrackingNumber}
+                                request={getDeliveryInfo}
                             />
                         </ProCard>
 
@@ -480,56 +506,52 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             }[repairmentstage]}
         </>
 
-
     const acceptanceForm =
         <ProCard
             ghost
             direction='column'
             gutter={[24, 24]}
-        // split={props.responsive ? 'horizontal' : 'vertical'}
-        // split='vertical'
         >
-            <ProCard boxShadow style={{ borderRadius: 20 }}>
-                <ProDescriptions
-                    size='small'
-                    // layout={props.responsive ? 'horizontal' : 'vertical'}
-                    layout='horizontal'
-                    column={{
-                        xs: 1,
-                        sm: 2,
-                        md: 2,
-                    }}
-                    title={<FormattedMessage
-                        id="pages.repairment.repairmentModal.deliveryDetails"
-                        defaultMessage='Delivery Details'
-                    />}
-                    labelStyle={{
-                        fontWeight: 'bolder'
-                    }}
-                    columns={[
-                        {
-                            title: <FormattedMessage
-                                id='pages.repairment.dispatchModal.trackingNumber'
-                                defaultMessage='tracking number' />,
-                            dataIndex: 'trackingNumber'
-                        },
-                        {
-                            title: <FormattedMessage
-                                id='pages.repairment.repairmentModal.senderPhone'
-                                defaultMessage='sender phone' />,
-                            dataIndex: 'senderPhone'
-                        },
-                        {
-                            title: <FormattedMessage
-                                id='pages.repairment.repairmentModal.sender'
-                                defaultMessage='sender' />,
-                            dataIndex: 'sender'
-                        },
-                    ]}
-                    request={getTrackingNumber}
-                />
-            </ProCard>
-
+            {props.value?.processDetails?.dispatch?.approach === 0 &&
+                <ProCard boxShadow style={{ borderRadius: 20 }}>
+                    <ProDescriptions
+                        size='small'
+                        layout='horizontal'
+                        column={{
+                            xs: 1,
+                            sm: 2,
+                            md: 2,
+                        }}
+                        title={<FormattedMessage
+                            id="pages.repairment.repairmentModal.deliveryDetails"
+                            defaultMessage='Delivery Details'
+                        />}
+                        labelStyle={{
+                            fontWeight: 'bolder'
+                        }}
+                        columns={[
+                            {
+                                title: <FormattedMessage
+                                    id='pages.repairment.dispatchModal.trackingNumber'
+                                    defaultMessage='tracking number' />,
+                                dataIndex: 'trackingNumber'
+                            },
+                            {
+                                title: <FormattedMessage
+                                    id='pages.repairment.repairmentModal.senderPhone'
+                                    defaultMessage='sender phone' />,
+                                dataIndex: 'senderPhone'
+                            },
+                            {
+                                title: <FormattedMessage
+                                    id='pages.repairment.repairmentModal.sender'
+                                    defaultMessage='sender' />,
+                                dataIndex: 'sender'
+                            },
+                        ]}
+                        request={getDeliveryInfo}
+                    />
+                </ProCard>}
             <ProCard ghost gutter={[24, 0]} direction={props.responsive ? 'column' : 'row'}>
                 <ProCard ghost>
 

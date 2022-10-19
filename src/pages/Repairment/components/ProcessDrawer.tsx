@@ -4,7 +4,7 @@
 import { getApporver } from '@/services/api';
 import { ProCard, ProDescriptions } from '@ant-design/pro-components';
 
-import { Drawer, Steps } from 'antd';
+import { Button, Drawer, Steps } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
 
 import React from 'react';
@@ -239,7 +239,17 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     );
 
     return (
-        <Drawer width={props.responsive ? '100%' : 600} open={props.drawerOpen} onClose={props.onClose} >
+        <Drawer width={props.responsive ? '100%' : 600} open={props.drawerOpen} onClose={props.onClose} 
+            // 调试信息
+            extra={
+                <Button 
+                onClick={()=>{
+                    console.log(props.value)
+                }}
+                
+                >获取console信息</Button>
+            }
+        >
             <Steps
                 direction="vertical"
                 current={props.value?.processDetails?.stage}

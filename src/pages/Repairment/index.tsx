@@ -12,7 +12,7 @@ import { Button, Tag, Badge, Space } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
 import type { ProColumns, ActionType, ColumnsState } from '@ant-design/pro-components';
 
-import React, { useRef, useState } from 'react';
+import React, { Children, useRef, useState } from 'react';
 import RcResizeObserver from 'rc-resize-observer';
 
 import ProcessDrawer from './components/ProcessDrawer';
@@ -273,7 +273,7 @@ const Repairment: React.FC = () => {
                     },
                     {
                         key: 'drafts',
-                        tab: '草稿箱'
+                        tab: '草稿箱',                        
                     }
                 ]}
                 extra={(

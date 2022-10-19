@@ -3,7 +3,8 @@
  * */
 export default function access(initialState: { userInfo?: API.UserInfo } | undefined) {
   const { userInfo } = initialState ?? {};
+  
   return {
-    canAdmin: userInfo && userInfo.auth === 1,
+    canAdmin: userInfo && userInfo.auth! > 1
   };
 }

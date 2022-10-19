@@ -99,8 +99,8 @@ export const getStaff = async (params: string) => (
 	})).data
 
 
-export const getTrackingNumber = async (options?: { [key: string]: any }) => {
-	let params = await request('/api/getTrackingNumber', {
+export const getDeliveryInfo = async (options?: { [key: string]: any }) => {
+	let params = await request<API.TrackingInfo>('/api/getDeliveryInfo', {
 		method: 'GET',
 		...(options || {}),
 	})

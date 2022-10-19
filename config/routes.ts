@@ -76,6 +76,7 @@ export default [
         name: 'System',
         icon: 'setting',
         path: '/system',
+        access: 'canAdmin',
         routes:[
             {
                 name: 'Character Management',

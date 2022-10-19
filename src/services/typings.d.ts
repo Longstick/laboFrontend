@@ -64,6 +64,7 @@ declare namespace API {
       dispatch?: {
         status?: Status;
         processerID?: number;
+        approach?: number
         result?: string;
         comments?: string;
       };
@@ -91,13 +92,21 @@ declare namespace API {
     updateTime: string;
   };
 
-  type CharacterTableColumnsType = {
+  type TrackingInfo = {
+      trackingNumber?: string,
+      deliveryCompany?: string,
+      shippingAddress?: string,
+      senderPhone?: string,
+      sender?: string
+  }
+
+  type UserTableColumnsType = {
+    userid: number;
     name?: string;
     sex?: 'male' | 'female';
     ID?: string;
-    number?: string;
+    phoneNumber?: string;
     character?: string;
-    operate?: any;
   };
 }
 

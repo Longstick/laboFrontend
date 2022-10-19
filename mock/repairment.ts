@@ -18,7 +18,7 @@ function getRule(req: Request, res: Response, u: string) {
     };
 
   let tableListDataSource = []
-  
+
   for (let i = 0; i < 100; i++) {
     let estimatedTime = Date.now() + getRandomInt(3600000000);
     tableListDataSource.push({
@@ -61,6 +61,7 @@ function getRule(req: Request, res: Response, u: string) {
           processerID: 1,
           status: 'process',
           result: 'pass',
+          approach: getRandomInt(2),
           comments: 'dispatcher HHX'
         },
         repairment: {
@@ -178,16 +179,16 @@ const getStaff = (req: Request, res: Response) => {
   })
 }
 
-const getTrackingNumber = (req: Request, res: Response) => {
+const getDeliveryInfo = (req: Request, res: Response) => {
   return res.json({
     data: {
       trackingNumber: 'sf123jj1239055000051',
       deliveryCompany: '顺丰',
       shippingAddress: '深圳市坪山区深圳技术大学大数据与互联网学院C-1楼204实验室',
       senderPhone: '13537536685',
-      sender: '黄先生'
+      sender: '黄先生',
     },
-    success: true,
+    success: true
   })
 }
 
@@ -195,5 +196,5 @@ export default {
   'GET /api/rule': getRule,
   'GET /api/getApporver': getApporver,
   'GET /api/getStaff': getStaff,
-  'GET /api/getTrackingNumber': getTrackingNumber
+  'GET /api/getDeliveryInfo': getDeliveryInfo
 }

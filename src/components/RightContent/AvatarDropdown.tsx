@@ -32,6 +32,7 @@ const loginOut = async () => {
     //   }),
     // });
     history.push({pathname: '/user/login'})
+    location.reload();
   }
 };
 
@@ -68,7 +69,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   }
 
   // const { currentUser } = initialState;
-
+  
   // if (!currentUser || !currentUser.name) {
   //   return loading;
   // }
