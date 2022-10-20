@@ -37,3 +37,4 @@ npm install
 npm run start
 ```
 
+打开浏览器，输入`localhost:8000`即可访问项目网站。
