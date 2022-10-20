@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ProCard, ProTable, EditableProTable } from "@ant-design/pro-components";
 import type { ProColumns } from "@ant-design/pro-components";
-import { Button, Space, TableColumnType } from "antd";
+import { Button, message, Space, TableColumnType } from "antd";
 import { waitTime } from "@/services/utils";
 
 export const UserTable: React.FC = props => {
@@ -12,7 +12,6 @@ export const UserTable: React.FC = props => {
         {
             userid: 4,
             name: 'HHX',
-            sex: 'male',
             ID: '201902010315',
             phoneNumber: '13537536685',
             character: 'dispatcher',
@@ -20,7 +19,6 @@ export const UserTable: React.FC = props => {
         {
             userid: 2,
             name: 'WZC',
-            sex: 'male',
             ID: '12312323',
             phoneNumber: '13537536685',
             character: 'maintainer',
@@ -28,7 +26,6 @@ export const UserTable: React.FC = props => {
         {
             userid: 1,
             name: 'CWS',
-            sex: 'female',
             ID: '34699094433',
             phoneNumber: '342434342436',
             character: 'maintainer',
@@ -36,7 +33,6 @@ export const UserTable: React.FC = props => {
         {
             userid: 5,
             name: 'ZJH',
-            sex: 'female',
             ID: '201902010315',
             phoneNumber: '12333245542',
             character: 'approver',
@@ -49,16 +45,7 @@ export const UserTable: React.FC = props => {
             title: '姓名',
             dataIndex: 'name',
             readonly: true,
-        },
-        {
-            key: 'sex',
-            title: '性别',
-            dataIndex: 'sex',
             hideInSearch: true,
-            valueEnum: {
-                male: '男',
-                female: '女',
-            }
         },
         {
             key: 'ID',
@@ -120,12 +107,19 @@ export const UserTable: React.FC = props => {
                 total: 4,
                 success: true,
             })}
+            toolbar={{
+                title: '用户信息',
+            }}
+            search={{
+                filterType: 'query',
+            }}
             editable={{
                 type: 'single',
                 editableKeys,
                 onSave: async (rowKey, data, row) => {
                     console.log(rowKey, data, row)
                     await waitTime(1000)
+                    message.success('修改成功！')
                 },
                 onChange: setEditableKeys,
             }}

@@ -103,7 +103,6 @@ declare namespace API {
   type UserTableColumnsType = {
     userid: number;
     name?: string;
-    sex?: 'male' | 'female';
     ID?: string;
     phoneNumber?: string;
     character?: string;
