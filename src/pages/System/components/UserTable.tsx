@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ProCard, ProTable, EditableProTable } from "@ant-design/pro-components";
 import type { ProColumns } from "@ant-design/pro-components";
-import { Button, message, Space, TableColumnType } from "antd";
+import { Button, message, Popconfirm, Space, TableColumnType } from "antd";
 import { waitTime } from "@/services/utils";
 
 export const UserTable: React.FC = props => {
@@ -44,8 +44,8 @@ export const UserTable: React.FC = props => {
             key: 'name',
             title: '姓名',
             dataIndex: 'name',
-            readonly: true,
-            hideInSearch: true,
+            // readonly: true,
+            // hideInSearch: true,
         },
         {
             key: 'ID',
@@ -84,23 +84,33 @@ export const UserTable: React.FC = props => {
                             action?.startEditable?.(record.userid)
                         }}
                     >修改</Button>
+                    <Popconfirm
+                        title='确认要删除该用户数据吗？'
+                        onConfirm={async ()=>{
+                            try {
+                                await waitTime(1000)
+                                message.success('删除成功！')
+                            } catch (err) {
+                                message.error('删除失败！')
+                            }
+                            
+                        }}
+                    >
                     <Button
                         key='delete'
-                        onClick={()=>{
-                            setValue(value.filter((item) => item.userid !== record.userid));
-                        }}
                     >删除</Button>
+                    </Popconfirm>
                 </Space>
         },
     ]
     
     return (
-        <EditableProTable<API.UserTableColumnsType, API.PageParams>
+        <ProTable<API.UserTableColumnsType, API.PageParams>
             rowKey='userid'
             columns={userTableColumns}
-            value={userData}
-            onChange={setValue}
-            recordCreatorProps={false}
+            dataSource={userData}
+            // onChange={setValue}
+            // recordCreatorProps={false}
             tableLayout='fixed'
             request={async()=>({
                 data: userData,
