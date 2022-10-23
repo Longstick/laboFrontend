@@ -3,17 +3,18 @@ import { ProCard, ProTable, EditableProTable } from "@ant-design/pro-components"
 import type { ProColumns } from "@ant-design/pro-components";
 import { Button, message, Popconfirm, Space, TableColumnType } from "antd";
 import { waitTime } from "@/services/utils";
+import { CreateUserForm } from "./CreateUserForm";
+import ButtonGroup from "antd/lib/button/button-group";
+import { characterType } from "../struct";
 
 export const UserTable: React.FC = props => {
-
-    const [editableKeys, setEditableKeys] = useState<React.Key[]>([])
-    const [value, setValue] = useState<API.UserTableColumnsType[]>([])
     const userData: API.UserTableColumnsType[] = [
         {
             userid: 4,
             name: 'HHX',
             ID: '201902010315',
             phoneNumber: '13537536685',
+            email: 'userhhx@example.com',
             character: 'dispatcher',
         },
         {
@@ -21,6 +22,7 @@ export const UserTable: React.FC = props => {
             name: 'WZC',
             ID: '12312323',
             phoneNumber: '13537536685',
+            email: 'wzc@example.com',
             character: 'maintainer',
         },
         {
@@ -28,6 +30,7 @@ export const UserTable: React.FC = props => {
             name: 'CWS',
             ID: '34699094433',
             phoneNumber: '342434342436',
+            email: 'cws@qq.com',
             character: 'maintainer',
         },
         {
@@ -35,23 +38,28 @@ export const UserTable: React.FC = props => {
             name: 'ZJH',
             ID: '201902010315',
             phoneNumber: '12333245542',
+            email: 'user@example.com',
             character: 'approver',
         },
     ]
 
+    const [editableKeys, setEditableKeys] = useState<React.Key[]>([]);
+    const [value, setValue] = useState<API.UserTableColumnsType[]>(userData);
+    const [selectedRows,setSelectedRows] = useState<API.UserTableColumnsType[]>([]);
+
     const userTableColumns: ProColumns<API.UserTableColumnsType>[] = [
         {
             key: 'name',
-            title: '姓名',
+            title: '用户名',
             dataIndex: 'name',
             // readonly: true,
             // hideInSearch: true,
+            editable: false,
         },
         {
             key: 'ID',
             title: '学工号',
             dataIndex: 'ID',
-            editable: ()=>true,
         },
         {
             key: 'phoneNumber',
@@ -59,15 +67,16 @@ export const UserTable: React.FC = props => {
             dataIndex: 'phoneNumber',
         },
         {
+            key: 'email',
+            title: '邮箱',
+            dataIndex: 'email',
+        },
+        {
             key: 'character',
             title: '角色',
             dataIndex: 'character',
             valueType: 'select',
-            valueEnum: {
-                dispatcher: '派发员',
-                maintainer: '维修员',
-                approver: '审批员',
-            }
+            valueEnum: characterType
         },
         {
             key: 'option',
@@ -85,11 +94,13 @@ export const UserTable: React.FC = props => {
                         }}
                     >修改</Button>
                     <Popconfirm
-                        title='确认要删除该用户数据吗？'
+                        title={<>确认删除该用户吗？<br />将无法还原数据!</>}
+                        // title = {"确认删除吗？\r将无法复原"}
                         onConfirm={async ()=>{
                             try {
-                                await waitTime(1000)
+                                await waitTime(500)
                                 message.success('删除成功！')
+                                // setValue(value.filter((item)=> item.userid !== record.userid))
                             } catch (err) {
                                 message.error('删除失败！')
                             }
@@ -108,17 +119,33 @@ export const UserTable: React.FC = props => {
         <ProTable<API.UserTableColumnsType, API.PageParams>
             rowKey='userid'
             columns={userTableColumns}
-            dataSource={userData}
+            dataSource={value}
             // onChange={setValue}
-            // recordCreatorProps={false}
             tableLayout='fixed'
+            rowSelection={{
+                onChange: (_, selected) => {setSelectedRows(selected)}
+            }}
             request={async()=>({
                 data: userData,
                 total: 4,
                 success: true,
             })}
+            scroll={{ x: 500}}
             toolbar={{
-                title: '用户信息',
+                title: 
+                    <Space size={16}>
+                    <CreateUserForm key='createUserForm'/>
+                    <ButtonGroup key='output'>
+                        <Button
+                            key='outputAll'
+                        >导出全部</Button>
+                        <Button
+                            key='outputSelected'
+                            disabled={selectedRows.length === 0}
+                        >导出已选</Button>
+                    </ButtonGroup>
+                    </Space>
+                
             }}
             search={{
                 filterType: 'query',
@@ -132,7 +159,10 @@ export const UserTable: React.FC = props => {
                     message.success('修改成功！')
                 },
                 onChange: setEditableKeys,
+                actionRender: (row, config, defaultDom) => [defaultDom.save, defaultDom.cancel],
+                
             }}
+            
 
         />
     )

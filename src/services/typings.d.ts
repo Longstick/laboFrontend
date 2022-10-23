@@ -28,6 +28,7 @@ declare namespace API {
     phone?: string;
     email?: string;
     identity?: number;
+    character?: string;
     auth?: number;
   }
 
@@ -105,6 +106,7 @@ declare namespace API {
     name?: string;
     ID?: string;
     phoneNumber?: string;
+    email?: string;
     character?: string;
   };
 }
