@@ -27,8 +27,9 @@ export const CreateUserForm: React.FC = props => {
                 destroyOnClose: true,
                 maskClosable: false,
             }}
-            onFinish={async () => {
+            onFinish={async values => {
                 await waitTime(1000);
+                console.log(values)
                 return true
             }}
         >
@@ -47,7 +48,7 @@ export const CreateUserForm: React.FC = props => {
                     }
                 ]}
                 fieldProps={{
-                    placeholder: '用户名'
+                    placeholder: '长度在2-8位之间'
                 }}
             />
 
@@ -67,9 +68,6 @@ export const CreateUserForm: React.FC = props => {
                         validateTrigger: 'onClick'
                     },
                 ]}
-                fieldProps={{
-                    placeholder: '手机号码',
-                }}
             />
 
             <ProFormSelect 
@@ -103,7 +101,7 @@ export const CreateUserForm: React.FC = props => {
                     }
                 ]}
                 fieldProps={{
-                    placeholder: '密码',
+                    placeholder: '长度在6-20位之间',
                 }}
             />
 

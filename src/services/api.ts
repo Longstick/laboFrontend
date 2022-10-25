@@ -106,3 +106,10 @@ export const getDeliveryInfo = async (options?: { [key: string]: any }) => {
 	})
 	return params
 }
+
+export const getUserData = async ( options?: { [key: string]: any }) => {
+	return request<API.UserTableColumnsType>('/api/getUserData', {
+		method: 'GET',
+		...(options || {}),
+	})
+}

@@ -103,13 +103,7 @@ const Signup = () => {
             }}
         >
             <Layout>
-                {/* <Header className={styles.LoginHeader}>
-                    <img src={logo} alt='' className={styles.HeaderLogo} />
-                    <Title level={2}>SZTU </Title>
-                </Header> */}
-
                 <Content className={styles.BasicBody}>
-
                     {isSuccess ?
                         <div className={styles.successPad}>
                             <Result
@@ -150,24 +144,11 @@ const Signup = () => {
                                 >
                                     <Radio.Button
                                         value="inSchool"
-                                        style={{
-                                            // borderTopLeftRadius: '20px',
-                                            // borderBottomLeftRadius: '20px',
-                                            // margin: '10px',
-                                        }}
                                     >学生/教职工</Radio.Button>
                                     <Radio.Button
                                         value="outSchool"
-                                        style={{
-                                            // borderTopRightRadius: '20px',
-                                            // borderBottomRightRadius: '20px'
-                                            // borderRadius: '20px',
-                                            // margin: '10px',
-                                        }}
                                     >合作/供应商</Radio.Button>
                                 </Radio.Group>
-
-                                {/* <ProCard > */}
 
                                 <ProForm
                                     formRef={formRef}
@@ -175,7 +156,6 @@ const Signup = () => {
                                     scrollToFirstError
                                     grid
                                     isKeyPressSubmit
-                                    // validateTrigger='onClick'
                                     requiredMark={false}
                                     submitter={{
                                         submitButtonProps: {
@@ -199,28 +179,6 @@ const Signup = () => {
                                     }}
                                     onFinish={identity === 'inSchool' ? inSchoolFinished : outSchoolFinished}
                                 >
-                                    {/* <ProFormText
-                                        // colProps={{ md: 12 }}
-                                        name="account"
-                                        // label='学号/工号'
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: '请填写学工号'
-                                            },
-                                            {
-                                                pattern: new RegExp(/^(?!.*\D).*$/, "g"),
-                                                message: '请填写正确的学工号',
-                                                validateTrigger: 'onClick'
-                                            }
-                                        ]}
-                                        fieldProps={{
-                                            // bordered: false,
-                                            size: 'large',
-                                            className: styles.RadiusInput,
-                                            placeholder: '学号/工号'
-                                        }}
-                                    /> */}
 
                                     <ProFormText
                                         name="username"
@@ -239,7 +197,7 @@ const Signup = () => {
                                         fieldProps={{
                                             size: 'large',
                                             className: styles.RadiusInput,
-                                            placeholder: '用户名'
+                                            placeholder: '长度需要在2-8位之内'
                                         }}
                                     />
 
@@ -262,7 +220,7 @@ const Signup = () => {
                                         fieldProps={{
                                             size: 'large',
                                             className: styles.RadiusInput,
-                                            placeholder: '手机号码',
+                                            // placeholder: '手机号码',
                                         }}
                                     />
 
@@ -287,7 +245,7 @@ const Signup = () => {
                                                 addonAfter: '@stumail.sztu.edu.cn',
                                                 size: 'large',
                                                 className: styles.RadiusInput,
-                                                placeholder: '内部邮箱',
+                                                // placeholder: '内部邮箱',
                                             }}
                                         />
 
@@ -316,7 +274,7 @@ const Signup = () => {
                                             fieldProps={{
                                                 size: 'large',
                                                 className: styles.RadiusInput,
-                                                placeholder: '登录邮箱',
+                                                placeholder: '如"xxx@xxmail.com"',
                                             }}
                                         />
                                     }
@@ -360,8 +318,6 @@ const Signup = () => {
                                                 message: '请填写密码',
                                             },
                                             {
-                                                // type: 'string',
-                                                // pattern: new RegExp(/^(?=.*[0-9])(?=.*[a-zA-Z]).*$/, "g"),
                                                 min: 6,
                                                 max: 20,
                                                 message: '密码长度只能为6-20位',
@@ -376,15 +332,19 @@ const Signup = () => {
                                         fieldProps={{
                                             size: 'large',
                                             className: styles.RadiusInput,
-                                            placeholder: '密码',
+                                            placeholder: '长度需要在6-20位之内',
                                         }}
                                     />
                                 </ProForm>
 
 
-                                <p className={styles.LoginLink}>已有账号？<a href="/user/login">返回登录</a></p>
+                                <p className={styles.LoginLink}>
+                                    已有账号？<a href="/user/login">返回登录</a>
+                                </p>
                             </ProCard>
+
                             {!responsive && <ProCard colSpan={12} className={styles.SignupIllustration} />}
+
                         </ProCard>}
                 </Content>
             </Layout>

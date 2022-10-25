@@ -109,6 +109,14 @@ declare namespace API {
     email?: string;
     character?: string;
   };
+
+  type CharacterInfo = {
+    charName?: string;
+    charDesc?: string;
+    createUserID?: string;
+    createUserPhone?: string;
+    authGroup: string[];
+  }
 }
 
   
