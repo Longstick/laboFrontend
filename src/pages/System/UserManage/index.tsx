@@ -6,7 +6,7 @@ import { waitTime } from "@/services/utils";
 import ButtonGroup from "antd/lib/button/button-group";
 import { characterType } from "../struct";
 import { CreateUserForm } from "../components/CreateUserForm";
-import { getUserData } from "@/services/api";
+import { getCharData, getUserData } from "@/services/api";
 
 const UserManage: React.FC = () => {
 
@@ -40,7 +40,17 @@ const UserManage: React.FC = () => {
             title: '角色',
             dataIndex: 'character',
             valueType: 'select',
-            valueEnum: characterType
+            request: async() => {
+                const res = (await getCharData()).data;
+                const option: {label?: string, value: number}[] = []
+                res.forEach((element: API.CharacterInfo) => {
+                    option.push({
+                        label: element.charName,
+                        value: element.charID,
+                    })
+                })
+                return option
+            }            
         },
         {
             key: 'option',
@@ -103,8 +113,8 @@ const UserManage: React.FC = () => {
 
                 }}
                 search={{
-                    filterType: 'query',
                     defaultCollapsed: false,
+                    showHiddenNum: true,
                 }}
                 editable={{
                     type: 'single',

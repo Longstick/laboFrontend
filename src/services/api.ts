@@ -108,7 +108,14 @@ export const getDeliveryInfo = async (options?: { [key: string]: any }) => {
 }
 
 export const getUserData = async ( options?: { [key: string]: any }) => {
-	return request<API.UserTableColumnsType>('/api/getUserData', {
+	return request('/api/getUserData', {
+		method:	'GET',
+		...(options || {}),
+	})
+}
+
+export const getCharData = async ( options?: { [key: string]: any }) => {
+	return request<{data: API.CharacterInfo[]}>('/api/getCharData', {
 		method: 'GET',
 		...(options || {}),
 	})

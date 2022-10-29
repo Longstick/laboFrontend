@@ -107,10 +107,11 @@ declare namespace API {
     ID?: string;
     phoneNumber?: string;
     email?: string;
-    character?: string;
+    character?: number;
   };
 
   type CharacterInfo = {
+    charID: number;
     charName?: string;
     charDesc?: string;
     createUserID?: string;

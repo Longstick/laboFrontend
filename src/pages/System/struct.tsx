@@ -6,7 +6,7 @@ export const characterType = {
     approver: '审批员',
 }
 
-export type authType = {
+export const authType = {
     dispatch: '派发',
     maintain: '维修',
     approve: '审批',
