@@ -48,12 +48,18 @@ const Character: React.FC = () => {
             render: (text, record, _, action) => {
                 const authlist = record.authGroup
                 const taglist: React.ReactNode[] = [];
+                if (authlist.length === 0) {
+                    return <>无特殊权限</>
+                }
+                authlist.sort()
                 authlist.forEach(element => {
                     taglist.push(
                         <Tag>{authType[element]}</Tag>
                     )
                 })
-                return taglist
+                return <Space direction='vertical'>
+                    {taglist}
+                </Space>
             }
         },
         {
@@ -89,6 +95,7 @@ const Character: React.FC = () => {
                     defaultCollapsed: false,
                     showHiddenNum: true,
                 }}
+                scroll={{x: 800}}
                 editable={{
                     type: 'single',
                     editableKeys,

@@ -28,8 +28,7 @@ import {
 import { getStaff, getDeliveryInfo } from '@/services/api'
 import { ExportOutlined, ImportOutlined, ToolOutlined, TransactionOutlined } from '@ant-design/icons'
 import { waitTime } from "@/services/utils";
-import { DebounceSelect } from '@/components/DebounceSelect'
- 
+
 
 const { Step } = Steps
 const { Title } = Typography
@@ -42,20 +41,9 @@ export type ModalProps = {
 
 const ApprovalModal: React.FC<ModalProps> = props => {
 
-    const [repairmentstage, setrepairmentstage] = useState<number>(2)
     const [currentuser, setuser] = useState<boolean>(true)
     const [isurged, clickUrge] = useState<boolean>(false)
 
-    const addStage = () => {
-        if (repairmentstage < 3) {
-            setrepairmentstage(repairmentstage + 1)
-        }
-    }
-    const subStage = () => {
-        if (repairmentstage > 0) {
-            setrepairmentstage(repairmentstage - 1)
-        }
-    }
     const onFinish = async (values: any) => {
         await waitTime(2000)
         console.log(values)
@@ -89,7 +77,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                     maxLength: 1000,
                 }}
             />
-            <DebounceSelect
+            <ProFormSelect
                 colProps={{ sm: 12, xs: 16 }}
                 name="nextProcesser"
                 required
@@ -106,7 +94,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                     staffType: 'all'
                 }}
             />
-            
+
         </>
 
 
@@ -255,9 +243,21 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             />
         </>
 
+
+    const postForm =
+        <>
+            <ProFormGroup>
+                <ProFormSelect />
+                <ProFormText />
+            </ProFormGroup>
+        </>
+
+
+
+
     const repairmentForm =
         <>
-            <Steps
+            {/* <Steps
                 current={repairmentstage}
                 labelPlacement='vertical'
             >
@@ -278,8 +278,8 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                     icon={<ExportOutlined />}
                 />
             </Steps>
-            <br />
-
+            <br /> */}
+            {/* 
             {{
                 0:
                     <ProCard
@@ -492,7 +492,45 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                             />
                         </ProCard>
                     </ProCard>,
-            }[repairmentstage]}
+            }[repairmentstage]} */}
+
+
+
+            {currentuser ?
+                <ProCard layout='center'>
+                    <Title level={4}>
+                        <FormattedMessage id="pages.repairment.repairmentModal.pleaseWait" defaultMessage='Please wait for the maintenance staff to complete their job.' />
+
+                    </Title>
+                </ProCard>
+                :
+                <>
+                    <ProFormTextArea
+                        name='issueCause'
+                        label={<FormattedMessage id="pages.repairment.issue.repairment.cause" defaultMessage='issue case' />}
+                        rules={[{
+                            required: true,
+                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                        }]}
+                        fieldProps={{
+                            maxLength: 1000,
+                            showCount: true,
+                        }}
+                    />
+                    <ProFormTextArea
+                        name='solution'
+                        label={<FormattedMessage id="pages.repairment.issue.repairment.solution" defaultMessage='solution' />}
+                        rules={[{
+                            required: true,
+                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                        }]}
+                        fieldProps={{
+                            maxLength: 1000,
+                            showCount: true,
+                        }}
+                    />
+                </>}
+
         </>
 
     const acceptanceForm =
@@ -607,8 +645,9 @@ const ApprovalModal: React.FC<ModalProps> = props => {
     const changeModal = {
         1: approvalForm,
         2: dispatchForm,
-        3: repairmentForm,
-        4: acceptanceForm,
+        3: postForm,
+        4: repairmentForm,
+        5: acceptanceForm,
     }[props.currentStage ?? 0]
 
     return (
@@ -628,48 +667,24 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             grid
             submitter={{
                 searchConfig: {
-                    submitText: ((props.currentStage === 3) ? {
-                        0: <FormattedMessage id='pages.repairment.repairmentModal.confirmReceipt' defaultMessage='Confirm Receipt' />,
-                        1: <FormattedMessage id='pages.repairment.repairmentModal.sendQuotation' defaultMessage='Send Quotation' />,
-                        2: (currentuser ?
-                            <></> :
-                            <FormattedMessage id='pages.repairment.repairmentModal.repairComplete' defaultMessage='Repair Confirm' />
-                        ),
-                        3: <FormattedMessage id='pages.repairment.repairmentModal.sendingConfirm' defaultMessage='Sending Confirm' />
-                    }[repairmentstage] :
-                        <FormattedMessage id='component.button.confirm' defaultMessage='Confirm' />)
+                    submitText:
+                        (props.currentStage === 4) ?
+                            currentuser ?
+                                <></> :
+                                <FormattedMessage id='pages.repairment.repairmentModal.repairComplete' defaultMessage='Repair Confirm' />
+
+                            :
+                            <FormattedMessage id='component.button.confirm' defaultMessage='Confirm' />
                 },
+
                 render: (prop, dom) => {
-                    return (props.currentStage === 3) ? {
-                        0: [
-                            <Popover
-                                key='problemPopover'
-                                title="签收常见问题"
-                                content={popContent[0]}
-                            >
-                                <Button key='receiptProblem' type='link'>
-                                    <FormattedMessage id="pages.repairment.repairmentModal.receiptProblem" defaultMessage='receipt problem' />
-                                </Button>
-                            </Popover>,
-                            ...dom
-                        ],
-                        1: [
-                            <Popover
-                                key='problemPopover'
-                                title='报价常见问题'
-                                content={popContent[1]}
-                            >
-                                <Button key='quotationProblem' type='link'>
-                                    <FormattedMessage id="pages.repairment.repairmentModal.quotationProblem" defaultMessage='quotation problem' />
-                                </Button>
-                            </Popover>,
-                            ...dom
-                        ],
-                        2: [
+                    return (props.currentStage === 4) ?
+                        [
                             <Switch key='switch'
                                 onChange={checked => setuser(checked)}
                                 checked={currentuser}
                             />,
+
                             currentuser ?
                                 <Button
                                     type='primary'
@@ -684,13 +699,10 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                     }}
                                 >
                                     <FormattedMessage id="pages.repairment.repairmentModal.urge" defaultMessage='Urge' />
-                                </Button> :
-                                dom
-                            ,
-                        ],
-                        3: dom
-                    }[repairmentstage]
-                        : dom
+                                </Button>
+                                : dom
+
+                        ] : dom
                 }
             }}
         >
@@ -711,18 +723,11 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                     size='middle'
                 />
 
-                <Button onClick={subStage}>
-                    &lt;
-                </Button>
-                <Button onClick={addStage}>
-                    &gt;
-                </Button>
-
             </ProCard>
             <ProCard>
                 {changeModal}
             </ProCard>
-        </ModalForm>
+        </ModalForm >
     )
 }
 

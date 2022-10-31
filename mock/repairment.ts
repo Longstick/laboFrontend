@@ -17,7 +17,7 @@ function getRule(req: Request, res: Response, u: string) {
       filter: any;
     };
 
-  let tableListDataSource = []
+  let tableListDataSource: API.TableColumns[] = []
 
   for (let i = 0; i < 100; i++) {
     let estimatedTime = Date.now() + getRandomInt(3600000000);
@@ -64,13 +64,19 @@ function getRule(req: Request, res: Response, u: string) {
           approach: getRandomInt(2),
           comments: 'dispatcher HHX'
         },
+        post: {
+          processerID: 1,
+          status: 'process',
+          trackingNumber: '123123111231',
+          deliveryComp: 'SF',
+          senderPhone: '15118090126',
+          sender: '吴泽诚',
+        },
         repairment: {
           processerID: 1,
           status: 'process',
-          result: 'pass',
           cause: 'somebody pour some water on it.',
           solution: 'have to change motherboard',
-          stage: 1
         },
         acceptance: {
           processerID: 1,

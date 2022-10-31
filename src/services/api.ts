@@ -93,7 +93,13 @@ export async function getApporver(options?: { [key: string]: any }) {
 }
 
 export const getStaff = async (params: string) => (
-	await request('/api/getStaff', {
+	await request<{
+		data: {
+			key?: string
+			label: string
+			value: number | string
+		}[]
+	}>('/api/getStaff', {
 		method: 'GET',
 		params: params,
 	})).data

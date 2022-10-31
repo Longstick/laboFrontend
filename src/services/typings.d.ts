@@ -39,13 +39,13 @@ declare namespace API {
     issueTitle?: string;
     issueDescription?: string;
     category?: any;
-    priority: number;
+    priority: string;
     remainingTime: number;
     estimatedTime: number;
     updatedTime: number;
     status: number;
     object?: string;
-    failureType?: number;
+    failureType?: string;
     manufacturer?: string;
     picture?: string[];
     trackingNumber?: string;
@@ -69,6 +69,14 @@ declare namespace API {
         result?: string;
         comments?: string;
       };
+      post?: {
+        status?: Status;
+        processerID?: number;
+        trackingNumber?: string;
+        deliveryComp?: string;
+        senderPhone?: string;
+        sender?: string;
+      }
       repairment?: {
         status?: Status;
         processerID?: number;

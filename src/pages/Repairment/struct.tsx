@@ -60,11 +60,12 @@ export const statusList = {
 }
 
 export const stepLabel = {
-    0: (<FormattedMessage id="pages.repairment.issue.submit" defaultMessage="Submit" />),
-    1: (<FormattedMessage id="pages.repairment.issue.approval" defaultMessage="Approval" />),
-    2: (<FormattedMessage id="pages.repairment.issue.dispatch" defaultMessage="Dispatch" />),
-    3: (<FormattedMessage id="pages.repairment.issue.repairment" defaultMessage="Repairment" />),
-    4: (<FormattedMessage id="pages.repairment.issue.acceptance" defaultMessage="Acceptance" />),
+    0: "提交",
+    1: "审批",
+    2: "派发",
+    3: "邮寄",
+    4: "维修",
+    5: "验收",
 };
 
 export const failureTypeLabel = {

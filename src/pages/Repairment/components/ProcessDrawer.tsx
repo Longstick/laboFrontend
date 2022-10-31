@@ -84,6 +84,32 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             ],
         },
         3: {
+            step: 'post',
+            columns: [
+                {
+                    title: '快递单号',
+                    key: 'TrackingNumber',
+                    dataIndex: 'TrackingNumber',
+                },
+
+                {
+                    title: '快递公司',
+                    key: 'DeliveryComp',
+                    dataIndex: 'DeliveryComp',
+                },
+                {
+                    title: '寄件人联系电话',
+                    key: 'senderPhone',
+                    dataIndex: 'senderPhone',
+                },
+                {
+                    title: '寄件人',
+                    key: 'sender',
+                    dataIndex: 'sender',
+                },
+            ],
+        },
+        4: {
             step: 'repairment',
             columns: [
                 {
@@ -119,7 +145,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 },
             ],
         },
-        4: {
+        5: {
             step: 'acceptance',
             columns: [
                 {
@@ -218,7 +244,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                         value={props.value}
                         responsive={props.responsive}
                     >
-                        {step === 3 ?
+                        {step === 4 ?
                             <FormattedMessage
                                 id='pages.repairment.repairmentModal.progressEntry'
                                 defaultMessage='Process Entry'
@@ -273,12 +299,17 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 />
                 <Step
                     title={stepLabel[3]}
-                    description={stepItem(3, props.value?.processDetails?.repairment)}
-                    status={props.value?.processDetails?.repairment?.status}
+                    description={stepItem(3, props.value?.processDetails?.post)}
+                    status={props.value?.processDetails?.post?.status}
                 />
                 <Step
                     title={stepLabel[4]}
-                    description={stepItem(4, props.value?.processDetails?.acceptance)}
+                    description={stepItem(4, props.value?.processDetails?.repairment)}
+                    status={props.value?.processDetails?.repairment?.status}
+                />
+                <Step
+                    title={stepLabel[5]}
+                    description={stepItem(5, props.value?.processDetails?.acceptance)}
                     status={props.value?.processDetails?.acceptance?.status}
                 />
             </Steps>
