@@ -76,6 +76,7 @@ declare namespace API {
         deliveryComp?: string;
         senderPhone?: string;
         sender?: string;
+        picture?: string[];
       }
       repairment?: {
         status?: Status;

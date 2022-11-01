@@ -11,7 +11,8 @@ import { getCharData, getUserData } from "@/services/api";
 const UserManage: React.FC = () => {
 
     const [editableKeys, setEditableKeys] = useState<React.Key[]>([]);
-    const [selectedRows, setSelectedRows] = useState<API.UserTableColumnsType[]>([]);
+    const [selectRows, setSelectedRows] = useState<API.UserTableColumnsType[]>([]);
+    const [rowSelect, setRowSelect] = useState<boolean>(false)
 
     const userTableColumns: ProColumns<API.UserTableColumnsType>[] = [
         {
@@ -40,9 +41,9 @@ const UserManage: React.FC = () => {
             title: '角色',
             dataIndex: 'character',
             valueType: 'select',
-            request: async() => {
+            request: async () => {
                 const res = (await getCharData()).data;
-                const option: {label?: string, value: number}[] = []
+                const option: { label?: string, value: number }[] = []
                 res.forEach((element: API.CharacterInfo) => {
                     option.push({
                         label: element.charName,
@@ -50,7 +51,7 @@ const UserManage: React.FC = () => {
                     })
                 })
                 return option
-            }            
+            }
         },
         {
             key: 'option',
@@ -91,9 +92,26 @@ const UserManage: React.FC = () => {
                 rowKey='userid'
                 columns={userTableColumns}
                 tableLayout='fixed'
-                rowSelection={{
-                    onChange: (_, selected) => { setSelectedRows(selected) }
-                }}
+                rowSelection={
+                    rowSelect ?
+                        {
+                            onChange: (_, selected) => { setSelectedRows(selected) },
+                            
+                            alwaysShowAlert: true,
+                        } : false
+                    }
+                tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected })=>
+                    <Space size={18}>
+                        <a>批量导出</a>
+                        <Popconfirm
+                            title={<>确认删除这些用户吗？<br />将无法还原数据!</>}
+                        >
+                            <a>批量删除</a>
+                        </Popconfirm>
+                        
+                        <a onClick={onCleanSelected}>清空选择</a>
+                    </Space>
+                }
                 request={getUserData}
                 scroll={{ x: 500 }}
                 toolbar={{
@@ -104,10 +122,19 @@ const UserManage: React.FC = () => {
                                 <Button
                                     key='outputAll'
                                 >导出全部</Button>
-                                <Button
-                                    key='outputSelected'
-                                    disabled={selectedRows.length === 0}
-                                >导出已选</Button>
+                                {
+                                    rowSelect ?
+                                        <Button
+                                            key='cancelBatch'
+                                            danger
+                                            onClick={() => { setRowSelect(false) }}
+                                        >取消选择</Button>
+                                        :
+                                        <Button
+                                            key='batch'
+                                            onClick={() => { setRowSelect(true) }}
+                                        >批量操作</Button>
+                                }
                             </ButtonGroup>
                         </Space>
 

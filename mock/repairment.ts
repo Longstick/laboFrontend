@@ -21,6 +21,7 @@ function getRule(req: Request, res: Response, u: string) {
 
   for (let i = 0; i < 100; i++) {
     let estimatedTime = Date.now() + getRandomInt(3600000000);
+    
     tableListDataSource.push({
       key: i,
       issueID: i,
@@ -37,7 +38,7 @@ function getRule(req: Request, res: Response, u: string) {
       remainingTime: estimatedTime,
       estimatedTime: estimatedTime,
       updatedTime: Date.now() + getRandomInt(3600000000),
-      status: getRandomInt(3),
+      status: activeKey === 'to-do' ? 0 : getRandomInt(3),
       currentProcesser: activeKey === 'to-do' ? 1 : getRandomInt(2),
       object: '大数据学院楼-204-椅子0015',
       failureType: getRandomInt(3).toString(),
