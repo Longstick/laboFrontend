@@ -70,14 +70,14 @@ export default [
         icon: 'table',
         path: '/repair',
         component: './Repairment',
-        
+
     },
     {
         name: 'System',
-        icon: 'setting',
+        icon: 'team',
         path: '/system',
         access: 'canAdmin',
-        routes:[
+        routes: [
             {
                 name: 'Character Management',
                 path: '/system/character',
@@ -90,7 +90,24 @@ export default [
                 icon: 'user',
                 component: './System/UserManage'
             },
-        ]        
+            {
+                path: '/system',
+                redirect: '/system/character',
+            }
+        ]
+    },
+    {
+        name: 'Statistics',
+        path: '/statistics',
+        icon: 'pieChart',
+        access: 'canAdmin',
+        routes: [
+            {
+                name: 'Real-Time Statistics',
+                path: '/statistics/realtime',
+                component: './Statistics/RealTimeStatistic'
+            },
+        ]
     },
     {
         path: '/',

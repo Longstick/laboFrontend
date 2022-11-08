@@ -18,7 +18,7 @@ export const CreateCharForm: React.FC = props => {
             trigger={
                 <Button
                     type='primary'
-                >新建用户</Button>
+                >新建角色</Button>
             }
             width={600}
             modalProps={{

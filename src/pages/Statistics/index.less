@@ -1,0 +1,13 @@
+@import (reference) '~antd/es/style/themes/index';
+
+.selected{
+    border: 1px solid #1890ff;
+    // background-color: #f4faff;
+    animation: changeColor 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes changeColor {
+    from {background-color: undefined;}
+    to {background-color: #f3f9fd;}
+}

@@ -58,5 +58,7 @@ export default {
   'menu.System': '系统维护管理',
   'menu.System.Character Management': '角色管理',
   'menu.System.User Management': '用户管理',
+  'menu.Statistics': '数据统计',
+  'menu.Statistics.Real-Time Statistics': '实时统计',
   
 };

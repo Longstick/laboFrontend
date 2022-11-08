@@ -28,6 +28,7 @@ const Repairment: React.FC = () => {
     const [currentRow, setCurrentRow] = useState<API.TableColumns>();
     const [activeKey, setActiveKey] = useState<string>('all')
     const [selectedRowsState, setSelectedRows] = useState<API.TableColumns[]>([]);
+    const [rowSelect, setRowSelect] = useState<boolean>(false)
     const [processDrawerOpen, setProcessDrawer] = useState<boolean>(false);
     const [detailModalOpen, setModalOpen] = useState<boolean>(false);
     const [columnsStateMap, setColumnsStateMap] = useState<Record<string, ColumnsState>>({

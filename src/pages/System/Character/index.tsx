@@ -105,7 +105,6 @@ const Character: React.FC = () => {
         <PageContainer>
             <ProTable<API.CharacterInfo, API.PageParams>
                 rowKey='charID'
-                tableLayout='fixed'
                 columns={CharacterTableColumns}
                 request={getCharData}
                 actionRef={actionRef}

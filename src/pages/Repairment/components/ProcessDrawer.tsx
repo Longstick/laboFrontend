@@ -297,11 +297,11 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                     description={stepItem(2, props.value?.processDetails?.dispatch)}
                     status={props.value?.processDetails?.dispatch?.status}
                 />
-                <Step
+                {/* <Step
                     title={stepLabel[3]}
                     description={stepItem(3, props.value?.processDetails?.post)}
                     status={props.value?.processDetails?.post?.status}
-                />
+                /> */}
                 <Step
                     title={stepLabel[4]}
                     description={stepItem(4, props.value?.processDetails?.repairment)}

@@ -130,6 +130,27 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                         switch (repairStaff) {
                             case 0:
                                 return <>
+                                <ProFormSelect
+                                    colProps={{ sm: 12 }}
+                                    name="repairStaffStudent"
+                                    required
+                                    label={intl.formatMessage({
+                                        id: 'pages.repairment.dispatchModal.repairStaff',
+                                        defaultMessage: 'repair staff'
+                                    })}
+                                    rules={[{
+                                        required: true,
+                                        message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                                    }]}
+                                    request={getStaff}
+                                    fieldProps={{
+                                        showSearch: true,
+                                        showArrow: false,
+                                    }}
+                                    params={{
+                                        staffType: 'all',
+                                    }}
+                                />
                                     <ProFormGroup>
                                         <ProFormRadio.Group
                                             name="repairApproach"
@@ -206,6 +227,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                     }]}
                                     fieldProps={{
                                         showSearch: true,
+                                        showArrow: false,
                                     }}
                                     request={getStaff}
                                     params={{

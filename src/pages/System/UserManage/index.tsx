@@ -91,7 +91,6 @@ const UserManage: React.FC = () => {
             <ProTable<API.UserTableColumnsType, API.PageParams>
                 rowKey='userid'
                 columns={userTableColumns}
-                tableLayout='fixed'
                 rowSelection={
                     rowSelect ?
                         {
