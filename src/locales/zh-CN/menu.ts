@@ -60,5 +60,6 @@ export default {
   'menu.System.User Management': '用户管理',
   'menu.Statistics': '数据统计',
   'menu.Statistics.Real-Time Statistics': '实时统计',
-  
+  'menu.Statistics.Maintenance Data': '维修数据',
+
 };

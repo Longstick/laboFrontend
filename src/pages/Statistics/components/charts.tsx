@@ -227,7 +227,11 @@ export const UsersPie = () => {
         radius: 0.75,
         // legend: false,
         label: {
-            type: 'outer',
+            type: 'inner',
+            content: ({ percent }) => `${(percent * 100).toFixed(0)}%`,
+            style: {
+                fontSize: 16
+            }
             // labelHeight: 40,
             // formatter: (data, mappingData) => {
             //     const group = new G.Group({});
@@ -272,4 +276,48 @@ export const UsersPie = () => {
     };
     const config = cfg;
     return <Pie {...config} />;
+};
+
+export const MaintenanceLine = () => {
+    const data = [
+        { month: '2021-08', value: 123, },
+        { month: '2021-09', value: 21, },
+        { month: '2021-10', value: 204, },
+        { month: '2021-11', value: 53, },
+        { month: '2021-12', value: 40, },
+        { month: '2022-01', value: 166, },
+        { month: '2022-02', value: 321, },
+        { month: '2022-03', value: 86, },
+        { month: '2022-04', value: 152, },
+        { month: '2022-05', value: 105, },
+        { month: '2022-06', value: 66, },
+    ];
+    const config: LineConfig = {
+        data,
+        xField: 'month',
+        yField: 'value',
+        height: 200,
+        label: {
+            style: {
+                // fontSize: 14,
+                fill: '#FFFFFF',
+                opacity: 0.6,
+            },
+        },
+        xAxis: {
+            label: {
+                autoHide: true,
+                autoRotate: false,
+            },
+        },
+        meta: {
+            month: {
+                alias: '月份',
+            },
+            value: {
+                alias: '工单数',
+            },
+        },
+    };
+    return <Line {...config} />;
 };

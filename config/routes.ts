@@ -107,6 +107,11 @@ export default [
                 path: '/statistics/realtime',
                 component: './Statistics/RealTimeStatistic'
             },
+            {
+                name: 'Maintenance Data',
+                path: '/statistics/maintenancedata',
+                component: './Statistics/MaintenanceData'
+            },
         ]
     },
     {

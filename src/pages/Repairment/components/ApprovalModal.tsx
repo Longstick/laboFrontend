@@ -97,41 +97,80 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
     const dispatchForm =
         <>
-            <ProFormGroup>
-                {/* 维修方式选择 */}
-                <ProFormRadio.Group
-                    name="repairStaff"
-                    colProps={{ md: 12 }}
-                    required
-                    radioType='button'
-                    label='维修人员'
-                    options={[
-                        {
-                            label: <FormattedMessage id="pages.repairment.dispatchModal.manufacturer" defaultMessage='manufacturer' />,
-                            value: 0,
-                        },
-                        {
-                            label: <FormattedMessage id="pages.repairment.dispatchModal.student" defaultMessage='student' />,
-                            value: 1,
-                        },
-                        {
-                            label: <FormattedMessage id="pages.repairment.dispatchModal.teacher" defaultMessage='teacher' />,
-                            value: 2,
-                        },
-                    ]}
-                    initialValue={0}
-                    fieldProps={{
-                        buttonStyle: 'solid',
-                    }}
-                />
-                {/* 维修方式对应不同的表单项 */}
-                <ProFormDependency name={['repairStaff']}>
-                    {({ repairStaff }) => {
-                        switch (repairStaff) {
-                            case 0:
-                                return <>
+            {/* 维修方式选择 */}
+            <ProFormRadio.Group
+                name="repairStaff"
+                colProps={{ md: 12 }}
+                required
+                radioType='button'
+                label='维修人员'
+                options={[
+                    {
+                        label: <FormattedMessage id="pages.repairment.dispatchModal.manufacturer" defaultMessage='manufacturer' />,
+                        value: 0,
+                    },
+                    {
+                        label: <FormattedMessage id="pages.repairment.dispatchModal.student" defaultMessage='student' />,
+                        value: 1,
+                    },
+                    {
+                        label: <FormattedMessage id="pages.repairment.dispatchModal.teacher" defaultMessage='teacher' />,
+                        value: 2,
+                    },
+                ]}
+                initialValue={0}
+                fieldProps={{
+                    buttonStyle: 'solid',
+                }}
+            />
+            {/* 维修方式对应不同的表单项 */}
+            <ProFormDependency name={['repairStaff']}>
+                {({ repairStaff }) => {
+                    switch (repairStaff) {
+                        case 0:
+                            return <ProFormGroup grid>
+                                <ProFormRadio.Group
+                                    name="repairApproach"
+                                    width='md'
+                                    colProps={{ sm: 12 }}
+                                    required
+                                    radioType='button'
+                                    label='维修方式'
+                                    options={[
+                                        {
+                                            label: '现场维修',
+                                            value: 0,
+                                        },
+                                        {
+                                            label: '邮寄维修',
+                                            value: 1,
+                                        },
+                                    ]}
+                                    initialValue={0}
+                                    fieldProps={{
+                                        buttonStyle: 'solid',
+                                    }}
+                                />
+
+                                <ProFormText
+                                    colProps={{ sm: 12 }}
+                                    width='md'
+                                    name='manufacturer'
+                                    required
+                                    label={intl.formatMessage({
+                                        id: 'pages.repairment.dispatchModal.Manufacturer',
+                                        defaultMessage: "repairment manufacturer",
+                                    })}
+                                    rules={[{
+                                        required: true,
+                                        message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                                    }]}
+                                />
+
+
                                 <ProFormSelect
                                     colProps={{ sm: 12 }}
+                                    width='md'
                                     name="repairStaffStudent"
                                     required
                                     label={intl.formatMessage({
@@ -151,48 +190,29 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         staffType: 'all',
                                     }}
                                 />
-                                    <ProFormGroup>
-                                        <ProFormRadio.Group
-                                            name="repairApproach"
-                                            colProps={{ md: 12 }}
-                                            required
-                                            radioType='button'
-                                            label='维修方式'
-
-                                            options={[
-                                                {
-                                                    label: '现场维修',
-                                                    value: 0,
-                                                },
-                                                {
-                                                    label: '邮寄维修',
-                                                    value: 1,
-                                                },
-                                            ]}
-                                            initialValue={0}
-                                            fieldProps={{
-                                                buttonStyle: 'solid',
-                                            }}
-                                        />
-
-                                        <ProFormText
-                                            colProps={{ md: 12 }}
-                                            name='manufacturer'
-                                            required
-                                            label={intl.formatMessage({
-                                                id: 'pages.repairment.dispatchModal.Manufacturer',
-                                                defaultMessage: "repairment manufacturer",
-                                            })}
-                                            rules={[{
-                                                required: true,
-                                                message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                                            }]}
-                                        />
-                                    </ProFormGroup>
-                                </>
-                            case 1:
-                                return <ProFormSelect
+                                <ProFormText
+                                    name="phoneNumber"
                                     colProps={{ sm: 12 }}
+                                    width='md'
+                                    required
+                                    label="联系电话"
+                                    rules={[{
+                                        required: true,
+                                        message: '此为必填项',
+                                    }]}
+                                    fieldProps={{
+                                        allowClear: true,
+                                    }}
+                                />
+                            </ProFormGroup>
+
+
+                        case 1:
+                            return <>
+
+                                <ProFormSelect
+                                    colProps={{ sm: 12 }}
+                                    width='md'
                                     name="repairStaffStudent"
                                     required
                                     label={intl.formatMessage({
@@ -212,9 +232,40 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         staffType: 'student',
                                     }}
                                 />
-                            case 2:
-                                return <ProFormSelect
+                                <ProFormText
+                                    name="phoneNumber"
                                     colProps={{ sm: 12 }}
+                                    width='md'
+                                    required
+                                    label="联系电话"
+                                    rules={[{
+                                        required: true,
+                                        message: '此为必填项',
+                                    }]}
+                                    fieldProps={{
+                                        allowClear: true,
+                                    }}
+                                />
+                            </>
+                        case 2:
+                            return <>
+                                <ProFormText
+                                    name="phoneNumber"
+                                    colProps={{ sm: 12 }}
+                                    width='md'
+                                    required
+                                    label="联系电话"
+                                    rules={[{
+                                        required: true,
+                                        message: '此为必填项',
+                                    }]}
+                                    fieldProps={{
+                                        allowClear: true,
+                                    }}
+                                />
+                                <ProFormSelect
+                                    colProps={{ sm: 12 }}
+                                    width='md'
                                     name="repairStaffTeacher"
                                     required
                                     label={intl.formatMessage({
@@ -234,12 +285,12 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         staffType: 'teacher',
                                     }}
                                 />
-                            default: return <></>
-                        }
+                            </>
+                        default: return <></>
                     }
-                    }
-                </ProFormDependency>
-            </ProFormGroup>
+                }
+                }
+            </ProFormDependency>
 
             {/* 备注信息 */}
             <ProFormTextArea
@@ -285,16 +336,16 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                         required: true,
                         message: '此为必填项，请填写',
                     }]}
-                    // colProps={{ md: 12 }}
+                // colProps={{ md: 12 }}
                 />
                 <ProFormText
                     name="deliveryComp"
                     label="快递公司"
-                    // colProps={{ md: 12 }}
+                // colProps={{ md: 12 }}
                 />
             </ProCard>
             <ProCard ghost>
-                <ProFormUploadButton 
+                <ProFormUploadButton
                     name='picture'
                     label='相关照片'
                     listType='picture-card'
