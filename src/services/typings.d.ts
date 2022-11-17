@@ -94,12 +94,38 @@ declare namespace API {
       };
     };
   };
+  
+  type IssueInfo = {
+    id: string;
+    identifier: string;
+    title?: string;
+    description?: string;
+    resource_id: string;
+    manufacturer?: string;
+    priority: number;
+    images?: string[];
+    type?: string;
+    finish_date?: string;
+    create_person?: string;
+    has_person?: string[];
+    status?: number;
+    create_time?: string;
+  }
 
   type ProcesserInfo = {
-    processerID: number;
-    processer: string;
-    phoneNumber: string;
-    updateTime: string;
+    id: string;
+    username: string;
+    password?: string;
+    phone: string;
+    email: string;
+    identity: number;
+    auth: number;
+    isRepair: number;
+    isDispatch: number;
+    isExamine: number;
+    isAccept: number;
+    systemManage: number;
+    equipManage: number;
   };
 
   type TrackingInfo = {

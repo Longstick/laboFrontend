@@ -20,23 +20,34 @@ import React, { useState, useRef } from 'react';
 
 import { waitTime } from '@/services/utils';
 import moment from 'moment';
-import { getStaff } from '@/services/api';
+import { createNewIssue, getApporver, getStaff } from '@/services/api';
 import { failureTypeLabel, priorityList } from '../struct';
+import { UploadFile } from 'antd/es/upload';
 
 export type CreateNewModalProps = {
     type?: 'newButton' | 'editLink'
-    initialValue?: API.TableColumns
+    initialValue?: API.IssueInfo
 }
 
 const CreateNew: React.FC<CreateNewModalProps> = props => {
     const formRef = useRef<ProFormInstance>()
+
     // 因为重写页脚button，还是选择老方法用一个state控制open
     const [isOpen, setOpen] = useState<boolean>(false)
+
+    // 图片需要使用form-data上传
+    const [fileList, setFileList] = useState<UploadFile[]>([])
 
     const onSave = async () => {
         await waitTime(1000)
         const value = formRef.current?.getFieldsFormatValue?.(true)
         setOpen(false)
+    }
+
+    const beforeUpload = (file: UploadFile) => {
+        fileList.push(file)
+        console.log(fileList)
+        return false
     }
 
     return (
@@ -47,14 +58,14 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
             initialValues={props.initialValue}
             trigger={
                 props.type === 'newButton' ?
-                <Button
-                    type='primary'
-                    size='large'
-                    onClick={()=>{setOpen(true);}}
-                >新建工单</Button>
-                :
-                <a onClick={()=>{setOpen(true);}}
-                >编辑提交</a>
+                    <Button
+                        type='primary'
+                        size='large'
+                        onClick={() => { setOpen(true); }}
+                    >新建工单</Button>
+                    :
+                    <a onClick={() => { setOpen(true); }}
+                    >编辑提交</a>
             }
             grid
             rowProps={{
@@ -63,9 +74,9 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
             modalProps={{
                 destroyOnClose: true,
                 maskClosable: false,
-                onCancel: ()=>{setOpen(false)}
+                onCancel: () => { setOpen(false) }
             }}
-            
+
             submitter={{
                 searchConfig: {
                     submitText: '提交'
@@ -74,7 +85,7 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
 
                     <Button
                         key='cancel'
-                        onClick={() => {setOpen(false)}}
+                        onClick={() => { setOpen(false) }}
                     >取消</Button>,
 
                     <Popconfirm
@@ -91,19 +102,22 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
                         key='submit'
                         type='primary'
                         {...prop.submitButtonProps}
-                        onClick={()=>{
+                        onClick={() => {
                             prop.submit()
                         }}
                     >提交</Button>
                 ]
             }}
             onFinish={async value => {
-                try{
-                    await waitTime(1000)
-                    message.success('提交成功！')                    
+                try {
+                    // await waitTime(1000)
+                    await createNewIssue(value)
+                    console.log(value)
+
+                    message.success('提交成功！')
                     setOpen(false)
                     return true
-                } catch(e) {
+                } catch (e) {
                     message.error('提交失败！')
                     return false
                 }
@@ -114,9 +128,9 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
             <ProCard split='horizontal'>
                 <ProCard>
                     <ProFormText
-                        name='issueTitle'
+                        name='title'
                         label='工单标题'
-                        key='issueTitle'
+                        key='title'
                         colProps={{ span: 24 }}
                         rules={[{
                             required: true,
@@ -125,9 +139,9 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
                     />
 
                     <ProFormTextArea
-                        name='issueDescription'
+                        name='description'
                         label='工单描述'
-                        key='issueDescription'
+                        key='description'
                         // colProps={{span: 24}}
                         fieldProps={{
                             showCount: true,
@@ -141,45 +155,47 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
                     />
 
                     <ProFormUploadButton
-                        name='picture'
+                        name='a'
                         label='上传相关图片'
                         key='picture'
                         listType='picture-card'
                         max={6}
                         fieldProps={{
                             multiple: true,
+                            // beforeUpload: beforeUpload,
+                            // fileList
                         }}
+                        accept="image/*"
                         extra={<FormattedMessage id="component.uploadPic.limit3" defaultMessage='up to 6 photos' />}
-                        rules={[{
-                            required: true,
-                            message: '此为必填项，请填写'
-                        }]}
+                    // rules={[{
+                    //     required: true,
+                    //     message: '此为必填项，请填写'
+                    // }]}
                     />
                 </ProCard>
 
                 <ProCard>
                     <ProFormGroup>
                         <ProFormSelect
-                            name='object'
+                            name='resource'
                             label='工作对象'
-                            key='object'
+                            key='resource'
                             colProps={{ sm: 12 }}
                             rules={[{
                                 required: true,
                                 message: '此为必填项，请填写'
                             }]}
                             options={[
-                                {
-                                    label: '3',
-                                    value: 3,
-                                }
+                                { label: '电脑', value: 'computers' },
+                                { label: '设备', value: 'equipments' },
+                                { label: '书本', value: 'books' },
                             ]}
 
                         />
                         <ProFormSelect
-                            name='failureType'
+                            name='type'
                             label='故障类型'
-                            key='failureType'
+                            key='type'
                             colProps={{ sm: 12 }}
                             rules={[{
                                 required: true,
@@ -216,9 +232,9 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
                         />
 
                         <ProFormDatePicker
-                            name='estimatedTime'
+                            name='finishDate'
                             label='时间期限'
-                            key='estimatedTime'
+                            key='finishDate'
                             colProps={{ md: 6 }}
                             rules={[{
                                 required: true,
@@ -232,16 +248,16 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
                         />
 
                         <ProFormSelect
-                            name='nextProcesser'
+                            name='next_person'
                             label='下一流程处理人'
-                            key='nextProcesser'
+                            key='next_person'
                             colProps={{ sm: 12 }}
                             rules={[{
                                 required: true,
                                 message: '此为必填项，请填写'
                             }]}
-                            request={getStaff}
-                            params={{ staffType: 'all' }}
+                            request={getApporver}
+                            params={{ orderAuthType: 1 }}
                         />
                     </ProFormGroup>
                 </ProCard>

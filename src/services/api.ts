@@ -3,8 +3,10 @@
 
 import { request } from '@umijs/max';
 
+const serverIP = 'http://43.139.11.85:3000/api'
+
 export const login = async (body: API.LoginParams, options?: { [key: string]: any }) => {
-	return request<API.PostResult>('http://1.13.198.41:3000/api/user/login', {
+	return request<API.PostResult>(`${serverIP}/user/login`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -15,7 +17,7 @@ export const login = async (body: API.LoginParams, options?: { [key: string]: an
 }
 
 export const signupInSchool = async (body: API.LoginParams, options?: { [key: string]: any }) => {
-	return request<API.PostResult>('http://1.13.198.41:3000/api/user/schoolRegister', {
+	return request<API.PostResult>(`${serverIP}/user/schoolRegister`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -26,7 +28,7 @@ export const signupInSchool = async (body: API.LoginParams, options?: { [key: st
 }
 
 export const signupOutSchool = async (body: API.LoginParams, options?: { [key: string]: any }) => {
-	return request<API.PostResult>('http://1.13.198.41:3000/api/user/register', {
+	return request<API.PostResult>(`${serverIP}/user/register`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -37,7 +39,7 @@ export const signupOutSchool = async (body: API.LoginParams, options?: { [key: s
 }
 
 export const getCaptcha = async (email: string, options?: { [key: string]: any }) => {
-	return request<API.PostResult>('http://1.13.198.41:3000/api/user/getCode', {
+	return request<API.PostResult>(`${serverIP}/user/getCode`, {
 		method: 'GET',
 		params: email,
 	})
@@ -47,7 +49,7 @@ export const getCaptcha = async (email: string, options?: { [key: string]: any }
 export const getUserInfo = async (options?: { [key: string]: any }) => {
 	return request<{
 		data: API.UserInfo
-	}>('http://1.13.198.41:3000/api/user/getUserInfo', {
+	}>(`${serverIP}/user/getUserInfo`, {
 		method: 'GET',
 		...(options || {}),
 	})
@@ -85,12 +87,49 @@ export async function issueTableRule(
 	});
 }
 
-export async function getApporver(options?: { [key: string]: any }) {
-	return request<API.ProcesserInfo>('/api/getApporver', {
+export const getIssueList = async (options?: { [key: string]: any }) => (
+	await request<{
+		code: number,
+		data: API.IssueInfo,
+		msg: string,
+	}[]>(`${serverIP}/order/getOrders`, {
 		method: 'GET',
-		...options || {},
+		...(options || {}),
+	})
+)
+
+export const createNewIssue = async (
+	body: API.IssueInfo,
+	options?: { [key: string]: any },
+) => {
+	return request<{
+		code: number,
+		data: API.IssueInfo,
+	}>(`${serverIP}/order/createOrder`, {
+		method: 'POST',
+		data: body,
+		// headers: {
+		// 	'Content-Type': 'multipart/form-data',
+		// },
+		...(options || {})
 	})
 }
+
+export const getApporver = async (orderAuthType: number) => {
+	const res = await request<API.PostResult>(`${serverIP}/user/getOrderPerson`, {
+		method: 'GET',
+		params: orderAuthType,
+	})
+	const data: API.ProcesserInfo[] = res.data
+	return data.map((value) => {
+		return {
+			label: value.username,
+			value: value.identity,
+			key: value.identity,
+		}
+	})
+}
+
 
 export const getStaff = async (params: string) => (
 	await request<{
@@ -113,15 +152,15 @@ export const getDeliveryInfo = async (options?: { [key: string]: any }) => {
 	return params
 }
 
-export const getUserData = async ( options?: { [key: string]: any }) => {
+export const getUserData = async (options?: { [key: string]: any }) => {
 	return request('/api/getUserData', {
-		method:	'GET',
+		method: 'GET',
 		...(options || {}),
 	})
 }
 
-export const getCharData = async ( options?: { [key: string]: any }) => {
-	return request<{data: API.CharacterInfo[]}>('/api/getCharData', {
+export const getCharData = async (options?: { [key: string]: any }) => {
+	return request<{ data: API.CharacterInfo[] }>('/api/getCharData', {
 		method: 'GET',
 		...(options || {}),
 	})

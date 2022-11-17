@@ -1,6 +1,6 @@
 // 维修管理系统主体
 
-import { issueTableRule } from '@/services/api'
+import { getIssueList, issueTableRule } from '@/services/api'
 import {
     PageContainer,
     ProTable,
@@ -25,9 +25,9 @@ import DraftsTable from './components/DraftsTable';
 
 const Repairment: React.FC = () => {
     const [responsive, setResponsive] = useState<boolean>(false);
-    const [currentRow, setCurrentRow] = useState<API.TableColumns>();
+    const [currentRow, setCurrentRow] = useState<API.IssueInfo>();
     const [activeKey, setActiveKey] = useState<string>('all')
-    const [selectedRowsState, setSelectedRows] = useState<API.TableColumns[]>([]);
+    const [selectedRowsState, setSelectedRows] = useState<API.IssueInfo[]>([]);
     const [rowSelect, setRowSelect] = useState<boolean>(false)
     const [processDrawerOpen, setProcessDrawer] = useState<boolean>(false);
     const [detailModalOpen, setModalOpen] = useState<boolean>(false);
@@ -60,124 +60,100 @@ const Repairment: React.FC = () => {
         );
     };
 
-    const columns: ProColumns<API.TableColumns>[] = [
+    const columns: ProColumns<API.IssueInfo>[] = [
         {
-            key: 'issueID',
-            title: (<FormattedMessage
-                id="pages.repairment.issue.issueID"
-                defaultMessage='Issue ID'
-            />),
-            dataIndex: 'issueID',
+            key: 'identifier',
+            title: '工单ID',
+            dataIndex: 'identifier',
             search: false,
             width: '6%',
         },
         {
-            key: 'issueTitle',
-            title: (<FormattedMessage
-                id="pages.repairment.issue.issueTitle"
-                defaultMessage='Title'
-            />),
-            dataIndex: 'issueTitle',
+            key: 'title',
+            title: '工单标题',
+            dataIndex: 'title',
             ellipsis: true,
             search: false,
         },
         {
-            key: 'issueDescription',
-            title: (<FormattedMessage
-                id="pages.repairment.issue.issueDescription"
-                defaultMessage='Description'
-            />),
-            dataIndex: 'issueDescription',
+            key: 'description',
+            title: '工单描述',
+            dataIndex: 'description',
             valueType: 'textarea',
             ellipsis: true,
             search: false,
         },
         {
-            key: 'object',
-            title: (<FormattedMessage
-                id="pages.repairment.issue.object"
-                defaultMessage='Object'
-            />),
-            dataIndex: 'object',
+            key: 'resource_id',
+            title: '工作对象',
+            dataIndex: 'resource_id',
             ellipsis: true,
             search: false,
         },
-        {
-            key: 'categoryList',
-            title: (<FormattedMessage
-                id="pages.repairment.issue.categoryList"
-                defaultMessage='Category'
-            />),
-            dataIndex: 'categoryList',
-            hideInTable: true,
-            valueEnum: {
-                0: '电脑',
-                1: '实验设备',
-                2: '灯',
-            },
-            valueType: 'select',
-            fieldProps: {
-                dropdownMatchSelectWidth: false,
-            }
-        },
+        // {
+        //     key: 'type',
+        //     title: '对象类别',
+        //     dataIndex: 'type',
+        //     hideInTable: true,
+        //     // valueEnum: {
+        //     //     0: '电脑',
+        //     //     1: '实验设备',
+        //     //     2: '灯',
+        //     // },
+        //     valueType: 'select',
+        //     fieldProps: {
+        //         dropdownMatchSelectWidth: false,
+        //     }
+        // },
         {
             key: 'priority',
-            title: (<FormattedMessage
-                id="pages.repairment.issue.priority"
-                defaultMessage='Priority'
-            />),
+            title: '优先级',
             dataIndex: 'priority',
             valueType: 'select',
             valueEnum: priorityList,
             width: '8%',
             render: (_, record) =>
                 <Tag color={priorityList[record?.priority??0].color}>
-                    {priorityList[record?.priority].text}
+                    {priorityList[record?.priority??0].text}
                 </Tag>,
             fieldProps: {
                 dropdownMatchSelectWidth: false,
             }
         },
+        // {
+        //     key: 'remainingTime',
+        //     title: (<FormattedMessage
+        //         id="pages.repairment.issue.remainingTime"
+        //         defaultMessage='Remaining'
+        //     />),
+        //     dataIndex: 'remainingTime',
+        //     search: false,
+        //     valueType: 'fromNow',
+        //     width: '8%',
+        //     sorter: (a, b) => a.remainingTime - b.remainingTime,
+        // },
         {
-            key: 'remainingTime',
-            title: (<FormattedMessage
-                id="pages.repairment.issue.remainingTime"
-                defaultMessage='Remaining'
-            />),
-            dataIndex: 'remainingTime',
-            search: false,
-            valueType: 'fromNow',
-            width: '8%',
-            sorter: (a, b) => a.remainingTime - b.remainingTime,
-        },
-        {
-            key: 'estimatedTime',
-            title: (<FormattedMessage
-                id="pages.repairment.issue.estimatedTime"
-                defaultMessage='Estimated'
-            />),
-            dataIndex: 'estimatedTime',
+            key: 'finish_date',
+            title: '预期时限',
+            dataIndex: 'finish_date',
             search: false,
             valueType: 'dateTime',
-            sorter: (a, b) => a.estimatedTime - b.estimatedTime,
+            sorter: (a, b) => a.finish_date - b.finish_date,
         },
-        {
-            key: 'updatedTime',
-            title: (<FormattedMessage
-                id="pages.repairment.issue.updatedTime"
-                defaultMessage='Updated'
-            />),
-            dataIndex: 'updatedTime',
-            search: false,
-            valueType: 'dateTime',
-            sorter: (a, b) => a.updatedTime - b.updatedTime,
-        },
+        // {
+        //     key: 'updatedTime',
+        //     title: (<FormattedMessage
+        //         id="pages.repairment.issue.updatedTime"
+        //         defaultMessage='Updated'
+        //     />),
+        //     dataIndex: 'updatedTime',
+        //     search: false,
+        //     valueType: 'dateTime',
+        //     sorter: (a, b) => a.updatedTime - b.updatedTime,
+        // },
         {
             key: 'status',
-            title: (<FormattedMessage
-                id="pages.repairment.issue.status"
-                defaultMessage='Status'
-            />),
+            title: '状态',
             dataIndex: 'status',
             valueType: 'select',
             valueEnum: statusList,
@@ -315,10 +291,11 @@ const Repairment: React.FC = () => {
                         </ProCard.Group>
 
 
-                        <ProTable<API.TableColumns, API.PageParams>
+                        <ProTable<API.IssueInfo, API.PageParams>
                             columns={columns}
                             actionRef={actionRef}
-                            request={(params) => issueTableRule({ ...params, activeKey })}
+                            // request={(params) => issueTableRule({ ...params, activeKey })}
+                            request={getIssueList}
                             tableLayout='fixed'
                             rowKey='key'
                             scroll={{ x: 1200 }}

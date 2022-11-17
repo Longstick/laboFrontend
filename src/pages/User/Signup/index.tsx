@@ -189,15 +189,15 @@ const Signup = () => {
                                                 message: '请填写用户名'
                                             },
                                             {
-                                                max: 8,
+                                                max: 15,
                                                 min: 2,
-                                                message: '用户名长度只能在2-8位'
+                                                message: '用户名长度只能在2-15位'
                                             }
                                         ]}
                                         fieldProps={{
                                             size: 'large',
                                             className: styles.RadiusInput,
-                                            placeholder: '长度需要在2-8位之内'
+                                            placeholder: '长度需要在2-15位之内'
                                         }}
                                     />
 
