@@ -177,9 +177,9 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
                 <ProCard>
                     <ProFormGroup>
                         <ProFormSelect
-                            name='resource'
+                            name='resource_id'
                             label='工作对象'
-                            key='resource'
+                            key='resource_id'
                             colProps={{ sm: 12 }}
                             rules={[{
                                 required: true,
