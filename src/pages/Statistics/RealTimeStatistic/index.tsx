@@ -79,7 +79,6 @@ const RealTimeStatistic: React.FC = () => {
                                 />
                             }
                         />
-                        {/* <Divider type={responsive ? 'horizontal' : 'vertical'} /> */}
                         <StatisticCard
                             title={tabItems.newUsers}
                             colSpan={{ md: 12 }}
@@ -111,7 +110,6 @@ const RealTimeStatistic: React.FC = () => {
                             }
                         />
                     </StatisticCard.Group>
-                    {/* { responsive ? <Divider type="horizontal" /> : <></> } */}
                     <br />
                     <StatisticCard.Group
                         ghost
@@ -149,7 +147,6 @@ const RealTimeStatistic: React.FC = () => {
                             }
                         />
 
-                        {/* <Divider type={responsive ? 'horizontal' : 'vertical'} /> */}
                         <StatisticCard
                             title={tabItems.newIssues}
                             colSpan={{ md: 12 }}

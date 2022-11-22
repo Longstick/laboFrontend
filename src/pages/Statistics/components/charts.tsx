@@ -297,6 +297,7 @@ export const MaintenanceLine = () => {
         xField: 'month',
         yField: 'value',
         height: 200,
+        autoFit: true,
         label: {
             style: {
                 // fontSize: 14,

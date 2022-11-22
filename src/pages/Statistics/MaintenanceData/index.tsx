@@ -19,7 +19,50 @@ const MaintenanceData: React.FC = () => {
             }}
         >
         <PageContainer>
-            <StatisticCard.Group ghost gutter={24}>
+            <ProCard split='vertical' title='123' headerBordered bordered >
+                <ProCard split='horizontal'>
+                <ProCard split='horizontal'>
+                    <ProCard split='vertical'>
+                        <StatisticCard 
+                            statistic={{
+                                title: '数据',
+                                value: 123,
+                            }}
+                        />
+                        <StatisticCard 
+                            statistic={{
+                                title: '数据',
+                                value: 123,
+                            }}
+                        />
+                    </ProCard>
+                    <ProCard split='vertical'>
+                        <StatisticCard 
+                            statistic={{
+                                title: '数据',
+                                value: 123,
+                            }}
+                        />
+                        <StatisticCard 
+                            statistic={{
+                                title: '数据',
+                                value: 123,
+                            }}
+                        />
+                        
+                    </ProCard>
+                    <StatisticCard 
+                        title='大宗商品交易'
+                        chart={<MaintenanceLine />}
+                    />
+                </ProCard>
+                </ProCard>
+                <StatisticCard 
+                        title='大宗商品交易'
+                        chart={<MaintenanceLine />}
+                    />
+            </ProCard>
+            {/* <StatisticCard.Group ghost gutter={24}>
             <StatisticCard 
                 colSpan={{lg: 12}}
                 title="工单总量统计"
@@ -32,7 +75,7 @@ const MaintenanceData: React.FC = () => {
                 chart={<MaintenanceLine />}
                 // chartPlacement='right'
             />
-            </StatisticCard.Group>
+            </StatisticCard.Group> */}
         </PageContainer>
         </RcResizeObserver>
     )
