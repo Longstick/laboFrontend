@@ -108,9 +108,9 @@ export const createNewIssue = async (
 	}>(`${serverIP}/order/createOrder`, {
 		method: 'POST',
 		data: body,
-		// headers: {
-		// 	'Content-Type': 'multipart/form-data',
-		// },
+		headers: {
+			'Content-Type': 'multipart/form-data',
+		},
 		...(options || {})
 	})
 }
