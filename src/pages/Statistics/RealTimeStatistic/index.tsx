@@ -40,10 +40,13 @@ const RealTimeStatistic: React.FC = () => {
                     ghost
                     // title="数据统计"
                     // collapsible
-                    gutter={24}
+                    gutter={[16, 16]}
+                    direction='column'
                 >
                     <StatisticCard.Group
+                        ghost
                         direction={responsive ? 'column' : 'row'}
+                        gutter={24}
                     >
                         <StatisticCard
                             title={tabItems.totalUsers}
@@ -76,7 +79,6 @@ const RealTimeStatistic: React.FC = () => {
                                 />
                             }
                         />
-                        <Divider type={responsive ? 'horizontal' : 'vertical'} />
                         <StatisticCard
                             title={tabItems.newUsers}
                             colSpan={{ md: 12 }}
@@ -108,8 +110,10 @@ const RealTimeStatistic: React.FC = () => {
                             }
                         />
                     </StatisticCard.Group>
-                    { responsive ? <Divider type="horizontal" /> : <></> }
+                    <br />
                     <StatisticCard.Group
+                        ghost
+                        gutter={24}
                         direction={responsive ? 'column' : 'row'}
                     >
                         <StatisticCard
@@ -143,7 +147,6 @@ const RealTimeStatistic: React.FC = () => {
                             }
                         />
 
-                        <Divider type={responsive ? 'horizontal' : 'vertical'} />
                         <StatisticCard
                             title={tabItems.newIssues}
                             colSpan={{ md: 12 }}
