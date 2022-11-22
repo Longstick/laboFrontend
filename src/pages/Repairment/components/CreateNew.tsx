@@ -187,13 +187,12 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
                             }]}
                             request={getResourceID}
                             params={{ condition: 102 }}
-                            
-                            // options={[
-                            //     { label: '电脑', value: 'computers' },
-                            //     { label: '设备', value: 'equipments' },
-                            //     { label: '书本', value: 'books' },
-                            // ]}
-
+                        />
+                        <ProFormText 
+                            name='resource'
+                            label='资源'
+                            key='resource'
+                            colProps={{ sm: 12 }}
                         />
                         <ProFormSelect
                             name='type'
@@ -227,7 +226,9 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
                             radioType='button'
                             fieldProps={{
                                 buttonStyle: 'solid',
+                                
                             }}
+                            normalize={values => Number(values)}
                             rules={[{
                                 required: true,
                                 message: '此为必填项，请填写'
