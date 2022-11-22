@@ -124,7 +124,7 @@ export const getApporver = async (orderAuthType: number) => {
 	return data.map((value) => {
 		return {
 			label: value.username,
-			value: value.identity,
+			value: value.id,
 			key: value.identity,
 		}
 	})
