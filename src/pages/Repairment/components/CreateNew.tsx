@@ -187,6 +187,7 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
                             }]}
                             request={getResourceID}
                             params={{ condition: 102 }}
+                            
                             // options={[
                             //     { label: '电脑', value: 'computers' },
                             //     { label: '设备', value: 'equipments' },

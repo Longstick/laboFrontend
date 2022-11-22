@@ -102,15 +102,13 @@ export const createNewIssue = async (
 	body: API.IssueInfo,
 	options?: { [key: string]: any },
 ) => {
-	return request<{
-		code: number,
-		data: API.IssueInfo,
-	}>(`${serverIP}/order/createOrder`, {
+	return request<API.PostResult>(`${serverIP}/order/createOrder`, {
 		method: 'POST',
-		data: body,
 		headers: {
 			'Content-Type': 'multipart/form-data',
+			// 'Content-Type': 'application/json',
 		},
+		data: body,
 		...(options || {})
 	})
 }
