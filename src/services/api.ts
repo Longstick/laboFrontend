@@ -130,6 +130,21 @@ export const getApporver = async (orderAuthType: number) => {
 	})
 }
 
+export const getResourceID = async (condition: number) => {
+	const res = await request<API.PostResult>(`${serverIP}/resource/searchResource`, {
+		method: 'GET',
+		params: condition,
+	})
+	const data: API.ResourceInfo[] = res.data
+	return data.map((value) => {
+		return {
+			label: value.name,
+			value: value.id,
+			key: value.identifier,
+		}
+	})
+}
+
 
 export const getStaff = async (params: string) => (
 	await request<{

@@ -128,6 +128,25 @@ declare namespace API {
     equipManage: number;
   };
 
+  type ResourceInfo = {
+    id: string;
+    identifier: string;
+    name: string;
+    storagePlace: string;
+    minServiceYear: number;
+    modelNumber: number;
+    remark: any;
+    supplier: string;
+    usedYear: string;
+    indate: string;
+    originalValue: number;
+    presentSituation: string;
+    collectUnit: string;
+    type: string;
+    specifications: string;
+    collectPerson: string;
+  }
+
   type TrackingInfo = {
       trackingNumber?: string,
       deliveryCompany?: string,

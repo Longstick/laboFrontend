@@ -29,7 +29,8 @@ const MaintenanceData: React.FC = () => {
                     suffix: '项',
                     description: <Statistic title="月同比" trend='up' value='2.5%' />
                 }}
-                
+                chart={<MaintenanceLine />}
+                // chartPlacement='right'
             />
             </StatisticCard.Group>
         </PageContainer>

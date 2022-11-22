@@ -20,7 +20,7 @@ import React, { useState, useRef } from 'react';
 
 import { waitTime } from '@/services/utils';
 import moment from 'moment';
-import { createNewIssue, getApporver, getStaff } from '@/services/api';
+import { createNewIssue, getApporver, getResourceID, getStaff } from '@/services/api';
 import { failureTypeLabel, priorityList } from '../struct';
 import { UploadFile } from 'antd/es/upload';
 
@@ -185,11 +185,13 @@ const CreateNew: React.FC<CreateNewModalProps> = props => {
                                 required: true,
                                 message: '此为必填项，请填写'
                             }]}
-                            options={[
-                                { label: '电脑', value: 'computers' },
-                                { label: '设备', value: 'equipments' },
-                                { label: '书本', value: 'books' },
-                            ]}
+                            request={getResourceID}
+                            params={{ condition: 102 }}
+                            // options={[
+                            //     { label: '电脑', value: 'computers' },
+                            //     { label: '设备', value: 'equipments' },
+                            //     { label: '书本', value: 'books' },
+                            // ]}
 
                         />
                         <ProFormSelect
