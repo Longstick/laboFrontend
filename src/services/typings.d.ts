@@ -107,7 +107,7 @@ declare namespace API {
     type?: string;
     finish_date?: string;
     create_person?: string;
-    has_person?: string[];
+    has_person: string[];
     status?: number;
     create_time?: string;
   }

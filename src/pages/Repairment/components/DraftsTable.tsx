@@ -145,6 +145,9 @@ const DraftsTable: React.FC = () => {
                 //     // showHiddenNum: true,
                 // }}
                 search={false}
+                toolbar={{
+                    search: true,
+                }}
                 // toolbar={{
                 //     search: true,
                 // }}

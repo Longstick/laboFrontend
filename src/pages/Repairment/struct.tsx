@@ -38,10 +38,10 @@ export const priorityList = {
 export const statusList = {
     0: {
         text: (<FormattedMessage
-            id="pages.repairment.issue.status.processing"
-            defaultMessage='Processing'
+            id="pages.repairment.issue.status.error"
+            defaultMessage='Error'
         />),
-        status: 'Default',
+        status: 'Error',
     },
     1: {
         text: (<FormattedMessage
@@ -52,11 +52,11 @@ export const statusList = {
     },
     2: {
         text: (<FormattedMessage
-            id="pages.repairment.issue.status.error"
-            defaultMessage='Error'
+            id="pages.repairment.issue.status.processing"
+            defaultMessage='Processing'
         />),
-        status: 'Error',
-    }
+        status: 'Default',
+    },
 }
 
 export const stepLabel = {
@@ -234,23 +234,23 @@ export const staticGroup = {
 export const issueDescColumns: ProDescriptionsItemProps[] = [
     {
         title: <FormattedMessage id='pages.repairment.issue.issueTitle' defaultMessage='Issue Title' />,
-        dataIndex: 'issueTitle',
+        dataIndex: 'title',
         span: 2,
 
     },
     {
         title: <FormattedMessage id="pages.repairment.issue.object" defaultMessage='Object' />,
-        dataIndex: 'object',
+        dataIndex: 'resource',
         span: 2,
     },
     {
         title: <FormattedMessage id='pages.repairment.issue.issueDescription' defaultMessage='Description' />,
-        dataIndex: 'issueDescription',
+        dataIndex: 'description',
         span: 2,
     },
     {
         title: <FormattedMessage id="pages.repairment.issue.failureType" defaultMessage='Failure Type' />,
-        dataIndex: 'failureType',
+        dataIndex: 'type',
         valueEnum: failureTypeLabel,
         valueType: 'select',
     },
@@ -268,21 +268,21 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
     },
     {
         title: <FormattedMessage id='pages.repairment.issue.estimatedTime' defaultMessage='Estimated Time' />,
-        dataIndex: 'estimatedTime',
+        dataIndex: 'finish_date',
         valueType: 'dateTime',
     },
     {
         title: <FormattedMessage id='pages.repairment.issue.picture' defaultMessage='Picture' />,
-        dataIndex: 'picture',
+        dataIndex: 'images',
         span: 2,
         render: (_, item) => {
             const picGroup: ReactNode[] = []
-            for (let i = 0; i < item.picture.length; i++) {
+            for (let i = 0; i < item.images.length; i++) {
                 picGroup.push(
                     <Image
                         className={styles.approvalModalPicture}
-                        src={item.picture[i]}
-                        alt='123'
+                        src={item.images[i]}
+                        alt=''
                     />)
             }
             return (

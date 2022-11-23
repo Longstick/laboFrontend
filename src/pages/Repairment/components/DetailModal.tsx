@@ -9,7 +9,7 @@ export type DetailModalProps = {
     isOpen?: boolean,
     onClose?: () => void,
     responsive?: boolean,
-    value?: Partial<API.TableColumns>,
+    value?: Partial<API.IssueInfo>,
 }
  
 const DetailModal: React.FC<DetailModalProps> = props => {
@@ -19,7 +19,7 @@ const DetailModal: React.FC<DetailModalProps> = props => {
             open={props.isOpen}
             onCancel={props.onClose}
             footer={null}
-            title={`工单No.${props.value?.issueID}的详细信息`}
+            title={`工单 No.${props.value?.identifier}`}
             width={800}
         >
             <ProDescriptions

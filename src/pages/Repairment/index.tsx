@@ -1,12 +1,7 @@
 // 维修管理系统主体
 
-import { getIssueList, issueTableRule } from '@/services/api'
-import {
-    PageContainer,
-    ProTable,
-    ProCard,
-    TableDropdown,
-} from '@ant-design/pro-components';
+import { getIssueList, getTodoList, issueTableRule } from '@/services/api';
+import { PageContainer, ProTable, ProCard, TableDropdown } from '@ant-design/pro-components';
 
 import { Button, Tag, Badge, Space } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
@@ -26,9 +21,9 @@ import DraftsTable from './components/DraftsTable';
 const Repairment: React.FC = () => {
     const [responsive, setResponsive] = useState<boolean>(false);
     const [currentRow, setCurrentRow] = useState<API.IssueInfo>();
-    const [activeKey, setActiveKey] = useState<string>('all')
+    const [activeKey, setActiveKey] = useState<string>('all');
     const [selectedRowsState, setSelectedRows] = useState<API.IssueInfo[]>([]);
-    const [rowSelect, setRowSelect] = useState<boolean>(false)
+    const [rowSelect, setRowSelect] = useState<boolean>(false);
     const [processDrawerOpen, setProcessDrawer] = useState<boolean>(false);
     const [detailModalOpen, setModalOpen] = useState<boolean>(false);
     const [columnsStateMap, setColumnsStateMap] = useState<Record<string, ColumnsState>>({
@@ -40,23 +35,24 @@ const Repairment: React.FC = () => {
 
     const onCloseProcessDrawer = () => {
         setProcessDrawer(false);
-    }
+    };
     const onCloseDetailModal = () => {
-        setModalOpen(false)
-    }
+        setModalOpen(false);
+    };
 
     const renderBadge = (count: number, active = false) => {
-        return (
-            count === 0 ? <></> :
-                <Badge
-                    count={count}
-                    style={{
-                        marginBlockStart: -2,
-                        marginInlineStart: 4,
-                        color: active ? '#1890FF' : '#999',
-                        backgroundColor: active ? '#E6F7FF' : '#eee',
-                    }}
-                />
+        return count === 0 ? (
+            <></>
+        ) : (
+            <Badge
+                count={count}
+                style={{
+                    marginBlockStart: -2,
+                    marginInlineStart: 4,
+                    color: active ? '#1890FF' : '#999',
+                    backgroundColor: active ? '#E6F7FF' : '#eee',
+                }}
+            />
         );
     };
 
@@ -66,8 +62,8 @@ const Repairment: React.FC = () => {
             title: '工单ID',
             dataIndex: 'identifier',
             search: false,
-            width: '6%',
-        },
+            width: '10%',
+        },  
         {
             key: 'title',
             title: '工单标题',
@@ -112,13 +108,14 @@ const Repairment: React.FC = () => {
             valueType: 'select',
             valueEnum: priorityList,
             width: '8%',
-            render: (_, record) =>
-                <Tag color={priorityList[record?.priority??0].color}>
-                    {priorityList[record?.priority??0].text}
-                </Tag>,
+            render: (_, record) => (
+                <Tag color={priorityList[record?.priority ?? 0].color}>
+                    {priorityList[record?.priority ?? 0].text}
+                </Tag>
+            ),
             fieldProps: {
                 dropdownMatchSelectWidth: false,
-            }
+            },
         },
         // {
         //     key: 'remainingTime',
@@ -160,20 +157,20 @@ const Repairment: React.FC = () => {
             width: 120,
             fieldProps: {
                 dropdownMatchSelectWidth: false,
-            }
+            },
         },
         {
             key: 'tableOptions',
-            title: (<FormattedMessage
-                id="pages.repairment.searchTable.tableOptions"
-                defaultMessage='Options'
-            />),
+            title: (
+                <FormattedMessage id="pages.repairment.searchTable.tableOptions" defaultMessage="Options" />
+            ),
             dataIndex: 'tableOptions',
             search: false,
             width: responsive ? 60 : 200,
             fixed: 'right',
-            render: (text, record, _, action) =>
-                responsive ?
+            render: (text, record, _, action) => {
+                const len = record.has_person?.length
+                return responsive ? (
                     <TableDropdown
                         key="actionGroup"
                         onSelect={() => action?.reload()}
@@ -184,40 +181,47 @@ const Repairment: React.FC = () => {
                                 onClick: () => {
                                     setCurrentRow(record);
                                     setModalOpen(true);
-                                }
+                                },
                             },
                             {
                                 key: 'dropdownProcess',
-                                name: record.currentProcesser === initialState?.userInfo?.identity ? '点击处理' : '查看流程',
+                                name:
+                                    record.currentProcesser === initialState?.userInfo?.identity
+                                        ? '点击处理'
+                                        : '查看流程',
                                 onClick: () => {
                                     setCurrentRow(record);
                                     setProcessDrawer(true);
-                                }
+                                },
                             },
                         ]}
                     />
-                    :
+                ) : (
                     <Space size={24}>
-                        <a onClick={() => {
-                            setCurrentRow(record);
-                            setModalOpen(true);
-                        }}
-                        >详细信息</a>
-
-                        <a onClick={() => {
-                            setCurrentRow(record);
-                            setProcessDrawer(true);
-                        }}
+                        <a
+                            onClick={() => {
+                                setCurrentRow(record);
+                                setModalOpen(true);
+                            }}
                         >
-                            {record.currentProcesser === initialState?.userInfo?.identity ?
-                                <FormattedMessage id="pages.repairment.searchTable.options.process" defaultMessage='Process' /> :
-                                <FormattedMessage id="pages.repairment.searchTable.options.check" defaultMessage='Check' />
+                            详细信息
+                        </a>
+
+                        <a
+                            onClick={() => {
+                                setCurrentRow(record);
+                                setProcessDrawer(true);
+                            }}
+                        >
+                            {record.has_person[len - 1] === initialState?.userInfo?.id ? '点击处理' : '查看流程'
                             }
+
                         </a>
                     </Space>
+                );
+            },
         },
     ];
-
 
     return (
         <RcResizeObserver
@@ -228,58 +232,50 @@ const Repairment: React.FC = () => {
         >
             <PageContainer
                 onTabChange={(key) => {
-                    setActiveKey(key as string)
+                    setActiveKey(key as string);
                     actionRef.current?.reloadAndRest?.();
                 }}
                 tabList={[
                     {
                         key: 'all',
-                        tab: '全部'
+                        tab: '全部',
                     },
                     {
                         key: 'to-do',
-                        tab: <span>我的待办{renderBadge(15, activeKey === 'to-do')}</span>
+                        tab: <span>我的待办{renderBadge(15, activeKey === 'to-do')}</span>,
                     },
                     {
                         key: 'myCompleted',
-                        tab: <span>我的已处理{renderBadge(35, activeKey === 'myCompleted')}</span>
+                        tab: <span>我的已处理{renderBadge(35, activeKey === 'myCompleted')}</span>,
                     },
                     {
                         key: 'mySubmission',
-                        tab: '我的提交'
+                        tab: '我的提交',
                     },
                     {
                         key: 'drafts',
-                        tab: '草稿箱',                        
-                    }
+                        tab: '草稿箱',
+                    },
                 ]}
-                extra={(
+                extra={
                     <Space size={16}>
-                        <CreateNew
-                            type='newButton'
-                        />
+                        <CreateNew type="newButton" tableActionRef={actionRef} />
                         <ButtonGroup>
-                            <Button
-                                key='outputAll'
-                                size='large'
-                            >导出全部</Button>
+                            <Button key="outputAll" size="large">
+                                导出全部
+                            </Button>
 
-                            <Button
-                                key="outputSelected"
-                                size='large'
-                                disabled={selectedRowsState.length === 0}
-                            >
+                            <Button key="outputSelected" size="large" disabled={selectedRowsState.length === 0}>
                                 <FormattedMessage
                                     id="pages.repairment.searchTable.outputSelected"
-                                    defaultMessage='Output Selected'
+                                    defaultMessage="Output Selected"
                                 />
                             </Button>
                         </ButtonGroup>
                     </Space>
-                )}
+                }
             >
-
-                {activeKey !== 'drafts' ?
+                {activeKey !== 'drafts' ? (
                     <>
                         <ProCard.Group
                             direction={responsive ? 'column' : 'row'}
@@ -290,17 +286,23 @@ const Repairment: React.FC = () => {
                             {staticGroup[activeKey]}
                         </ProCard.Group>
 
-
                         <ProTable<API.IssueInfo, API.PageParams>
                             columns={columns}
                             actionRef={actionRef}
                             // request={(params) => issueTableRule({ ...params, activeKey })}
-                            request={getIssueList}
-                            tableLayout='fixed'
-                            rowKey='key'
+                            request={
+                                {
+                                    all: getIssueList,
+                                    mySubmission: getTodoList,
+                                }[activeKey]
+                            }
+                            tableLayout="fixed"
+                            rowKey="key"
                             scroll={{ x: 1200 }}
                             rowSelection={{
-                                onChange: (_, selectedRows) => { setSelectedRows(selectedRows) },
+                                onChange: (_, selectedRows) => {
+                                    setSelectedRows(selectedRows);
+                                },
                             }}
                             search={{
                                 optionRender: false,
@@ -352,12 +354,9 @@ const Repairment: React.FC = () => {
                             value={currentRow}
                         />
                     </>
-
-                    :
-
+                ) : (
                     <DraftsTable />
-                }
-
+                )}
             </PageContainer>
         </RcResizeObserver>
     );

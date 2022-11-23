@@ -98,15 +98,25 @@ export const getIssueList = async (options?: { [key: string]: any }) => (
 	})
 )
 
+export const getTodoList = async (options?: { [key: string]: any }) => (
+	await request<{
+		code: number,
+		data: API.IssueInfo,
+		msg: string,
+	}[]>(`${serverIP}/order/getOwnOrders`, {
+		method: 'GET',
+		...(options || {}),
+	})
+)
+
 export const createNewIssue = async (
-	body: API.IssueInfo,
+	body: FormData,
 	options?: { [key: string]: any },
 ) => {
 	return request<API.PostResult>(`${serverIP}/order/createOrder`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'multipart/form-data',
-			// 'Content-Type': 'application/json',
 		},
 		data: body,
 		...(options || {})
