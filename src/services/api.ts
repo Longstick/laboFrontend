@@ -88,13 +88,16 @@ export async function issueTableRule(
 }
 
 export const getIssueList = async (options?: { [key: string]: any }) => (
-	await request<{
-		code: number,
-		data: API.IssueInfo,
-		msg: string,
-	}[]>(`${serverIP}/order/getOrders`, {
+	await request<API.PostResult>(`${serverIP}/order/getOrders`, {
 		method: 'GET',
 		...(options || {}),
+	})
+)
+
+export const getIssueDetail = async (orderID: string) => (
+	await request<API.PostResult>(`${serverIP}/order/getOrder`, {
+		method: 'GET',
+		params: {orderId: orderID},
 	})
 )
 

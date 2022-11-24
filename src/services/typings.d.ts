@@ -30,6 +30,7 @@ declare namespace API {
     identity?: number;
     character?: string;
     auth?: number;
+    id?: string;
   }
 
   // declare type Status = 'error' | 'process' | 'finish' | 'wait';
@@ -110,7 +111,24 @@ declare namespace API {
     has_person: string[];
     status?: number;
     create_time?: string;
-  }
+    orderNodes?: OrderNode[];
+  };
+
+  type OrderNode = {
+    id?: string;
+    user_id?: string;
+    next_charger?: string;
+    current_stage?: number;
+    remark?: string;
+    repair_manufacturer?: string;
+    handle_method: string;
+    repair_method: string;
+    logistics_num: string;
+    status: number;
+    reason: string;
+    phone: st
+
+  };
 
   type ProcesserInfo = {
     id: string;

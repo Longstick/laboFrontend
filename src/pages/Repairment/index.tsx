@@ -63,7 +63,7 @@ const Repairment: React.FC = () => {
             dataIndex: 'identifier',
             search: false,
             width: '10%',
-        },  
+        },
         {
             key: 'title',
             title: '工单标题',
@@ -186,7 +186,7 @@ const Repairment: React.FC = () => {
                             {
                                 key: 'dropdownProcess',
                                 name:
-                                    record.currentProcesser === initialState?.userInfo?.identity
+                                    record.has_person[len - 1] === initialState?.userInfo?.id
                                         ? '点击处理'
                                         : '查看流程',
                                 onClick: () => {
@@ -344,7 +344,7 @@ const Repairment: React.FC = () => {
                             responsive={responsive}
                             drawerOpen={processDrawerOpen}
                             onClose={onCloseProcessDrawer}
-                            value={currentRow}
+                            value={currentRow?.id}
                         />
 
                         <DetailModal

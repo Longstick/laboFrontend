@@ -1,13 +1,13 @@
 // 流程抽屉
 
 
-import { getApporver } from '@/services/api';
+import { getApporver, getIssueDetail } from '@/services/api';
 import { ProCard, ProDescriptions } from '@ant-design/pro-components';
 
 import { Button, Drawer, Steps } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from '../index.less';
 import ApprovalModal from './ApprovalModal';
 import { stepLabel } from '../struct';
@@ -18,7 +18,7 @@ const { Item } = ProDescriptions;
 export type ProcessDrawerProps = {
     drawerOpen?: boolean;
     onClose?: () => void;
-    value?: Partial<API.TableColumns>;
+    value: string;
     responsive?: boolean;
 };
 
@@ -28,9 +28,14 @@ const rejectdata = {
 }
 
 const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
-
     const { initialState } = useModel("@@initialState")
-
+    const [issueDetail, setIssueDetail] = useState<API.Issue>()
+    useEffect(() => {
+        (async function getDetail(){
+            await getIssueDetail(props.value)
+        })()
+        console.log(props.value)
+    },[props.value])
     // 已完成流程详细
     const ProcessDetailColumns = {
         1: {
@@ -256,7 +261,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 'error': (<>
                     {processerInfo}
                     <ProCard className={styles.processDrawerRejectDetails}>
-                        <ProDescriptions column={1} columns={rejectColumns} dataSource={rejectdata} labelStyle={{ fontWeight: 'bolder' }}/>
+                        <ProDescriptions column={1} columns={rejectColumns} dataSource={rejectdata} labelStyle={{ fontWeight: 'bolder' }} />
                     </ProCard>
                 </>),
                 'wait': <></>,
@@ -265,16 +270,20 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     );
 
     return (
-        <Drawer width={props.responsive ? '100%' : 600} open={props.drawerOpen} onClose={props.onClose} 
+        <Drawer
+            width={props.responsive ? '100%' : 600}
+            open={props.drawerOpen}
+            onClose={props.onClose}
             // 调试信息
             extra={
-                <Button 
-                onClick={()=>{
-                    console.log(props.value)
-                }}
-                
+                <Button
+                    onClick={() => {
+                        console.log(props.value)
+                    }}
+
                 >获取console信息</Button>
             }
+
         >
             <Steps
                 direction="vertical"
