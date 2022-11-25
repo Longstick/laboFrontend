@@ -156,6 +156,16 @@ export const getResourceID = async (condition: number) => {
 	})
 }
 
+export const submitApproval = async (body: API.OrderNode, options?: { [key: string]: any }) => {
+	return request<API.PostResult>(`${serverIP}/order/approvalOrder`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		data: body,
+		...(options || {}),
+	});
+}
 
 export const getStaff = async (params: string) => (
 	await request<{

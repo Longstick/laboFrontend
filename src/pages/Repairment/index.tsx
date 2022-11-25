@@ -1,6 +1,6 @@
 // 维修管理系统主体
 
-import { getIssueList, getTodoList, issueTableRule } from '@/services/api';
+import { getIssueDetail, getIssueList, getTodoList, issueTableRule } from '@/services/api';
 import { PageContainer, ProTable, ProCard, TableDropdown } from '@ant-design/pro-components';
 
 import { Button, Tag, Badge, Space } from 'antd';
@@ -170,6 +170,18 @@ const Repairment: React.FC = () => {
             fixed: 'right',
             render: (text, record, _, action) => {
                 const len = record.has_person?.length
+                const onDetailButtonClick = () => {
+                    setCurrentRow(record);
+                    setModalOpen(true);
+                }
+
+                const onProcessButtonClick = async () => {
+                    const res = await getIssueDetail(record.id)
+                    console.log(res.data)
+                    setCurrentRow(res.data);
+                    setProcessDrawer(true);
+                }
+
                 return responsive ? (
                     <TableDropdown
                         key="actionGroup"
@@ -178,10 +190,7 @@ const Repairment: React.FC = () => {
                             {
                                 key: 'detail',
                                 name: '详细信息',
-                                onClick: () => {
-                                    setCurrentRow(record);
-                                    setModalOpen(true);
-                                },
+                                onClick: onDetailButtonClick
                             },
                             {
                                 key: 'dropdownProcess',
@@ -189,33 +198,17 @@ const Repairment: React.FC = () => {
                                     record.has_person[len - 1] === initialState?.userInfo?.id
                                         ? '点击处理'
                                         : '查看流程',
-                                onClick: () => {
-                                    setCurrentRow(record);
-                                    setProcessDrawer(true);
-                                },
+                                onClick: onProcessButtonClick
                             },
                         ]}
                     />
                 ) : (
                     <Space size={24}>
-                        <a
-                            onClick={() => {
-                                setCurrentRow(record);
-                                setModalOpen(true);
-                            }}
-                        >
-                            详细信息
-                        </a>
+                        <a onClick={onDetailButtonClick}>详细信息</a>
 
-                        <a
-                            onClick={() => {
-                                setCurrentRow(record);
-                                setProcessDrawer(true);
-                            }}
-                        >
+                        <a onClick={onProcessButtonClick} >
                             {record.has_person[len - 1] === initialState?.userInfo?.id ? '点击处理' : '查看流程'
                             }
-
                         </a>
                     </Space>
                 );

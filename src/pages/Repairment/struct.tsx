@@ -63,9 +63,8 @@ export const stepLabel = {
     0: "提交",
     1: "审批",
     2: "派发",
-    3: "邮寄",
-    4: "维修",
-    5: "验收",
+    3: "维修",
+    4: "验收",
 };
 
 export const failureTypeLabel = {
@@ -293,5 +292,20 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
                 </Image.PreviewGroup>
             )
         }
+    },
+]
+
+export const ProcesserDetailColumns: ProDescriptionsItemProps[] = [
+    {
+        title: '处理人',
+        dataIndex: 'username',
+    },
+    {
+        title: '联系电话',
+        dataIndex: 'phone',
+    },
+    {
+        title: '更新时间',
+        dataIndex: 'updatedTime',
     },
 ]

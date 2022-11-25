@@ -2,6 +2,7 @@
 
 
 import {
+    ActionType,
     ModalForm,
     ProCard,
     ProDescriptions,
@@ -23,15 +24,16 @@ import {
     issueDescColumns,
 } from '../struct'
 
-import { getStaff, getDeliveryInfo } from '@/services/api'
-import { waitTime } from "@/services/utils";
+import { getStaff, getDeliveryInfo, getApporver, submitApproval } from '@/services/api'
 
 const { Title } = Typography
 
 export type ModalProps = {
     currentStage?: number;
-    value?: Partial<API.TableColumns>;
+    value?: Partial<API.IssueInfo>;
     responsive?: boolean;
+    onDrawerClose?: () => void;
+    tableActionRef?: React.MutableRefObject<ActionType | undefined>;
 }
 
 const ApprovalModal: React.FC<ModalProps> = props => {
@@ -40,10 +42,30 @@ const ApprovalModal: React.FC<ModalProps> = props => {
     const [isurged, clickUrge] = useState<boolean>(false)
 
     const onFinish = async (values: any) => {
-        await waitTime(2000)
-        console.log(values)
-        message.success('提交成功！')
-        return true
+        try{
+            switch(props.currentStage){
+                case 1: {
+                    const body = {
+                        ...values,
+                        orderId: props.value?.id,
+                        status: 1,
+                    }
+                    console.log(body)
+                    await submitApproval(body)
+                    break;
+                }
+                default: break;
+            }
+            message.success('提交成功！')
+            props.onDrawerClose?.()
+            props.tableActionRef?.current?.reloadAndRest?.()
+            return true
+        } catch (err) {
+            console.log(err)
+            message.error('提交失败！')
+            return false
+        }
+        
     }
 
     const [form] = Form.useForm()
@@ -53,15 +75,9 @@ const ApprovalModal: React.FC<ModalProps> = props => {
         <>
             <ProFormTextArea
                 required
-                name="approvalComments"
-                label={intl.formatMessage({
-                    id: "pages.repairment.issue.approval.comments",
-                    defaultMessage: "approval comments"
-                })}
-                placeholder={intl.formatMessage({
-                    id: 'component.textarea.placeholder',
-                    defaultMessage: 'Please enter your approval comments'
-                })}
+                name="opinion"
+                label='审核意见'
+                placeholder='请输入审批意见'
                 rules={[{
                     required: true,
                     message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
@@ -74,7 +90,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             />
             <ProFormSelect
                 colProps={{ sm: 12, xs: 16 }}
-                name="nextProcesser"
+                name="next_person"
                 required
                 fieldProps={{
                     showSearch: true,
@@ -87,9 +103,9 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                     required: true,
                     message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
                 }]}
-                request={getStaff}
+                request={getApporver}
                 params={{
-                    staffType: 'all'
+                    orderAuthType: 1
                 }}
             />
         </>
@@ -534,7 +550,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             submitter={{
                 searchConfig: {
                     submitText:
-                        (props.currentStage === 4) ?
+                        (props.currentStage === 3) ?
                             currentuser ?
                                 <></> :
                                 <FormattedMessage id='pages.repairment.repairmentModal.repairComplete' defaultMessage='Repair Confirm' />

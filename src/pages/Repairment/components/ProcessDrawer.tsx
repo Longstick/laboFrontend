@@ -1,16 +1,16 @@
 // 流程抽屉
 
 
-import { getApporver, getIssueDetail } from '@/services/api';
-import { ProCard, ProDescriptions } from '@ant-design/pro-components';
+import { getApporver, getIssueDetail, getUserInfo } from '@/services/api';
+import { ActionType, ProCard, ProDescriptions } from '@ant-design/pro-components';
 
 import { Button, Drawer, Steps } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../index.less';
 import ApprovalModal from './ApprovalModal';
-import { stepLabel } from '../struct';
+import { ProcesserDetailColumns, stepLabel } from '../struct';
 
 const { Step } = Steps;
 const { Item } = ProDescriptions;
@@ -18,8 +18,9 @@ const { Item } = ProDescriptions;
 export type ProcessDrawerProps = {
     drawerOpen?: boolean;
     onClose?: () => void;
-    value: string;
+    value: API.IssueInfo;
     responsive?: boolean;
+    tableActionRef?: React.MutableRefObject<ActionType | undefined>;
 };
 
 const rejectdata = {
@@ -29,13 +30,13 @@ const rejectdata = {
 
 const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     const { initialState } = useModel("@@initialState")
-    const [issueDetail, setIssueDetail] = useState<API.Issue>()
-    useEffect(() => {
-        (async function getDetail(){
-            await getIssueDetail(props.value)
-        })()
-        console.log(props.value)
-    },[props.value])
+    const [issueDetail, setIssueDetail] = useState<API.IssueInfo>()
+    // useEffect(() => {
+    //     (async function getDetail() {
+    //         const value = await getIssueDetail(props.value)
+    //         setIssueDetail(value.data)
+    //     })()
+    // }, [props.value])
     // 已完成流程详细
     const ProcessDetailColumns = {
         1: {
@@ -89,32 +90,6 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             ],
         },
         3: {
-            step: 'post',
-            columns: [
-                {
-                    title: '快递单号',
-                    key: 'TrackingNumber',
-                    dataIndex: 'TrackingNumber',
-                },
-
-                {
-                    title: '快递公司',
-                    key: 'DeliveryComp',
-                    dataIndex: 'DeliveryComp',
-                },
-                {
-                    title: '寄件人联系电话',
-                    key: 'senderPhone',
-                    dataIndex: 'senderPhone',
-                },
-                {
-                    title: '寄件人',
-                    key: 'sender',
-                    dataIndex: 'sender',
-                },
-            ],
-        },
-        4: {
             step: 'repairment',
             columns: [
                 {
@@ -150,7 +125,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 },
             ],
         },
-        5: {
+        4: {
             step: 'acceptance',
             columns: [
                 {
@@ -198,74 +173,50 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
         },
     ]
 
-    const processerInfo = (
-        <ProDescriptions<API.ProcesserInfo> request={getApporver} column={{ xs: 1, sm: 2, md: 2 }} size="middle" labelStyle={{ fontWeight: 'bolder' }}>
-            <Item
-                dataIndex="processer"
-                label={
-                    <FormattedMessage
-                        id="pages.repairment.issue.processer"
-                        defaultMessage="Processer"
-                    />
-                }
-            />
-            <Item
-                dataIndex="phoneNumber"
-                label={
-                    <FormattedMessage
-                        id="pages.repairment.issue.phoneNumber"
-                        defaultMessage="Phone Number"
-                    />
-                }
-            />
-            <Item
-                dataIndex="updateTime"
-                label={
-                    <FormattedMessage
-                        id="pages.repairment.issue.updateTime"
-                        defaultMessage="Update Time"
-                    />
-                }
-            />
-        </ProDescriptions>
+    const processerInfo = (dataSource: API.OrderNode | undefined) => (
+        <ProDescriptions
+            column={{ xs: 1, sm: 2, md: 2 }}
+            columns={ProcesserDetailColumns}
+            size="middle"
+            labelStyle={{ fontWeight: 'bolder' }}
+            dataSource={dataSource}
+        />
     );
 
-    const stepItem = (step: number, detailsData: any) => (
+    const stepItem = (step: number) => (
         <ProCard>
-            {{
-                'finish': (<>
-                    {processerInfo}
-                    {step !== 0 &&
-                        <ProCard className={styles.processDrawerStepDetails}>
-
-                            <ProDescriptions column={1} columns={ProcessDetailColumns[step].columns ?? {}} labelStyle={{ fontWeight: 'bolder' }} dataSource={detailsData ?? {}} />
-                        </ProCard>
-                    }
-                </>),
-                'process': (<>
-                    {processerInfo}
-                    {initialState?.userInfo?.identity === props.value?.currentProcesser && <ApprovalModal
-                        currentStage={step}
-                        value={props.value}
-                        responsive={props.responsive}
-                    >
-                        {step === 4 ?
-                            <FormattedMessage
-                                id='pages.repairment.repairmentModal.progressEntry'
-                                defaultMessage='Process Entry'
-                            />
-                            : stepLabel[step]
-                        }
-                    </ApprovalModal>}
-                </>),
-                'error': (<>
-                    {processerInfo}
-                    <ProCard className={styles.processDrawerRejectDetails}>
-                        <ProDescriptions column={1} columns={rejectColumns} dataSource={rejectdata} labelStyle={{ fontWeight: 'bolder' }} />
-                    </ProCard>
-                </>),
-                'wait': <></>,
-            }[detailsData?.status]}
+            {function stepRender() {
+                const currentStep = props.value?.orderNodes?.length ?? 1
+                if (step === currentStep) {
+                    return <>
+                        {processerInfo(props.value?.orderNodes![step-1])}
+                        {initialState?.userInfo?.id === props.value?.orderNodes![step - 1].user_id &&
+                            <ApprovalModal
+                                currentStage={step - 1}
+                                value={props.value}
+                                responsive={props.responsive}
+                                onDrawerClose={props.onClose}
+                            >{stepLabel[step - 1]}</ApprovalModal>}
+                    </>
+                }
+                else if (step < currentStep) {
+                    return <>
+                        {processerInfo(props.value?.orderNodes![step-1])}
+                        {step !== 1 &&
+                            <ProCard className={styles.processDrawerStepDetails}>
+                                <ProDescriptions
+                                    column={1}
+                                    columns={ProcessDetailColumns[step].columns ?? {}}
+                                    labelStyle={{ fontWeight: 'bolder' }}
+                                    dataSource={props.value?.orderNodes![step]}
+                                />
+                            </ProCard>}
+                    </>
+                }
+                else {
+                    return <></>
+                }
+            }()}
         </ProCard>
     );
 
@@ -283,43 +234,31 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
 
                 >获取console信息</Button>
             }
-
+            destroyOnClose
         >
             <Steps
                 direction="vertical"
-                current={props.value?.processDetails?.stage}
+                current={(props.value?.orderNodes?.length ?? 1) - 1}
             >
                 <Step
                     title={stepLabel[0]}
-                    description={stepItem(0, {
-                        ...props.value?.processDetails?.submit
-                    })}
-                    status={props.value?.processDetails?.submit?.status}
+                    description={stepItem(1)}
                 />
                 <Step
                     title={stepLabel[1]}
-                    description={stepItem(1, props.value?.processDetails?.approval)}
-                    status={props.value?.processDetails?.approval?.status}
+                    description={stepItem(2)}
                 />
                 <Step
                     title={stepLabel[2]}
-                    description={stepItem(2, props.value?.processDetails?.dispatch)}
-                    status={props.value?.processDetails?.dispatch?.status}
+                    description={stepItem(3)}
                 />
-                {/* <Step
+                <Step
                     title={stepLabel[3]}
-                    description={stepItem(3, props.value?.processDetails?.post)}
-                    status={props.value?.processDetails?.post?.status}
-                /> */}
+                    description={stepItem(4)}
+                />
                 <Step
                     title={stepLabel[4]}
-                    description={stepItem(4, props.value?.processDetails?.repairment)}
-                    status={props.value?.processDetails?.repairment?.status}
-                />
-                <Step
-                    title={stepLabel[5]}
-                    description={stepItem(5, props.value?.processDetails?.acceptance)}
-                    status={props.value?.processDetails?.acceptance?.status}
+                    description={stepItem(5)}
                 />
             </Steps>
         </Drawer>

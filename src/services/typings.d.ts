@@ -121,13 +121,18 @@ declare namespace API {
     current_stage?: number;
     remark?: string;
     repair_manufacturer?: string;
-    handle_method: string;
-    repair_method: string;
-    logistics_num: string;
-    status: number;
-    reason: string;
-    phone: st
-
+    handle_method?: string;
+    repair_method?: string;
+    logistics_num?: string;
+    status?: number;
+    reason?: string;
+    phone?: string;
+    solution?: string;
+    score?: number;
+    accept_images?: string[];
+    update_time?: string;
+    orderId?: string;
+    opinion?: string;
   };
 
   type ProcesserInfo = {
