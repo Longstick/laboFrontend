@@ -337,7 +337,7 @@ const Repairment: React.FC = () => {
                             responsive={responsive}
                             drawerOpen={processDrawerOpen}
                             onClose={onCloseProcessDrawer}
-                            value={currentRow?.id}
+                            value={currentRow}
                         />
 
                         <DetailModal
