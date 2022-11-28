@@ -82,7 +82,7 @@ const Repairment: React.FC = () => {
         {
             key: 'resource_id',
             title: '工作对象',
-            dataIndex: 'resource_id',
+            dataIndex: ['resource', 'name'],
             ellipsis: true,
             search: false,
         },
@@ -170,7 +170,9 @@ const Repairment: React.FC = () => {
             fixed: 'right',
             render: (text, record, _, action) => {
                 const len = record.has_person?.length
+
                 const onDetailButtonClick = () => {
+                    console.log(record)
                     setCurrentRow(record);
                     setModalOpen(true);
                 }
@@ -178,7 +180,7 @@ const Repairment: React.FC = () => {
                 const onProcessButtonClick = async () => {
                     const res: API.PostResult = await getIssueDetail(record.id)
                     // 步骤顺序排序
-                    res.data.orderNodes.sort((a: API.OrderNode, b: API.OrderNode)=>{ return a.current_stage! - b.current_stage! })
+                    res.data.orderNodes.sort((a: API.OrderNode, b: API.OrderNode) => { return a.current_stage! - b.current_stage! })
                     setCurrentRow(res.data);
                     setProcessDrawer(true);
                 }
@@ -259,12 +261,21 @@ const Repairment: React.FC = () => {
                                 导出全部
                             </Button>
 
-                            <Button key="outputSelected" size="large" disabled={selectedRowsState.length === 0}>
-                                <FormattedMessage
-                                    id="pages.repairment.searchTable.outputSelected"
-                                    defaultMessage="Output Selected"
-                                />
-                            </Button>
+                            {rowSelect ?
+                                <Button
+                                    key='cancelOperate'
+                                    size='large'
+                                    danger
+                                    onClick={() => { setRowSelect(false) }}
+                                >取消操作</Button>
+                                :
+                                <Button
+                                    key="outputSelected"
+                                    size="large"
+                                    onClick={() => { setRowSelect(true) }}
+                                >批量操作</Button>
+                            }
+
                         </ButtonGroup>
                     </Space>
                 }
@@ -283,21 +294,21 @@ const Repairment: React.FC = () => {
                         <ProTable<API.IssueInfo, API.PageParams>
                             columns={columns}
                             actionRef={actionRef}
-                            // request={(params) => issueTableRule({ ...params, activeKey })}
-                            request={
-                                {
-                                    all: getIssueList,
-                                    mySubmission: getTodoList,
-                                }[activeKey]
-                            }
+                            request={{
+                                all: getIssueList,
+                                mySubmission: getTodoList,
+                            }[activeKey]}
                             tableLayout="fixed"
-                            rowKey="key"
+                            rowKey="identifier"
                             scroll={{ x: 1200 }}
-                            rowSelection={{
-                                onChange: (_, selectedRows) => {
-                                    setSelectedRows(selectedRows);
-                                },
-                            }}
+                            rowSelection={
+                                rowSelect ?
+                                    {
+                                        onChange: (_, selectedRows) => {
+                                            setSelectedRows(selectedRows);
+                                        },
+                                        alwaysShowAlert: true,
+                                    } : false}
                             search={{
                                 optionRender: false,
                                 collapsed: false,
@@ -308,37 +319,23 @@ const Repairment: React.FC = () => {
                             toolbar={{
                                 search: true,
                             }}
+                            tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+                                <Space size={24}>
+                                    <a >批量导出</a>
+                                    <a onClick={onCleanSelected}>取消选择</a>
+                                </Space>
+                            )}
                             columnsState={{
                                 value: columnsStateMap,
                                 onChange: setColumnsStateMap,
                             }}
                         />
 
-                        {/* {selectedRowsState?.length > 0 && (
-                    <FooterToolbar
-                        extra={
-                            <div>
-                                <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen" />{' '}
-                                <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-                                <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
-                                &nbsp;&nbsp;
-                            </div>
-                        }
-                    >
-                        <Button type="primary">
-                            <FormattedMessage
-                                id="pages.searchTable.batchApproval"
-                                defaultMessage="Batch approval"
-                            />
-                        </Button>
-                    </FooterToolbar>
-                )} */}
-
                         <ProcessDrawer
                             responsive={responsive}
                             drawerOpen={processDrawerOpen}
                             onClose={onCloseProcessDrawer}
-                            value={currentRow}
+                            value={currentRow!}
                         />
 
                         <DetailModal

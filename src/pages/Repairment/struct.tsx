@@ -239,7 +239,7 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
     },
     {
         title: <FormattedMessage id="pages.repairment.issue.object" defaultMessage='Object' />,
-        dataIndex: 'resource',
+        dataIndex: ['resource', 'name'],
         span: 2,
     },
     {
