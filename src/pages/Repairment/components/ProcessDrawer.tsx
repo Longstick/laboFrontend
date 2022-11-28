@@ -50,7 +50,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                         />
                     ),
                     key: 'approvalResult',
-                    dataIndex: 'result',
+                    dataIndex: 'status',
                 },
                 {
                     title: (
@@ -60,7 +60,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                         />
                     ),
                     key: 'approvalComments',
-                    dataIndex: 'comments',
+                    dataIndex: 'remark',
                 },
             ],
         },
@@ -173,15 +173,15 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
         },
     ]
 
-    const processerInfo = (dataSource: API.OrderNode | undefined) => (
+    const processerInfo = (step: number) =>
         <ProDescriptions
             column={{ xs: 1, sm: 2, md: 2 }}
             columns={ProcesserDetailColumns}
             size="middle"
             labelStyle={{ fontWeight: 'bolder' }}
-            dataSource={dataSource}
+            dataSource={props.value?.orderNodes?.[step]}
         />
-    );
+
 
     const stepItem = (step: number) => (
         <ProCard>
@@ -189,26 +189,27 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 const currentStep = props.value?.orderNodes?.length ?? 1
                 if (step === currentStep) {
                     return <>
-                        {processerInfo(props.value?.orderNodes![step-1])}
-                        {initialState?.userInfo?.id === props.value?.orderNodes![step - 1].user_id &&
+                        {processerInfo(step - 1)}
+                        {/* {initialState?.userInfo?.id === props.value?.orderNodes![step - 1].user_id && */}
                             <ApprovalModal
                                 currentStage={step - 1}
                                 value={props.value}
                                 responsive={props.responsive}
                                 onDrawerClose={props.onClose}
-                            >{stepLabel[step - 1]}</ApprovalModal>}
+                            >{stepLabel[step - 1]}</ApprovalModal>
+                        {/* } */}
                     </>
                 }
                 else if (step < currentStep) {
                     return <>
-                        {processerInfo(props.value?.orderNodes![step-1])}
+                        {processerInfo(step - 1)}
                         {step !== 1 &&
                             <ProCard className={styles.processDrawerStepDetails}>
                                 <ProDescriptions
                                     column={1}
-                                    columns={ProcessDetailColumns[step].columns ?? {}}
+                                    columns={ProcessDetailColumns[step-1].columns}
                                     labelStyle={{ fontWeight: 'bolder' }}
-                                    dataSource={props.value?.orderNodes![step]}
+                                    dataSource={props.value?.orderNodes![step-1]}
                                 />
                             </ProCard>}
                     </>

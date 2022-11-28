@@ -101,7 +101,7 @@ declare namespace API {
     identifier: string;
     title?: string;
     description?: string;
-    resource_id: string;
+    resource?: ResourceInfo;
     manufacturer?: string;
     priority: number;
     images?: string[];
@@ -117,6 +117,7 @@ declare namespace API {
   type OrderNode = {
     id?: string;
     user_id?: string;
+    now_user?: string;
     next_charger?: string;
     current_stage?: number;
     remark?: string;

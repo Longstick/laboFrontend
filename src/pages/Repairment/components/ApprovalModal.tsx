@@ -24,7 +24,7 @@ import {
     issueDescColumns,
 } from '../struct'
 
-import { getStaff, getDeliveryInfo, getApporver, submitApproval } from '@/services/api'
+import { getStaff, getDeliveryInfo, getApporver, submitOnProccess } from '@/services/api'
 
 const { Title } = Typography
 
@@ -41,35 +41,31 @@ const ApprovalModal: React.FC<ModalProps> = props => {
     const [currentuser, setuser] = useState<boolean>(true)
     const [isurged, clickUrge] = useState<boolean>(false)
 
+    const [form] = Form.useForm()
+    const intl = useIntl();
+
     const onFinish = async (values: any) => {
-        try{
-            switch(props.currentStage){
-                case 1: {
-                    const body = {
-                        ...values,
-                        orderId: props.value?.id,
-                        status: 1,
-                    }
-                    console.log(body)
-                    await submitApproval(body)
-                    break;
-                }
-                default: break;
+        try {
+            const body = {
+                ...values,
+                orderId: props.value?.id,
+                status: 1,
+            }
+            console.log(body)
+            const res = await submitOnProccess(props.currentStage!, body)
+            if (res.code !== 1) {
+                message.error(res.msg)
+                throw new Error()
             }
             message.success('提交成功！')
             props.onDrawerClose?.()
             props.tableActionRef?.current?.reloadAndRest?.()
             return true
         } catch (err) {
-            console.log(err)
-            message.error('提交失败！')
+            message.error(`提交失败！`)
             return false
         }
-        
     }
-
-    const [form] = Form.useForm()
-    const intl = useIntl();
 
     const approvalForm =
         <>
@@ -115,38 +111,42 @@ const ApprovalModal: React.FC<ModalProps> = props => {
         <>
             {/* 维修方式选择 */}
             <ProFormRadio.Group
-                name="repairStaff"
+                name="handle_method"
                 colProps={{ md: 12 }}
                 required
                 radioType='button'
                 label='维修人员'
                 options={[
                     {
-                        label: <FormattedMessage id="pages.repairment.dispatchModal.manufacturer" defaultMessage='manufacturer' />,
-                        value: 0,
+                        label: '厂商维修',
+                        value: '厂商维修',
                     },
                     {
-                        label: <FormattedMessage id="pages.repairment.dispatchModal.student" defaultMessage='student' />,
-                        value: 1,
+                        label: '学生维修',
+                        value: '学生维修',
                     },
                     {
-                        label: <FormattedMessage id="pages.repairment.dispatchModal.teacher" defaultMessage='teacher' />,
-                        value: 2,
+                        label: '教职维修',
+                        value: '教职维修',
                     },
                 ]}
-                initialValue={0}
+                initialValue='厂商维修'
                 fieldProps={{
                     buttonStyle: 'solid',
                 }}
             />
+
             {/* 维修方式对应不同的表单项 */}
-            <ProFormDependency name={['repairStaff']}>
-                {({ repairStaff }) => {
-                    switch (repairStaff) {
-                        case 0:
+            <ProFormDependency name={['handle_method']}>
+                {({ handle_method }) => {
+                    if (handle_method === '厂商维修') {
+
+                    }
+                    switch (handle_method) {
+                        case '厂商维修':
                             return <ProFormGroup grid>
                                 <ProFormRadio.Group
-                                    name="repairApproach"
+                                    name="repair_method"
                                     width='md'
                                     colProps={{ sm: 12 }}
                                     required
@@ -155,11 +155,11 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                     options={[
                                         {
                                             label: '现场维修',
-                                            value: 0,
+                                            value: '现场维修',
                                         },
                                         {
                                             label: '邮寄维修',
-                                            value: 1,
+                                            value: '邮寄维修',
                                         },
                                     ]}
                                     initialValue={0}
@@ -171,7 +171,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                 <ProFormText
                                     colProps={{ sm: 12 }}
                                     width='md'
-                                    name='manufacturer'
+                                    name='repair_manufacturer'
                                     required
                                     label={intl.formatMessage({
                                         id: 'pages.repairment.dispatchModal.Manufacturer',
@@ -187,7 +187,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                 <ProFormSelect
                                     colProps={{ sm: 12 }}
                                     width='md'
-                                    name="repairStaffStudent"
+                                    name="next_person"
                                     required
                                     label={intl.formatMessage({
                                         id: 'pages.repairment.dispatchModal.repairStaff',
@@ -197,13 +197,11 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         required: true,
                                         message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
                                     }]}
-                                    request={getStaff}
+                                    request={getApporver}
+                                    params={{ orderAuthType: 2 }}
                                     fieldProps={{
                                         showSearch: true,
                                         showArrow: false,
-                                    }}
-                                    params={{
-                                        staffType: 'all',
                                     }}
                                 />
                                 <ProFormText
@@ -223,13 +221,12 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                             </ProFormGroup>
 
 
-                        case 1:
-                            return <>
-
+                        case '学生维修':
+                            return <ProFormGroup grid>
                                 <ProFormSelect
                                     colProps={{ sm: 12 }}
                                     width='md'
-                                    name="repairStaffStudent"
+                                    name="next_person"
                                     required
                                     label={intl.formatMessage({
                                         id: 'pages.repairment.dispatchModal.repairStaff',
@@ -239,13 +236,11 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         required: true,
                                         message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
                                     }]}
-                                    request={getStaff}
+                                    request={getApporver}
+                                    params={{ orderAuthType: 2 }}
                                     fieldProps={{
                                         showSearch: true,
                                         showArrow: false,
-                                    }}
-                                    params={{
-                                        staffType: 'student',
                                     }}
                                 />
                                 <ProFormText
@@ -262,9 +257,29 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         allowClear: true,
                                     }}
                                 />
-                            </>
-                        case 2:
-                            return <>
+                            </ProFormGroup>
+                        case '教职维修':
+                            return <ProFormGroup grid>
+                                <ProFormSelect
+                                    colProps={{ sm: 12 }}
+                                    width='md'
+                                    name="next_person"
+                                    required
+                                    label={intl.formatMessage({
+                                        id: 'pages.repairment.dispatchModal.repairStaff',
+                                        defaultMessage: 'repair staff'
+                                    })}
+                                    rules={[{
+                                        required: true,
+                                        message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                                    }]}
+                                    fieldProps={{
+                                        showSearch: true,
+                                        showArrow: false,
+                                    }}
+                                    request={getApporver}
+                                    params={{ orderAuthType: 2 }}
+                                />
                                 <ProFormText
                                     name="phoneNumber"
                                     colProps={{ sm: 12 }}
@@ -279,29 +294,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         allowClear: true,
                                     }}
                                 />
-                                <ProFormSelect
-                                    colProps={{ sm: 12 }}
-                                    width='md'
-                                    name="repairStaffTeacher"
-                                    required
-                                    label={intl.formatMessage({
-                                        id: 'pages.repairment.dispatchModal.repairStaff',
-                                        defaultMessage: 'repair staff'
-                                    })}
-                                    rules={[{
-                                        required: true,
-                                        message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                                    }]}
-                                    fieldProps={{
-                                        showSearch: true,
-                                        showArrow: false,
-                                    }}
-                                    request={getStaff}
-                                    params={{
-                                        staffType: 'teacher',
-                                    }}
-                                />
-                            </>
+                            </ProFormGroup>
                         default: return <></>
                     }
                 }
@@ -311,11 +304,8 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             {/* 备注信息 */}
             <ProFormTextArea
                 required
-                name="dispatchComments"
-                label={intl.formatMessage({
-                    id: 'pages.repairment.issue.dispatch.comments',
-                    defaultMessage: 'dispatch comments'
-                })}
+                name="opinion"
+                label='备注'
                 placeholder={intl.formatMessage({
                     id: 'component.textarea.placeholder',
                     defaultMessage: 'Please enter your dispatch comments'
@@ -331,49 +321,6 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 }}
             />
         </>
-
-
-    const postForm =
-        <ProCard ghost gutter={[24, 0]} direction={props.responsive ? 'column' : 'row'}>
-            <ProCard ghost>
-                <ProFormText
-                    name="senderPhone"
-                    label="寄件人联系电话"
-                    // colProps={{ md: 12 }}
-                    rules={[{
-                        required: true,
-                        message: '此为必填项，请填写',
-                    }]}
-                />
-                <ProFormText
-                    name="sender"
-                    label="寄件人"
-                    rules={[{
-                        required: true,
-                        message: '此为必填项，请填写',
-                    }]}
-                // colProps={{ md: 12 }}
-                />
-                <ProFormText
-                    name="deliveryComp"
-                    label="快递公司"
-                // colProps={{ md: 12 }}
-                />
-            </ProCard>
-            <ProCard ghost>
-                <ProFormUploadButton
-                    name='picture'
-                    label='相关照片'
-                    listType='picture-card'
-                    max={5}
-                    fieldProps={{
-                        multiple: true,
-                    }}
-                    extra='最多上传五张照片，图片格式支持 .jpg / .png / .jpeg'
-                />
-
-            </ProCard>
-        </ProCard>
 
 
     const repairmentForm =
@@ -411,7 +358,8 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                             showCount: true,
                         }}
                     />
-                </>}
+                </>
+            }
         </>
 
 
@@ -527,9 +475,8 @@ const ApprovalModal: React.FC<ModalProps> = props => {
     const changeModal = {
         1: approvalForm,
         2: dispatchForm,
-        3: postForm,
-        4: repairmentForm,
-        5: acceptanceForm,
+        3: repairmentForm,
+        4: acceptanceForm,
     }[props.currentStage ?? 0]
 
     return (

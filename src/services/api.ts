@@ -97,7 +97,7 @@ export const getIssueList = async (options?: { [key: string]: any }) => (
 export const getIssueDetail = async (orderID: string) => (
 	await request<API.PostResult>(`${serverIP}/order/getOrder`, {
 		method: 'GET',
-		params: {orderId: orderID},
+		params: { orderId: orderID },
 	})
 )
 
@@ -156,8 +156,11 @@ export const getResourceID = async (condition: number) => {
 	})
 }
 
-export const submitApproval = async (body: API.OrderNode, options?: { [key: string]: any }) => {
-	return request<API.PostResult>(`${serverIP}/order/approvalOrder`, {
+export const submitOnProccess = async (currentStage: number, body: API.OrderNode, options?: { [key: string]: any }) => {
+	return request<API.PostResult>({
+		1: `${serverIP}/order/approvalOrder`,
+		2: `${serverIP}/order/dispatchOrder`,
+	}[currentStage], {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
