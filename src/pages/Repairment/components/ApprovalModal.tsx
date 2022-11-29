@@ -1,6 +1,5 @@
 // 流程处理/审批弹出框
 
-
 import {
     ActionType,
     ModalForm,
@@ -19,12 +18,9 @@ import { FormattedMessage, useIntl } from '@umijs/max'
 
 import { Button, Form, message, Switch, Typography } from 'antd'
 import React, { useState } from 'react'
-import {
-    stepLabel,
-    issueDescColumns,
-} from '../struct'
-
+import { stepLabel, issueDescColumns } from '../struct'
 import { getStaff, getDeliveryInfo, getApporver, submitOnProccess } from '@/services/api'
+import styles from '../index.less'
 
 const { Title } = Typography
 
@@ -46,12 +42,20 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
     const onFinish = async (values: any) => {
         try {
+            // 前四个流程复用同一个API函数
+            if (props.currentStage === 4) {
+                const formData = new FormData();
+                Object.keys(value).map((item) => {
+                    formData.append(item, value[item]);
+                });
+                // await waitTime(1000)
+                await createNewIssue(formData);
+            }
             const body = {
                 ...values,
                 orderId: props.value?.id,
                 status: 1,
             }
-            console.log(body)
             const res = await submitOnProccess(props.currentStage!, body)
             if (res.code !== 1) {
                 message.error(res.msg)
@@ -205,7 +209,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                     }}
                                 />
                                 <ProFormText
-                                    name="phoneNumber"
+                                    name="phone"
                                     colProps={{ sm: 12 }}
                                     width='md'
                                     required
@@ -244,7 +248,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                     }}
                                 />
                                 <ProFormText
-                                    name="phoneNumber"
+                                    name="phone"
                                     colProps={{ sm: 12 }}
                                     width='md'
                                     required
@@ -281,7 +285,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                     params={{ orderAuthType: 2 }}
                                 />
                                 <ProFormText
-                                    name="phoneNumber"
+                                    name="phone"
                                     colProps={{ sm: 12 }}
                                     width='md'
                                     required
@@ -325,41 +329,81 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
     const repairmentForm =
         <>
-            {currentuser ?
-                <ProCard layout='center'>
-                    <Title level={4}>
-                        <FormattedMessage id="pages.repairment.repairmentModal.pleaseWait" defaultMessage='Please wait for the maintenance staff to complete their job.' />
+            <ProFormTextArea
+                name='reason'
+                label={<FormattedMessage id="pages.repairment.issue.repairment.cause" defaultMessage='issue case' />}
+                rules={[{
+                    required: true,
+                    message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                }]}
+                fieldProps={{
+                    maxLength: 1000,
+                    showCount: true,
+                }}
+            />
+            <ProFormTextArea
+                name='solution'
+                label={<FormattedMessage id="pages.repairment.issue.repairment.solution" defaultMessage='solution' />}
+                rules={[{
+                    required: true,
+                    message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                }]}
+                fieldProps={{
+                    maxLength: 1000,
+                    showCount: true,
+                }}
+            />
+            <ProFormGroup>
+                <ProFormText
+                    name="phone"
+                    colProps={{ sm: 12 }}
+                    width='md'
+                    required
+                    label="联系电话"
+                    rules={[{
+                        required: true,
+                        message: '此为必填项',
+                    }]}
+                    fieldProps={{
+                        allowClear: true,
+                    }}
+                />
+                <ProFormText
+                    name="logistics_num"
+                    colProps={{ sm: 12 }}
+                    width='md'
+                    required
+                    label="物流单号"
+                    rules={[{
+                        required: true,
+                        message: '此为必填项',
+                    }]}
+                    fieldProps={{
+                        allowClear: true,
+                    }}
+                />
+                <ProFormSelect
+                    colProps={{ sm: 12, xs: 16 }}
+                    name="next_person"
+                    required
+                    fieldProps={{
+                        showSearch: true,
+                    }}
+                    label={intl.formatMessage({
+                        id: 'pages.repairment.issue.nextProcesser',
+                        defaultMessage: "next processer",
+                    })}
+                    rules={[{
+                        required: true,
+                        message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                    }]}
+                    request={getApporver}
+                    params={{
+                        orderAuthType: 3
+                    }}
+                />
 
-                    </Title>
-                </ProCard>
-                :
-                <>
-                    <ProFormTextArea
-                        name='issueCause'
-                        label={<FormattedMessage id="pages.repairment.issue.repairment.cause" defaultMessage='issue case' />}
-                        rules={[{
-                            required: true,
-                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                        }]}
-                        fieldProps={{
-                            maxLength: 1000,
-                            showCount: true,
-                        }}
-                    />
-                    <ProFormTextArea
-                        name='solution'
-                        label={<FormattedMessage id="pages.repairment.issue.repairment.solution" defaultMessage='solution' />}
-                        rules={[{
-                            required: true,
-                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                        }]}
-                        fieldProps={{
-                            maxLength: 1000,
-                            showCount: true,
-                        }}
-                    />
-                </>
-            }
+            </ProFormGroup>
         </>
 
 
@@ -369,51 +413,12 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             direction='column'
             gutter={[24, 24]}
         >
-            {/* {props.value?.processDetails?.dispatch?.approach === 0 &&
-                <ProCard boxShadow style={{ borderRadius: 20 }}>
-                    <ProDescriptions
-                        size='small'
-                        layout='horizontal'
-                        column={{
-                            xs: 1,
-                            sm: 2,
-                            md: 2,
-                        }}
-                        title={<FormattedMessage
-                            id="pages.repairment.repairmentModal.deliveryDetails"
-                            defaultMessage='Delivery Details'
-                        />}
-                        labelStyle={{
-                            fontWeight: 'bolder'
-                        }}
-                        columns={[
-                            {
-                                title: <FormattedMessage
-                                    id='pages.repairment.dispatchModal.trackingNumber'
-                                    defaultMessage='tracking number' />,
-                                dataIndex: 'trackingNumber'
-                            },
-                            {
-                                title: <FormattedMessage
-                                    id='pages.repairment.repairmentModal.senderPhone'
-                                    defaultMessage='sender phone' />,
-                                dataIndex: 'senderPhone'
-                            },
-                            {
-                                title: <FormattedMessage
-                                    id='pages.repairment.repairmentModal.sender'
-                                    defaultMessage='sender' />,
-                                dataIndex: 'sender'
-                            },
-                        ]}
-                        request={getDeliveryInfo}
-                    />
-                </ProCard>} */}
+
             <ProCard ghost gutter={[24, 0]} direction={props.responsive ? 'column' : 'row'}>
                 <ProCard ghost>
 
                     <ProFormText
-                        name='consigneePhone'
+                        name='phone'
                         required
                         label={intl.formatMessage({
                             id: 'pages.repairment.repairmentModal.consigneePhone',
@@ -425,13 +430,13 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                         }]}
                     />
                     <ProFormUploadButton
-                        name="receiptPhoto"
+                        name="a"
                         label={<FormattedMessage id="pages.repairment.repairmentModal.receivingPhotos" defaultMessage='receipt photos' />}
-                        required
-                        rules={[{
-                            required: true,
-                            message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                        }]}
+                        // required
+                        // rules={[{
+                        //     required: true,
+                        //     message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                        // }]}
                         max={3}
                         fieldProps={{
                             name: 'file',
@@ -445,7 +450,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 </ProCard>
                 <ProCard ghost colSpan={{ md: 12 }}>
                     <ProFormRate
-                        name="rating"
+                        name="score"
                         label={<FormattedMessage id="pages.repairment.issue.acceptance.rating" defaultMessage='rating' />}
                         required
                         rules={[{
@@ -454,7 +459,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                         }]}
                     />
                     <ProFormTextArea
-                        name='comments'
+                        name='remark'
                         label={<FormattedMessage id="pages.repairment.issue.acceptance.comments" defaultMessage='comments' />}
                         required
                         rules={[{
@@ -484,7 +489,11 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             form={form}
             title={stepLabel[props.currentStage ?? 0]}
             trigger={
-                <Button type="primary" size="large">
+                <Button
+                    type="primary"
+                    size="large"
+                    className={styles.StepItemButton}
+                >
                     {props.children}
                 </Button>
             }
@@ -494,46 +503,6 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             }}
             onFinish={onFinish}
             grid
-            submitter={{
-                searchConfig: {
-                    submitText:
-                        (props.currentStage === 3) ?
-                            currentuser ?
-                                <></> :
-                                <FormattedMessage id='pages.repairment.repairmentModal.repairComplete' defaultMessage='Repair Confirm' />
-
-                            :
-                            <FormattedMessage id='component.button.confirm' defaultMessage='Confirm' />
-                },
-
-                render: (prop, dom) => {
-                    return (props.currentStage === 4) ?
-                        [
-                            <Switch key='switch'
-                                onChange={checked => setuser(checked)}
-                                checked={currentuser}
-                            />,
-
-                            currentuser ?
-                                <Button
-                                    type='primary'
-                                    key='urge'
-                                    disabled={isurged}
-                                    onClick={() => {
-                                        clickUrge(true)
-                                        message.success(intl.formatMessage({
-                                            id: 'pages.repairment.repairmentModal.urgeSuccess',
-                                            defaultMessage: 'Urged successfully, please wait patiently.'
-                                        }))
-                                    }}
-                                >
-                                    <FormattedMessage id="pages.repairment.repairmentModal.urge" defaultMessage='Urge' />
-                                </Button>
-                                : dom
-
-                        ] : dom
-                }
-            }}
         >
             <ProCard>
                 <ProDescriptions

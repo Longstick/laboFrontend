@@ -4,7 +4,7 @@
 import { getApporver, getIssueDetail, getUserInfo } from '@/services/api';
 import { ActionType, ProCard, ProDescriptions } from '@ant-design/pro-components';
 
-import { Button, Drawer, Steps } from 'antd';
+import { Button, Drawer, Space, Steps, Typography } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
 
 import React, { useEffect, useState } from 'react';
@@ -14,6 +14,7 @@ import { ProcesserDetailColumns, stepLabel } from '../struct';
 
 const { Step } = Steps;
 const { Item } = ProDescriptions;
+const { Title } = Typography;
 
 export type ProcessDrawerProps = {
     drawerOpen?: boolean;
@@ -31,34 +32,23 @@ const rejectdata = {
 const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     const { initialState } = useModel("@@initialState")
     const [issueDetail, setIssueDetail] = useState<API.IssueInfo>()
-    // useEffect(() => {
-    //     (async function getDetail() {
-    //         const value = await getIssueDetail(props.value)
-    //         setIssueDetail(value.data)
-    //     })()
-    // }, [props.value])
-    // 已完成流程详细
+
+    const StatusEnum = {
+        1: '通过',
+        2: '异常',
+    }
     const ProcessDetailColumns = {
         1: {
             step: 'approval',
             columns: [
                 {
-                    title: (
-                        <FormattedMessage
-                            id="pages.repairment.issue.approval.result"
-                            defaultMessage="Result"
-                        />
-                    ),
+                    label: '审核结果',
                     key: 'approvalResult',
                     dataIndex: 'status',
+                    valueEnum: StatusEnum
                 },
                 {
-                    title: (
-                        <FormattedMessage
-                            id="pages.repairment.issue.approval.comments"
-                            defaultMessage="Approval Comments"
-                        />
-                    ),
+                    label: '备注',
                     key: 'approvalComments',
                     dataIndex: 'remark',
                 },
@@ -68,24 +58,16 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             step: 'dispatch',
             columns: [
                 {
-                    title: (
-                        <FormattedMessage
-                            id="pages.repairment.issue.dispatch.result"
-                            defaultMessage="Result"
-                        />
-                    ),
+                    label: '派发结果',
                     key: 'dispatchResult',
-                    dataIndex: 'result',
+                    dataIndex: 'status',
+                    valueEnum: StatusEnum
+
                 },
                 {
-                    title: (
-                        <FormattedMessage
-                            id="pages.repairment.issue.dispatch.comments"
-                            defaultMessage="comments"
-                        />
-                    ),
+                    label: '备注',
                     key: 'dispatchComments',
-                    dataIndex: 'comments',
+                    dataIndex: 'remark',
                 },
             ],
         },
@@ -93,33 +75,19 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             step: 'repairment',
             columns: [
                 {
-                    title: (
-                        <FormattedMessage
-                            id="pages.repairment.issue.repairment.result"
-                            defaultMessage="Result"
-                        />
-                    ),
+                    label: '维修结果',
                     key: 'repairResult',
-                    dataIndex: 'result',
+                    dataIndex: 'status',
+                    valueEnum: StatusEnum
                 },
 
                 {
-                    title: (
-                        <FormattedMessage
-                            id="pages.repairment.issue.repairment.cause"
-                            defaultMessage="Cause"
-                        />
-                    ),
-                    key: 'cause',
-                    dataIndex: 'cause',
+                    label: '故障原因',
+                    key: 'reason',
+                    dataIndex: 'reason',
                 },
                 {
-                    title: (
-                        <FormattedMessage
-                            id="pages.repairment.issue.repairment.solution"
-                            defaultMessage="Solution"
-                        />
-                    ),
+                    label: '解决方案',
                     key: 'solution',
                     dataIndex: 'solution',
                 },
@@ -129,23 +97,13 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             step: 'acceptance',
             columns: [
                 {
-                    title: (
-                        <FormattedMessage
-                            id="pages.repairment.issue.acceptance.rating"
-                            defaultMessage="Rating"
-                        />
-                    ),
+                    label: '评分',
                     key: 'rating',
                     dataIndex: 'rating',
                     valueType: 'rate',
                 },
                 {
-                    title: (
-                        <FormattedMessage
-                            id="pages.repairment.issue.acceptance.comments"
-                            defaultMessage="Comments"
-                        />
-                    ),
+                    label: '评论',
                     key: 'comments',
                     dataIndex: 'comments',
                 },
@@ -190,14 +148,23 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 if (step === currentStep) {
                     return <>
                         {processerInfo(step - 1)}
-                        {/* {initialState?.userInfo?.id === props.value?.orderNodes![step - 1].user_id && */}
+                        {initialState?.userInfo?.id === props.value?.orderNodes![step - 1]?.now_user?.id ?
+                        <ProCard layout='center'>
                             <ApprovalModal
                                 currentStage={step - 1}
                                 value={props.value}
                                 responsive={props.responsive}
                                 onDrawerClose={props.onClose}
                             >{stepLabel[step - 1]}</ApprovalModal>
-                        {/* } */}
+                            &nbsp;&nbsp;
+                            <Button
+                                size='large'
+                                className={styles.StepItemButton}
+                            >驳回</Button>
+                            </ProCard>
+                            :
+                            <ProCard layout='center'>请耐心等待处理哦</ProCard>
+                        }
                     </>
                 }
                 else if (step < currentStep) {
@@ -207,9 +174,9 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                             <ProCard className={styles.processDrawerStepDetails}>
                                 <ProDescriptions
                                     column={1}
-                                    columns={ProcessDetailColumns[step-1].columns}
+                                    columns={ProcessDetailColumns[step - 1].columns}
                                     labelStyle={{ fontWeight: 'bolder' }}
-                                    dataSource={props.value?.orderNodes![step-1]}
+                                    dataSource={props.value?.orderNodes![step - 1]}
                                 />
                             </ProCard>}
                     </>
@@ -240,6 +207,12 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             <Steps
                 direction="vertical"
                 current={(props.value?.orderNodes?.length ?? 1) - 1}
+                // status={{
+                //     0: 'error',
+                //     1: 'finish',
+                //     2: 'process',
+                // }[props.value.status!]}
+                // current={5}
             >
                 <Step
                     title={stepLabel[0]}

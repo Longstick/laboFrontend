@@ -117,7 +117,11 @@ declare namespace API {
   type OrderNode = {
     id?: string;
     user_id?: string;
-    now_user?: string;
+    now_user?: {
+      id?: string;
+      username?: string;
+      phone?: string;
+    };
     next_charger?: string;
     current_stage?: number;
     remark?: string;

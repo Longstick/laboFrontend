@@ -261,8 +261,11 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
     {
         title: <FormattedMessage id="pages.repairment.issue.failureType" defaultMessage='Failure Type' />,
         dataIndex: 'type',
-        valueEnum: failureTypeLabel,
         valueType: 'select',
+        render: (_, item) =>
+            <Tag color={failureTypeLabel[item.type].color}>
+                {failureTypeLabel[item.type].text}
+            </Tag>
     },
     {
         title: <FormattedMessage id="pages.repairment.issue.Manufacturer" defaultMessage='manufacturer' />,
@@ -309,14 +312,14 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
 export const ProcesserDetailColumns: ProDescriptionsItemProps[] = [
     {
         title: '处理人',
-        dataIndex: 'username',
+        dataIndex: ['now_user', 'username'],
     },
     {
         title: '联系电话',
-        dataIndex: 'phone',
+        dataIndex: ['now_user', 'phone'],
     },
     {
         title: '更新时间',
-        dataIndex: 'updatedTime',
+        dataIndex: 'update_time',
     },
 ]

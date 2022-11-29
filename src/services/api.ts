@@ -160,7 +160,9 @@ export const submitOnProccess = async (currentStage: number, body: API.OrderNode
 	return request<API.PostResult>({
 		1: `${serverIP}/order/approvalOrder`,
 		2: `${serverIP}/order/dispatchOrder`,
-	}[currentStage], {
+		3: `${serverIP}/order/repairOrder`,
+		4: `${serverIP}/order/checkBeforeAccept`,
+	}[currentStage]!, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -169,6 +171,22 @@ export const submitOnProccess = async (currentStage: number, body: API.OrderNode
 		...(options || {}),
 	});
 }
+
+
+export const submitOnAcceptance = async (
+	body: FormData,
+	options?: { [key: string]: any },
+) => {
+	return request<API.PostResult>(`${serverIP}/order/createOrder`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'multipart/form-data',
+		},
+		data: body,
+		...(options || {})
+	})
+}
+
 
 export const getStaff = async (params: string) => (
 	await request<{

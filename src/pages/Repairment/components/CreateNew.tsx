@@ -212,7 +212,7 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                             request={getResourceID}
                             params={{ condition: 102 }}
                         />
-                        
+
                         <ProFormSelect
                             name="type"
                             label="故障类型"
@@ -239,7 +239,7 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                             ]}
                         />
 
-<ProFormRadio.Group
+                        <ProFormRadio.Group
                             name="priority"
                             label="优先级"
                             key="priority"
@@ -277,7 +277,7 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                         />
                     </ProFormGroup>
                     <ProFormGroup>
-                        
+
 
                         <ProFormSelect
                             name="next_person"

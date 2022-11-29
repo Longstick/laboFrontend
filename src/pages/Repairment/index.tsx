@@ -92,15 +92,15 @@ const Repairment: React.FC = () => {
             dataIndex: 'type',
             valueType: 'select',
             valueEnum: failureTypeLabel,
-            fieldProps: {
-                dropdownMatchSelectWidth: false,
-            },
             width: '8%',
             render: (_, record) => (
                 <Tag color={failureTypeLabel[record.type!].color}>
                     {failureTypeLabel[record.type!].text}
                 </Tag>
-            )
+            ),
+            fieldProps: {
+                dropdownMatchSelectWidth: false,
+            },
         },
         {
             key: 'priority',
