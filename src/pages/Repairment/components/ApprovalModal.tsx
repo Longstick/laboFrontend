@@ -19,7 +19,7 @@ import { FormattedMessage, useIntl } from '@umijs/max'
 import { Button, Form, message, Switch, Typography } from 'antd'
 import React, { useState } from 'react'
 import { stepLabel, issueDescColumns } from '../struct'
-import { getStaff, getDeliveryInfo, getApporver, submitOnProccess } from '@/services/api'
+import { getStaff, getDeliveryInfo, getApporver, submitOnProccess, submitOnAcceptance } from '@/services/api'
 import styles from '../index.less'
 
 const { Title } = Typography
@@ -42,25 +42,31 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
     const onFinish = async (values: any) => {
         try {
-            // 前四个流程复用同一个API函数
+            // 验收流程因为接口需要发送form-data，不能复用，另外使用一个API
             if (props.currentStage === 4) {
                 const formData = new FormData();
-                Object.keys(value).map((item) => {
-                    formData.append(item, value[item]);
+                Object.keys(values).map((item) => {
+                    formData.append(item, values[item]);
                 });
+                formData.append('orderId', props.value!.id!)
+                formData.append('status', '1')
                 // await waitTime(1000)
-                await createNewIssue(formData);
+                await submitOnAcceptance(formData);
             }
-            const body = {
-                ...values,
-                orderId: props.value?.id,
-                status: 1,
+            // 前三个流程复用同一个API函数，通过currentStage控制接口地址
+            else {
+                const body = {
+                    ...values,
+                    orderId: props.value?.id,
+                    status: 1,
+                }
+                const res = await submitOnProccess(props.currentStage!, body)
+                if (res.code !== 1) {
+                    message.error(res.msg)
+                    throw new Error()
+                }
             }
-            const res = await submitOnProccess(props.currentStage!, body)
-            if (res.code !== 1) {
-                message.error(res.msg)
-                throw new Error()
-            }
+
             message.success('提交成功！')
             props.onDrawerClose?.()
             props.tableActionRef?.current?.reloadAndRest?.()

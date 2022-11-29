@@ -98,14 +98,14 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             columns: [
                 {
                     label: '评分',
-                    key: 'rating',
-                    dataIndex: 'rating',
+                    key: 'score',
+                    dataIndex: 'score',
                     valueType: 'rate',
                 },
                 {
                     label: '评论',
-                    key: 'comments',
-                    dataIndex: 'comments',
+                    key: 'remark',
+                    dataIndex: 'remark',
                 },
             ],
         },
@@ -141,7 +141,59 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
         />
 
 
-    const stepItem = (step: number) => (
+    const stepItem = (step: number) => {
+        const orderNodeInfo = props.value?.orderNodes?.[step - 1]
+        console.log(orderNodeInfo)
+        return <Step
+            title={stepLabel[step - 1]}
+            description={
+                <ProCard>
+                    {orderNodeInfo ? {
+                        1: <>
+                            {processerInfo(step - 1)}
+                            {step !== 1 &&
+                                <ProCard className={styles.processDrawerStepDetails}>
+                                    <ProDescriptions
+                                        column={1}
+                                        columns={ProcessDetailColumns[step - 1].columns}
+                                        labelStyle={{ fontWeight: 'bolder' }}
+                                        dataSource={props.value?.orderNodes![step - 1]}
+                                    />
+                                </ProCard>}
+                        </>,
+                        2: <>
+                            {processerInfo(step - 1)}
+                            {initialState?.userInfo?.id === props.value?.orderNodes![step - 1]?.now_user?.id ?
+                                <ProCard layout='center'>
+                                    <ApprovalModal
+                                        currentStage={step - 1}
+                                        value={props.value}
+                                        responsive={props.responsive}
+                                        onDrawerClose={props.onClose}
+                                    >{stepLabel[step - 1]}</ApprovalModal>
+                                    &nbsp;&nbsp;
+                                    <Button
+                                        size='large'
+                                        className={styles.StepItemButton}
+                                    >驳回</Button>
+                                </ProCard>
+                                :
+                                <ProCard layout='center'>请耐心等待处理哦</ProCard>
+                            }
+                        </>,
+                    }[orderNodeInfo.status!]
+                        :
+                        <></>
+                    }</ProCard>}
+
+            status={orderNodeInfo ? {
+                1: 'finish',
+                2: 'process',
+            }[orderNodeInfo.status!] : 'wait'}
+        />
+    }
+
+    const step_Item = (step: number) => (
         <ProCard>
             {function stepRender() {
                 const currentStep = props.value?.orderNodes?.length ?? 1
@@ -149,18 +201,18 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                     return <>
                         {processerInfo(step - 1)}
                         {initialState?.userInfo?.id === props.value?.orderNodes![step - 1]?.now_user?.id ?
-                        <ProCard layout='center'>
-                            <ApprovalModal
-                                currentStage={step - 1}
-                                value={props.value}
-                                responsive={props.responsive}
-                                onDrawerClose={props.onClose}
-                            >{stepLabel[step - 1]}</ApprovalModal>
-                            &nbsp;&nbsp;
-                            <Button
-                                size='large'
-                                className={styles.StepItemButton}
-                            >驳回</Button>
+                            <ProCard layout='center'>
+                                <ApprovalModal
+                                    currentStage={step - 1}
+                                    value={props.value}
+                                    responsive={props.responsive}
+                                    onDrawerClose={props.onClose}
+                                >{stepLabel[step - 1]}</ApprovalModal>
+                                &nbsp;&nbsp;
+                                <Button
+                                    size='large'
+                                    className={styles.StepItemButton}
+                                >驳回</Button>
                             </ProCard>
                             :
                             <ProCard layout='center'>请耐心等待处理哦</ProCard>
@@ -207,14 +259,18 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             <Steps
                 direction="vertical"
                 current={(props.value?.orderNodes?.length ?? 1) - 1}
-                // status={{
-                //     0: 'error',
-                //     1: 'finish',
-                //     2: 'process',
-                // }[props.value.status!]}
-                // current={5}
+            // status={{
+            //     0: 'error',
+            //     1: 'finish',
+            //     2: 'process',
+            // }[props.value.status!]}
             >
-                <Step
+                {stepItem(1)}
+                {stepItem(2)}
+                {stepItem(3)}
+                {stepItem(4)}
+                {stepItem(5)}
+                {/* <Step
                     title={stepLabel[0]}
                     description={stepItem(1)}
                 />
@@ -233,7 +289,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 <Step
                     title={stepLabel[4]}
                     description={stepItem(5)}
-                />
+                /> */}
             </Steps>
         </Drawer>
     );

@@ -161,7 +161,6 @@ export const submitOnProccess = async (currentStage: number, body: API.OrderNode
 		1: `${serverIP}/order/approvalOrder`,
 		2: `${serverIP}/order/dispatchOrder`,
 		3: `${serverIP}/order/repairOrder`,
-		4: `${serverIP}/order/checkBeforeAccept`,
 	}[currentStage]!, {
 		method: 'POST',
 		headers: {
@@ -177,7 +176,7 @@ export const submitOnAcceptance = async (
 	body: FormData,
 	options?: { [key: string]: any },
 ) => {
-	return request<API.PostResult>(`${serverIP}/order/createOrder`, {
+	return request<API.PostResult>(`${serverIP}/order/checkBeforeAccept`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'multipart/form-data',
