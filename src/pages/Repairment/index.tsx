@@ -13,7 +13,7 @@ import RcResizeObserver from 'rc-resize-observer';
 import ProcessDrawer from './components/ProcessDrawer';
 import CreateNew from './components/CreateNew';
 import styles from './index.less';
-import { priorityList, staticGroup, statusList } from './struct';
+import { failureTypeLabel, priorityList, staticGroup, statusList } from './struct';
 import ButtonGroup from 'antd/lib/button/button-group';
 import DetailModal from './components/DetailModal';
 import DraftsTable from './components/DraftsTable';
@@ -62,7 +62,7 @@ const Repairment: React.FC = () => {
             title: '工单ID',
             dataIndex: 'identifier',
             search: false,
-            width: '10%',
+            // width: '10%',
         },
         {
             key: 'title',
@@ -71,14 +71,14 @@ const Repairment: React.FC = () => {
             ellipsis: true,
             search: false,
         },
-        {
-            key: 'description',
-            title: '工单描述',
-            dataIndex: 'description',
-            valueType: 'textarea',
-            ellipsis: true,
-            search: false,
-        },
+        // {
+        //     key: 'description',
+        //     title: '工单描述',
+        //     dataIndex: 'description',
+        //     valueType: 'textarea',
+        //     ellipsis: true,
+        //     search: false,
+        // },
         {
             key: 'resource_id',
             title: '工作对象',
@@ -86,21 +86,22 @@ const Repairment: React.FC = () => {
             ellipsis: true,
             search: false,
         },
-        // {
-        //     key: 'type',
-        //     title: '对象类别',
-        //     dataIndex: 'type',
-        //     hideInTable: true,
-        //     // valueEnum: {
-        //     //     0: '电脑',
-        //     //     1: '实验设备',
-        //     //     2: '灯',
-        //     // },
-        //     valueType: 'select',
-        //     fieldProps: {
-        //         dropdownMatchSelectWidth: false,
-        //     }
-        // },
+        {
+            key: 'type',
+            title: '故障类型',
+            dataIndex: 'type',
+            valueType: 'select',
+            valueEnum: failureTypeLabel,
+            fieldProps: {
+                dropdownMatchSelectWidth: false,
+            },
+            width: '8%',
+            render: (_, record) => (
+                <Tag color={failureTypeLabel[record.type!].color}>
+                    {failureTypeLabel[record.type!].text}
+                </Tag>
+            )
+        },
         {
             key: 'priority',
             title: '优先级',
@@ -157,7 +158,7 @@ const Repairment: React.FC = () => {
             width: 120,
             fieldProps: {
                 dropdownMatchSelectWidth: false,
-            },
+            }
         },
         {
             key: 'tableOptions',
@@ -234,7 +235,7 @@ const Repairment: React.FC = () => {
                 tabList={[
                     {
                         key: 'all',
-                        tab: '全部',
+                        tab: '所有工单',
                     },
                     {
                         key: 'to-do',
@@ -246,7 +247,7 @@ const Repairment: React.FC = () => {
                     },
                     {
                         key: 'mySubmission',
-                        tab: '我的提交',
+                        tab: '我的工单',
                     },
                     {
                         key: 'drafts',

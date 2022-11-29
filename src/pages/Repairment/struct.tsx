@@ -19,7 +19,7 @@ export const priorityList = {
     },
     1: {
         // value: 'medium',
-        color: 'warning',
+        color: 'orange',
         text: (<FormattedMessage
             id="pages.repairment.issue.priority.medium"
             defaultMessage='Medium'
@@ -27,7 +27,7 @@ export const priorityList = {
     },
     2: {
         // value: 'low',
-        color: 'success',
+        color: 'green',
         text: (<FormattedMessage
             id="pages.repairment.issue.priority.low"
             defaultMessage='Low'
@@ -36,27 +36,26 @@ export const priorityList = {
 }
 
 export const statusList = {
-    0: {
-        text: (<FormattedMessage
-            id="pages.repairment.issue.status.error"
-            defaultMessage='Error'
-        />),
-        status: 'Error',
-    },
     1: {
-        text: (<FormattedMessage
-            id="pages.repairment.issue.status.done"
-            defaultMessage='Done'
-        />),
-        status: 'Success',
-    },
-    2: {
-        text: (<FormattedMessage
-            id="pages.repairment.issue.status.processing"
-            defaultMessage='Processing'
-        />),
+        text: '待审核',
         status: 'Default',
     },
+    2: {
+        text: '待派发',
+        status: 'Default',
+    },
+    3: {
+        text: '待维修',
+        status: 'Default',
+    },
+    4: {
+        text: '待验收',
+        status: 'Default'
+    },
+    5: {
+        text: '已完成',
+        status: 'Success'
+    }
 }
 
 export const stepLabel = {
@@ -68,10 +67,22 @@ export const stepLabel = {
 };
 
 export const failureTypeLabel = {
-    badlyDamaged: '严重损毁',
-    slightlyDamaged: '轻微损坏',
-    affectUse: '影响使用',
-    needImproved: '需要改善',
+    badlyDamaged: {
+        color: 'red',
+        text: '严重损毁',
+    },
+    slightlyDamaged: {
+        color: 'orange',
+        text: '轻微损坏',
+    },
+    affectUse: {
+        color: 'blue',
+        text: '影响使用',
+    },
+    needImproved: {
+        color: 'green',
+        text: '需要改善',
+    },
     // 0: (<FormattedMessage id="pages.repairment.issue.failureType.badlyDamaged" defaultMessage="badly damaged" />),
     // 1: (<FormattedMessage id="pages.repairment.issue.failureType.slightlyDamaged" defaultMessage="slightly damaged" />),
     // 2: (<FormattedMessage id="pages.repairment.issue.failureType.affectUse" defaultMessage="affect use" />),
