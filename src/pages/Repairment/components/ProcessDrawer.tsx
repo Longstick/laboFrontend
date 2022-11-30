@@ -143,7 +143,6 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
 
     const stepItem = (step: number) => {
         const orderNodeInfo = props.value?.orderNodes?.[step - 1]
-        console.log(orderNodeInfo)
         return <Step
             title={stepLabel[step - 1]}
             description={

@@ -37,11 +37,11 @@ export const priorityList = {
 
 export const statusList = {
     1: {
-        text: '待审核',
-        status: 'Default',
+        text: '已完成',
+        status: 'Success',
     },
     2: {
-        text: '待派发',
+        text: '进行中',
         status: 'Default',
     },
     3: {
