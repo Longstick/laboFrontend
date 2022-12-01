@@ -26,7 +26,8 @@ import { waitTime } from '@/services/utils';
 import moment from 'moment';
 import { createNewIssue, getApporver, getResourceID, getStaff } from '@/services/api';
 import { failureTypeLabel, priorityList } from '../struct';
-import { UploadFile } from 'antd/es/upload';
+import type { UploadFile } from 'antd/es/upload';
+import { UploadChangeParam } from 'antd/lib/upload';
 
 export type CreateNewModalProps = {
     type?: 'newButton' | 'editLink';
@@ -49,11 +50,9 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
         setOpen(false);
     };
 
-    const beforeUpload = (file: UploadFile) => {
-        fileList.push(file);
-        console.log(fileList);
-        return false;
-    };
+    const onPicChange = (info: UploadChangeParam) => {
+        setFileList(info.fileList)
+    }
 
     return (
         <ModalForm
@@ -129,6 +128,11 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                     Object.keys(value).map((item) => {
                         formData.append(item, value[item]);
                     });
+
+                    // 将图片放入form-data中
+                    fileList.forEach((file)=>{
+                        formData.append(file.uid, file.originFileObj!)
+                    })
                     // await waitTime(1000)
                     await createNewIssue(formData);
                     message.success('提交成功！');
@@ -175,15 +179,15 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                     />
 
                     <ProFormUploadButton
-                        name="a"
+                        // name="images"
                         label="上传相关图片"
-                        key="picture"
+                        key="images"
                         listType="picture-card"
                         max={6}
                         fieldProps={{
                             multiple: true,
-                            // beforeUpload: beforeUpload,
-                            // fileList
+                            beforeUpload: ()=>false,
+                            onChange: onPicChange,
                         }}
                         accept="image/*"
                         extra={

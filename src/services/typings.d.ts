@@ -190,6 +190,7 @@ declare namespace API {
     phoneNumber?: string;
     email?: string;
     character?: number;
+    authGroup: string[];
   };
 
   type CharacterInfo = {

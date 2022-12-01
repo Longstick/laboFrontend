@@ -4,7 +4,7 @@ import type { ProColumns } from "@ant-design/pro-components";
 import { Button, message, Popconfirm, Space, TableColumnType } from "antd";
 import { waitTime } from "@/services/utils";
 import ButtonGroup from "antd/lib/button/button-group";
-import { characterType } from "../struct";
+import { authType, characterType } from "../struct";
 import { CreateUserForm } from "../components/CreateUserForm";
 import { getCharData, getUserData } from "@/services/api";
 
@@ -36,21 +36,47 @@ const UserManage: React.FC = () => {
             title: '邮箱',
             dataIndex: 'email',
         },
+        // {
+        //     key: 'character',
+        //     title: '角色',
+        //     dataIndex: 'character',
+        //     valueType: 'select',
+        //     request: async () => {
+        //         const res = (await getCharData()).data;
+        //         const option: { label?: string, value: number }[] = []
+        //         res.forEach((element: API.CharacterInfo) => {
+        //             option.push({
+        //                 label: element.charName,
+        //                 value: element.charID,
+        //             })
+        //         })
+        //         return option
+        //     }
+        // },
         {
-            key: 'character',
-            title: '角色',
-            dataIndex: 'character',
+            key: 'authGroup',
+            title: '权限组',
+            dataIndex: 'authGroup',
             valueType: 'select',
-            request: async () => {
-                const res = (await getCharData()).data;
-                const option: { label?: string, value: number }[] = []
-                res.forEach((element: API.CharacterInfo) => {
-                    option.push({
-                        label: element.charName,
-                        value: element.charID,
-                    })
+            valueEnum: authType,
+            fieldProps: {
+                mode: 'multiple',
+            },
+            render: (text, record, _, action) => {
+                const authlist = record.authGroup
+                const taglist: React.ReactNode[] = [];
+                if (authlist.length === 0) {
+                    return <>无特殊权限</>
+                }
+                authlist.sort()
+                authlist.forEach(element => {
+                    taglist.push(
+                        <Tag>{authType[element]}</Tag>
+                    )
                 })
-                return option
+                return <Space direction='vertical'>
+                    {taglist}
+                </Space>
             }
         },
         {

@@ -289,6 +289,9 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
         dataIndex: 'images',
         span: 2,
         render: (_, item) => {
+            if (item.images.length === 0) {
+                return <>暂无图片</>
+            }
             const picGroup: ReactNode[] = []
             for (let i = 0; i < item.images.length; i++) {
                 picGroup.push(
