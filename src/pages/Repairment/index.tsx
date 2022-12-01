@@ -211,7 +211,7 @@ const Repairment: React.FC = () => {
                         <a onClick={onDetailButtonClick}>详细信息</a>
 
                         <a onClick={onProcessButtonClick} >
-                            {record.has_person[len - 1] === initialState?.userInfo?.id && record.status != 1 ? '点击处理' : '查看流程'
+                            {record.has_person[len - 1] === initialState?.userInfo?.id && record.status !== 1 ? '点击处理' : '查看流程'
                             }
                         </a>
                     </Space>
