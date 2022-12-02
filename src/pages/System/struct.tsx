@@ -10,6 +10,7 @@ export const authType = {
     dispatch: '派发',
     maintain: '维修',
     approve: '审批',
+    accept: '验收',
     systemManage: '系统管理',
-    equipmentManage: '设备管理',
+    equipManage: '设备管理',
 }

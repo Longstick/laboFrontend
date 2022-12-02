@@ -31,6 +31,12 @@ declare namespace API {
     character?: string;
     auth?: number;
     id?: string;
+    isRepair?: number;
+    isDispatch?: number;
+    isExamine?: number;
+    isAccept?: number;
+    systemManage?: number;
+    equipManage?: number;
   }
 
   // declare type Status = 'error' | 'process' | 'finish' | 'wait';

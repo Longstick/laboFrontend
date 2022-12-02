@@ -1,35 +1,35 @@
 import React, { useState } from "react";
 import { ProCard, ProTable, EditableProTable, PageContainer } from "@ant-design/pro-components";
 import type { ProColumns } from "@ant-design/pro-components";
-import { Button, message, Popconfirm, Space, TableColumnType } from "antd";
+import { Button, message, Popconfirm, Space, TableColumnType, Tag } from "antd";
 import { waitTime } from "@/services/utils";
 import ButtonGroup from "antd/lib/button/button-group";
 import { authType, characterType } from "../struct";
 import { CreateUserForm } from "../components/CreateUserForm";
-import { getCharData, getUserData } from "@/services/api";
+import { getApporver, getCharData, getUserData } from "@/services/api";
 
 const UserManage: React.FC = () => {
 
     const [editableKeys, setEditableKeys] = useState<React.Key[]>([]);
-    const [selectRows, setSelectedRows] = useState<API.UserTableColumnsType[]>([]);
+    const [selectRows, setSelectedRows] = useState<API.UserInfo[]>([]);
     const [rowSelect, setRowSelect] = useState<boolean>(false)
 
-    const userTableColumns: ProColumns<API.UserTableColumnsType>[] = [
+    const userTableColumns: ProColumns<API.UserInfo>[] = [
         {
-            key: 'name',
+            key: 'username',
             title: '用户名',
-            dataIndex: 'name',
+            dataIndex: 'username',
             editable: false,
         },
         {
-            key: 'ID',
+            key: 'id',
             title: '学工号',
-            dataIndex: 'ID',
+            dataIndex: 'id',
         },
         {
-            key: 'phoneNumber',
+            key: 'phone',
             title: '联系电话',
-            dataIndex: 'phoneNumber',
+            dataIndex: 'phone',
         },
         {
             key: 'email',
@@ -56,17 +56,30 @@ const UserManage: React.FC = () => {
         {
             key: 'authGroup',
             title: '权限组',
-            dataIndex: 'authGroup',
-            valueType: 'select',
-            valueEnum: authType,
-            fieldProps: {
-                mode: 'multiple',
-            },
             render: (text, record, _, action) => {
-                const authlist = record.authGroup
-                const taglist: React.ReactNode[] = [];
-                if (authlist.length === 0) {
-                    return <>无特殊权限</>
+                const authlist = []
+                if (record.isExamine === 1) {
+                    authlist.push('approve')
+                }
+                if (record.isDispatch === 1) {
+                    authlist.push('dispatch')
+                }
+                if (record.isRepair === 1) {
+                    authlist.push('maintain')
+                }
+                if (record.isAccept === 1) {
+                    authlist.push('accept')
+                }
+                if (record.equipManage === 1) {
+                    authlist.push('equipManage')
+                }
+                if (record.systemManage === 1) {
+                    authlist.push('systemManage')
+                }
+
+                const taglist: React.ReactNode[] = []
+                if (authlist?.length === 0) {
+                    return <>无权限</>
                 }
                 authlist.sort()
                 authlist.forEach(element => {
@@ -91,7 +104,7 @@ const UserManage: React.FC = () => {
                         type='primary'
                         key='editable'
                         onClick={() => {
-                            action?.startEditable?.(record.userid)
+                            action?.startEditable?.(record.id!)
                         }}
                     >修改</Button>
                     <Popconfirm
@@ -114,18 +127,18 @@ const UserManage: React.FC = () => {
     ]
     return (
         <PageContainer>
-            <ProTable<API.UserTableColumnsType, API.PageParams>
+            <ProTable<API.UserInfo>
                 rowKey='userid'
                 columns={userTableColumns}
                 rowSelection={
                     rowSelect ?
                         {
                             onChange: (_, selected) => { setSelectedRows(selected) },
-                            
+
                             alwaysShowAlert: true,
                         } : false
-                    }
-                tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected })=>
+                }
+                tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected }) =>
                     <Space size={18}>
                         <a>批量导出</a>
                         <Popconfirm
@@ -133,11 +146,12 @@ const UserManage: React.FC = () => {
                         >
                             <a>批量删除</a>
                         </Popconfirm>
-                        
+
                         <a onClick={onCleanSelected}>清空选择</a>
                     </Space>
                 }
-                request={getUserData}
+                request={getApporver}
+                params={{orderAuthType: 3}}
                 scroll={{ x: 500 }}
                 toolbar={{
                     title:

@@ -297,7 +297,7 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
                 picGroup.push(
                     <Image
                         className={styles.approvalModalPicture}
-                        src={item.images[i]}
+                        src={`http://43.139.11.85:3000/${item.images[i]}`}
                         alt=''
                     />)
             }

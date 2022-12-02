@@ -213,6 +213,11 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                                     message: '此为必填项，请填写',
                                 },
                             ]}
+                            fieldProps={{
+                                showSearch: true,
+                                showArrow: false,
+                            }}
+                            debounceTime={500}
                             request={getResourceID}
                             params={{ condition: 102 }}
                         />
@@ -281,8 +286,6 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                         />
                     </ProFormGroup>
                     <ProFormGroup>
-
-
                         <ProFormSelect
                             name="next_person"
                             label="下一流程处理人"
@@ -294,6 +297,11 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                                     message: '此为必填项，请填写',
                                 },
                             ]}
+                            fieldProps={{
+                                showSearch: true,
+                                showArrow: false
+                            }}
+                            debounceTime={500}
                             request={getApporver}
                             params={{ orderAuthType: 1 }}
                         />
