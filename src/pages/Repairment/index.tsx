@@ -17,6 +17,7 @@ import { failureTypeLabel, priorityList, staticGroup, statusList } from './struc
 import ButtonGroup from 'antd/lib/button/button-group';
 import DetailModal from './components/DetailModal';
 import DraftsTable from './components/DraftsTable';
+import moment from 'moment';
 
 const Repairment: React.FC = () => {
     const [responsive, setResponsive] = useState<boolean>(false);
@@ -136,7 +137,11 @@ const Repairment: React.FC = () => {
             dataIndex: 'finish_date',
             search: false,
             valueType: 'dateTime',
-            sorter: (a, b) => a.finish_date - b.finish_date,
+            sorter: (a, b) => {
+                const atime = new Date(a.finish_date!).getTime();
+                const btime = new Date(b.finish_date!).getTime();
+                return atime - btime
+            }
         },
         // {
         //     key: 'updatedTime',

@@ -245,14 +245,14 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             open={props.drawerOpen}
             onClose={props.onClose}
             // 调试信息
-            extra={
-                <Button
-                    onClick={() => {
-                        console.log(props.value)
-                    }}
+            // extra={
+            //     <Button
+            //         onClick={() => {
+            //             console.log(props.value)
+            //         }}
 
-                >获取console信息</Button>
-            }
+            //     >获取console信息</Button>
+            // }
             destroyOnClose
         >
             <Steps
