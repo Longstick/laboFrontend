@@ -16,6 +16,8 @@ jobs:
         run: |
           npm install
           npm run build
+          pwd
+          ls
 
       - name: ssh-scp-ssh-pipelines
         # You may pin to the exact commit or the version.
@@ -37,7 +39,7 @@ jobs:
           
           # scp from local to remote
           scp: |
-            ./laboFrontend/dist* => /home/ubuntu/dist
+            ./dist* => /home/ubuntu/dist
           
           # execute post-commands after scp
           # last_ssh: # optional
