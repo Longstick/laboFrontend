@@ -39,7 +39,7 @@ jobs:
           
           # scp from local to remote
           scp: |
-            ./dist* => /home/ubuntu/dist
+            ./dist* => /www/laboFrontend/
           
           # execute post-commands after scp
           # last_ssh: # optional
