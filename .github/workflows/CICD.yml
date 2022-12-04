@@ -23,7 +23,7 @@ jobs:
         uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
         with:
           # ssh remote host
-          host: ${{ secrets.SERVER_IP 
+          host: ${{ secrets.SERVER_HOST }}
           
           # ssh remote user
           user: ubuntu
