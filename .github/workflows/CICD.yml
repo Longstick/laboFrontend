@@ -33,7 +33,7 @@ jobs:
           
           # execute pre-commands before scp
           first_ssh: |
-            rm -rf /home/ubuntu
+            rm -rf /home/ubuntu/dist
           
           # scp from local to remote
           scp: |
