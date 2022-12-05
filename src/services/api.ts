@@ -218,9 +218,9 @@ export const getAllUsers = async (
 		}
 		user['authList'] = authlist.sort()
 
-		if (user.systemManage === 1) { user['manageType'] === 'systemManage' }
-		else if (user.equipManage === 1) { user['manageType'] === 'equipmentManage' }
-		else { user['manageType'] === 'none' }
+		if (user.systemManage === 1) { user['manageType'] = 'systemManage' }
+		else if (user.equipManage === 1) { user['manageType'] = 'equipmentManage' }
+		else { user['manageType'] = 'none' }
 	})
 	return {
 		data: res.data.users,
@@ -274,14 +274,14 @@ export const setProcessAuth = async (
 
 export const setManageAuth = async (params: {
 	email: string
-	manageType: string,
+	managetype: string,
 }) => {
 	const body = {
 		...params,
 		isHaveMange: 0,
 		manageType: 0,
 	}
-	switch (params.manageType) {
+	switch (params.managetype) {
 		case 'systemManage': {
 			body['manageType'] = 1
 			body['isHaveMange'] = 1

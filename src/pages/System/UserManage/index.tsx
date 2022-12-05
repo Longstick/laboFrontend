@@ -6,7 +6,7 @@ import { waitTime } from "@/services/utils";
 import ButtonGroup from "antd/lib/button/button-group";
 import { authType, characterType, manageType } from "../struct";
 import { CreateUserForm } from "../components/CreateUserForm";
-import { getAllUsers, getApporver, getCharData, getUserData, setManageAuth, setProcessAuth, setUserAuth } from "@/services/api";
+import { getAllUsers, getApporver, getCharData, getUserData, setManageAuth, setProcessAuth } from "@/services/api";
 
 const UserManage: React.FC = () => {
 
@@ -198,7 +198,7 @@ const UserManage: React.FC = () => {
 
                             res = await setManageAuth({
                                 email: data.email!,
-                                manageType: data.manageType!
+                                managetype: data.manageType!
                             })
                             if (res.code === -1) {
                                 throw new Error('设置管理权限错误')
