@@ -7,11 +7,16 @@ declare namespace API {
     type?: string;
   };
 
-  type PostResult = {
+  type AsyncResult = {
     code?: number;
     data?: any;
     msg?: string;
   }
+
+  type PageParams = {
+    current?: number;
+    pageSize?: number;
+  };
 
   type SignupParams = {
     account?: string;
@@ -37,6 +42,7 @@ declare namespace API {
     isAccept?: number;
     systemManage?: number;
     equipManage?: number;
+    authList?: string[]
   }
 
   // declare type Status = 'error' | 'process' | 'finish' | 'wait';

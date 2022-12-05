@@ -23,10 +23,6 @@ declare namespace API {
     phone?: string;
   };
   
-  type PageParams = {
-    current?: number;
-    pageSize?: number;
-  };
 
   type RuleListItem = {
     key?: number;

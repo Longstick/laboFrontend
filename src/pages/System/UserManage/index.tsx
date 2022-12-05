@@ -6,7 +6,7 @@ import { waitTime } from "@/services/utils";
 import ButtonGroup from "antd/lib/button/button-group";
 import { authType, characterType } from "../struct";
 import { CreateUserForm } from "../components/CreateUserForm";
-import { getApporver, getCharData, getUserData } from "@/services/api";
+import { getAllUsers, getApporver, getCharData, getUserData } from "@/services/api";
 
 const UserManage: React.FC = () => {
 
@@ -22,11 +22,6 @@ const UserManage: React.FC = () => {
             editable: false,
         },
         {
-            key: 'id',
-            title: '学工号',
-            dataIndex: 'id',
-        },
-        {
             key: 'phone',
             title: '联系电话',
             dataIndex: 'phone',
@@ -35,6 +30,11 @@ const UserManage: React.FC = () => {
             key: 'email',
             title: '邮箱',
             dataIndex: 'email',
+        },
+        {
+            key: 'id',
+            title: '系统ID',
+            dataIndex: 'id',
         },
         // {
         //     key: 'character',
@@ -56,40 +56,26 @@ const UserManage: React.FC = () => {
         {
             key: 'authGroup',
             title: '权限组',
+            dataIndex: 'authList',
+            valueType: 'select',
+            fieldProps: {
+                mode: 'multiple'
+            },
+            valueEnum: authType,
             render: (text, record, _, action) => {
-                const authlist = []
-                if (record.isExamine === 1) {
-                    authlist.push('approve')
-                }
-                if (record.isDispatch === 1) {
-                    authlist.push('dispatch')
-                }
-                if (record.isRepair === 1) {
-                    authlist.push('maintain')
-                }
-                if (record.isAccept === 1) {
-                    authlist.push('accept')
-                }
-                if (record.equipManage === 1) {
-                    authlist.push('equipManage')
-                }
-                if (record.systemManage === 1) {
-                    authlist.push('systemManage')
-                }
-
                 const taglist: React.ReactNode[] = []
-                if (authlist?.length === 0) {
+                if (record.authList?.length === 0) {
                     return <>无权限</>
                 }
-                authlist.sort()
-                authlist.forEach(element => {
+                record.authList?.forEach(element => {
                     taglist.push(
                         <Tag>{authType[element]}</Tag>
                     )
                 })
-                return <Space direction='vertical'>
-                    {taglist}
-                </Space>
+                // return <Space direction='vertical'>
+                //     {taglist}
+                // </Space>
+                return <>{taglist}</>
             }
         },
         {
@@ -127,14 +113,14 @@ const UserManage: React.FC = () => {
     ]
     return (
         <PageContainer>
-            <ProTable<API.UserInfo>
-                rowKey='userid'
+            <ProTable<API.UserInfo, API.PageParams>
+                rowKey='id'
                 columns={userTableColumns}
+                request={getAllUsers}
                 rowSelection={
                     rowSelect ?
                         {
                             onChange: (_, selected) => { setSelectedRows(selected) },
-
                             alwaysShowAlert: true,
                         } : false
                 }
@@ -150,7 +136,7 @@ const UserManage: React.FC = () => {
                         <a onClick={onCleanSelected}>清空选择</a>
                     </Space>
                 }
-                
+
                 scroll={{ x: 500 }}
                 toolbar={{
                     title:
@@ -191,7 +177,6 @@ const UserManage: React.FC = () => {
                     },
                     onChange: setEditableKeys,
                     actionRender: (row, config, defaultDom) => [defaultDom.save, defaultDom.cancel],
-
                 }}
 
 
