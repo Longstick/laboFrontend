@@ -150,8 +150,7 @@ const UserManage: React.FC = () => {
                         <a onClick={onCleanSelected}>清空选择</a>
                     </Space>
                 }
-                request={getApporver}
-                params={{orderAuthType: 3}}
+                
                 scroll={{ x: 500 }}
                 toolbar={{
                     title:
