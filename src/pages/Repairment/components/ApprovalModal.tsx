@@ -111,7 +111,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 }]}
                 request={getApporver}
                 params={{
-                    orderAuthType: 1
+                    orderAuthType: 2
                 }}
             />
         </>
@@ -208,7 +208,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
                                     }]}
                                     request={getApporver}
-                                    params={{ orderAuthType: 2 }}
+                                    params={{ orderAuthType: 1 }}
                                     fieldProps={{
                                         showSearch: true,
                                         showArrow: false,
@@ -247,7 +247,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
                                     }]}
                                     request={getApporver}
-                                    params={{ orderAuthType: 2 }}
+                                    params={{ orderAuthType: 1 }}
                                     fieldProps={{
                                         showSearch: true,
                                         showArrow: false,
@@ -288,7 +288,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                         showArrow: false,
                                     }}
                                     request={getApporver}
-                                    params={{ orderAuthType: 2 }}
+                                    params={{ orderAuthType: 1 }}
                                 />
                                 <ProFormText
                                     name="phone"
@@ -405,7 +405,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                     }]}
                     request={getApporver}
                     params={{
-                        orderAuthType: 3
+                        orderAuthType: 4
                     }}
                 />
 

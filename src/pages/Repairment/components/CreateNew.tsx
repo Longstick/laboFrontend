@@ -303,7 +303,7 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                             }}
                             debounceTime={500}
                             request={getApporver}
-                            params={{ orderAuthType: 1 }}
+                            params={{ orderAuthType: 3 }}
                         />
                     </ProFormGroup>
                 </ProCard>

@@ -1,18 +1,19 @@
-import React, { useState } from "react";
-import { ProCard, ProTable, EditableProTable, PageContainer } from "@ant-design/pro-components";
+import React, { useRef, useState } from "react";
+import { ProCard, ProTable, EditableProTable, PageContainer, ActionType } from "@ant-design/pro-components";
 import type { ProColumns } from "@ant-design/pro-components";
 import { Button, message, Popconfirm, Space, TableColumnType, Tag } from "antd";
 import { waitTime } from "@/services/utils";
 import ButtonGroup from "antd/lib/button/button-group";
-import { authType, characterType } from "../struct";
+import { authType, characterType, manageType } from "../struct";
 import { CreateUserForm } from "../components/CreateUserForm";
-import { getApporver, getCharData, getUserData } from "@/services/api";
+import { getAllUsers, getApporver, getCharData, getUserData, setManageAuth, setProcessAuth } from "@/services/api";
 
 const UserManage: React.FC = () => {
 
     const [editableKeys, setEditableKeys] = useState<React.Key[]>([]);
     const [selectRows, setSelectedRows] = useState<API.UserInfo[]>([]);
     const [rowSelect, setRowSelect] = useState<boolean>(false)
+    const actionRef = useRef<ActionType>();
 
     const userTableColumns: ProColumns<API.UserInfo>[] = [
         {
@@ -22,19 +23,23 @@ const UserManage: React.FC = () => {
             editable: false,
         },
         {
+            key: 'email',
+            title: '邮箱',
+            dataIndex: 'email',
+            editable: false,
+
+        },
+        {
             key: 'id',
-            title: '学工号',
+            title: '系统ID',
             dataIndex: 'id',
+            editable: false,
+
         },
         {
             key: 'phone',
             title: '联系电话',
             dataIndex: 'phone',
-        },
-        {
-            key: 'email',
-            title: '邮箱',
-            dataIndex: 'email',
         },
         // {
         //     key: 'character',
@@ -54,42 +59,38 @@ const UserManage: React.FC = () => {
         //     }
         // },
         {
-            key: 'authGroup',
-            title: '权限组',
+            key: 'authList',
+            title: '工单处理权限',
+            dataIndex: 'authList',
+            valueType: 'select',
+            fieldProps: {
+                mode: 'multiple'
+            },
+            valueEnum: authType,
             render: (text, record, _, action) => {
-                const authlist = []
-                if (record.isExamine === 1) {
-                    authlist.push('approve')
-                }
-                if (record.isDispatch === 1) {
-                    authlist.push('dispatch')
-                }
-                if (record.isRepair === 1) {
-                    authlist.push('maintain')
-                }
-                if (record.isAccept === 1) {
-                    authlist.push('accept')
-                }
-                if (record.equipManage === 1) {
-                    authlist.push('equipManage')
-                }
-                if (record.systemManage === 1) {
-                    authlist.push('systemManage')
-                }
-
                 const taglist: React.ReactNode[] = []
-                if (authlist?.length === 0) {
+                if (record.authList?.length === 0) {
                     return <>无权限</>
                 }
-                authlist.sort()
-                authlist.forEach(element => {
+                record.authList?.forEach(element => {
                     taglist.push(
                         <Tag>{authType[element]}</Tag>
                     )
                 })
-                return <Space direction='vertical'>
-                    {taglist}
-                </Space>
+                // return <Space direction='vertical'>
+                //     {taglist}
+                // </Space>
+                return <>{taglist}</>
+            }
+        },
+        {
+            key: 'manageType',
+            title: '管理权限',
+            dataIndex: 'manageType',
+            valueType: 'select',
+            valueEnum: manageType,
+            render: (text, record, _, action) => {
+                return <Tag>{manageType[record.manageType!]}</Tag>
             }
         },
         {
@@ -127,14 +128,15 @@ const UserManage: React.FC = () => {
     ]
     return (
         <PageContainer>
-            <ProTable<API.UserInfo>
-                rowKey='userid'
+            <ProTable<API.UserInfo, API.PageParams>
+                rowKey='id'
+                actionRef={actionRef}
                 columns={userTableColumns}
+                request={getAllUsers}
                 rowSelection={
                     rowSelect ?
                         {
                             onChange: (_, selected) => { setSelectedRows(selected) },
-
                             alwaysShowAlert: true,
                         } : false
                 }
@@ -150,7 +152,7 @@ const UserManage: React.FC = () => {
                         <a onClick={onCleanSelected}>清空选择</a>
                     </Space>
                 }
-                
+
                 scroll={{ x: 500 }}
                 toolbar={{
                     title:
@@ -185,13 +187,34 @@ const UserManage: React.FC = () => {
                     type: 'single',
                     editableKeys,
                     onSave: async (rowKey, data, row) => {
-                        console.log(rowKey, data, row)
-                        await waitTime(1000)
-                        message.success('修改成功！')
-                    },
-                    onChange: setEditableKeys,
-                    actionRender: (row, config, defaultDom) => [defaultDom.save, defaultDom.cancel],
+                        try {
+                            let res = await setProcessAuth({
+                                email: data.email!,
+                                authList: data.authList!,
+                            })
+                            if (res.code === -1) {
+                                throw new Error('设置流程处理权限错误')
+                            }
 
+                            res = await setManageAuth({
+                                email: data.email!,
+                                managetype: data.manageType!
+                            })
+                            if (res.code === -1) {
+                                throw new Error('设置管理权限错误')
+                            }
+
+                            message.success('修改成功！')
+                            actionRef.current?.reloadAndRest?.()
+                        }
+                        catch (error) {
+                            message.error('发生错误，修改失败！')
+                        }
+                    },
+                    onChange: (rowKey, row) => {
+                        setEditableKeys(rowKey)
+                    },
+                    actionRender: (row, config, defaultDom) => [defaultDom.save, defaultDom.cancel],
                 }}
 
 
