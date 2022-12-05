@@ -184,7 +184,7 @@ const Repairment: React.FC = () => {
                 }
 
                 const onProcessButtonClick = async () => {
-                    const res: API.PostResult = await getIssueDetail(record.id)
+                    const res: API.AsyncResult = await getIssueDetail(record.id)
                     // 步骤顺序排序
                     res.data.orderNodes.sort((a: API.OrderNode, b: API.OrderNode) => { return a.current_stage! - b.current_stage! })
                     setCurrentRow(res.data);

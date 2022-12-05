@@ -216,20 +216,99 @@ export const getAllUsers = async (
 		if (user.isAccept === 1) {
 			authlist.push('accept')
 		}
-		if (user.equipManage === 1) {
-			authlist.push('equipManage')
-		}
-		if (user.systemManage === 1) {
-			authlist.push('systemManage')
-		}
 		user['authList'] = authlist.sort()
+
+		if (user.systemManage === 1) { user['manageType'] === 'systemManage' }
+		else if (user.equipManage === 1) { user['manageType'] === 'equipmentManage' }
+		else { user['manageType'] === 'none' }
 	})
 	return {
 		data: res.data.users,
 		success: true,
-		total: res.data.pages
+		total: res.data.count
 	}
 }
+
+
+export const setProcessAuth = async (
+	params: {
+		email: string
+		authList: string[]
+	}
+) => {
+	const body = {
+		...params,
+		isExamine: 0,
+		isDispatch: 0,
+		isRepair: 0,
+		isAccept: 0,
+	}
+	body.authList.forEach((auth) => {
+		switch (auth) {
+			case 'approve': {
+				body['isExamine'] = 1
+				break;
+			}
+			case 'dispatch': {
+				body['isDispatch'] = 1
+				break;
+			} case 'maintain': {
+				body['isRepair'] = 1
+				break;
+			}
+			case 'accept': {
+				body['isAccept'] = 1
+				break;
+			}
+		}
+	})
+	return request<API.AsyncResult>(`${serverIP}/user/setOrderAuth`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		data: body,
+	})
+}
+
+
+export const setManageAuth = async (params: {
+	email: string
+	manageType: string,
+}) => {
+	const body = {
+		...params,
+		isHaveMange: 0,
+		manageType: 0,
+	}
+	switch (params.manageType) {
+		case 'systemManage': {
+			body['manageType'] = 1
+			body['isHaveMange'] = 1
+			break;
+		}
+		case 'equipmentManage': {
+			body['manageType'] = 2
+			body['isHaveMange'] = 1
+			break;
+		}
+		case 'none': {
+			body['manageType'] = 0
+			body['isHaveMange'] = 0
+			break;
+		}
+	}
+	return request<API.AsyncResult>(`${serverIP}/user/setManage`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		data: body,
+	})
+}
+
+
+
 
 
 

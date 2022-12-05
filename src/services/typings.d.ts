@@ -42,7 +42,8 @@ declare namespace API {
     isAccept?: number;
     systemManage?: number;
     equipManage?: number;
-    authList?: string[]
+    authList?: string[];
+    manageType?: string;
   }
 
   // declare type Status = 'error' | 'process' | 'finish' | 'wait';
