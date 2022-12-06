@@ -21,6 +21,7 @@ import React, { useState } from 'react'
 import { stepLabel, issueDescColumns } from '../struct'
 import { getStaff, getDeliveryInfo, getApporver, submitOnProccess, submitOnAcceptance } from '@/services/api'
 import styles from '../index.less'
+import DetailCard from './DetailCard'
 
 const { Title } = Typography
 
@@ -69,7 +70,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
             message.success('提交成功！')
             props.onDrawerClose?.()
-            props.tableActionRef?.current?.reloadAndRest?.()
+            props.tableActionRef?.current?.reload?.()
             return true
         } catch (err) {
             message.error(`提交失败！`)
@@ -157,7 +158,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                             return <ProFormGroup grid>
                                 <ProFormRadio.Group
                                     name="repair_method"
-                                    width='md'
+                                    // width='md'
                                     colProps={{ sm: 12 }}
                                     required
                                     radioType='button'
@@ -363,7 +364,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 <ProFormText
                     name="phone"
                     colProps={{ sm: 12 }}
-                    width='md'
+                    // width="md"
                     required
                     label="联系电话"
                     rules={[{
@@ -374,7 +375,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                         allowClear: true,
                     }}
                 />
-                <ProFormText
+                {/* <ProFormText
                     name="logistics_num"
                     colProps={{ sm: 12 }}
                     width='md'
@@ -387,10 +388,11 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                     fieldProps={{
                         allowClear: true,
                     }}
-                />
+                /> */}
                 <ProFormSelect
                     colProps={{ sm: 12, xs: 16 }}
                     name="next_person"
+                    // width="md"
                     required
                     fieldProps={{
                         showSearch: true,
@@ -509,25 +511,12 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             }}
             onFinish={onFinish}
             grid
+            // layout='horizontal'
         >
-            <ProCard>
-                <ProDescriptions
-                    columns={issueDescColumns}
-                    column={{
-                        xs: 1,
-                        sm: 2,
-                        md: 2,
-                    }}
-                    layout={props.responsive ? 'vertical' : 'horizontal'}
-                    dataSource={props.value}
-                    bordered
-                    labelStyle={{
-                        fontWeight: 'bolder'
-                    }}
-                    size='middle'
-                />
-
-            </ProCard>
+            <DetailCard 
+                value={props.value}
+                responsive={props.responsive}
+            />
             <ProCard>
                 {changeModal}
             </ProCard>

@@ -149,7 +149,7 @@ export const getResourceID = async (condition: number) => {
 	const data: API.ResourceInfo[] = res.data
 	return data.map((value) => {
 		return {
-			label: value.name,
+			label: `${value.identifier} ${value.name}`,
 			value: value.id,
 			key: value.identifier,
 		}

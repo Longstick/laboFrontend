@@ -130,11 +130,11 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                     });
 
                     // 将图片放入form-data中
-                    fileList.forEach((file)=>{
+                    fileList.forEach((file) => {
                         formData.append(file.uid, file.originFileObj!)
                     })
-                    // await waitTime(1000)
                     await createNewIssue(formData);
+                    
                     message.success('提交成功！');
                     setOpen(false);
                     props.tableActionRef?.current?.reload?.()
@@ -186,7 +186,7 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                         max={6}
                         fieldProps={{
                             multiple: true,
-                            beforeUpload: ()=>false,
+                            beforeUpload: () => false,
                             onChange: onPicChange,
                         }}
                         accept="image/*"
