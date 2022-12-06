@@ -242,12 +242,6 @@ export const staticGroup = {
 
 
 export const issueDescColumns: ProDescriptionsItemProps[] = [
-    // {
-    //     title: <FormattedMessage id='pages.repairment.issue.issueTitle' defaultMessage='Issue Title' />,
-    //     dataIndex: 'title',
-    //     span: 2,
-
-    // },
     {
         title: '设备名称',
         dataIndex: ['resource', 'name'],
@@ -264,11 +258,6 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
         title: '设备配置',
         dataIndex: ['resource', 'specifications'],
     },
-    // {
-    //     title: <FormattedMessage id='pages.repairment.issue.issueDescription' defaultMessage='Description' />,
-    //     dataIndex: 'description',
-    //     span: 2,
-    // },
     {
         title: <FormattedMessage id="pages.repairment.issue.failureType" defaultMessage='Failure Type' />,
         dataIndex: 'type',
@@ -295,32 +284,6 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
         dataIndex: 'finish_date',
         valueType: 'dateTime',
     },
-    // {
-    //     title: <FormattedMessage id='pages.repairment.issue.picture' defaultMessage='Picture' />,
-    //     dataIndex: 'images',
-    //     span: 2,
-    //     render: (_, item) => {
-    //         if (item.images.length === 0) {
-    //             return <>暂无图片</>
-    //         }
-    //         const picGroup: ReactNode[] = []
-    //         for (let i = 0; i < item.images.length; i++) {
-    //             picGroup.push(
-    //                 <Image
-    //                     className={styles.approvalModalPicture}
-    //                     src={`http://43.139.11.85:3000/${item.images[i]}`}
-    //                     alt=''
-    //                 />)
-    //         }
-    //         return (
-    //             <Image.PreviewGroup>
-    //                 <Space>
-    //                     {picGroup}
-    //                 </Space>
-    //             </Image.PreviewGroup>
-    //         )
-    //     }
-    // },
 ]
 
 export const ProcesserDetailColumns: ProDescriptionsItemProps[] = [

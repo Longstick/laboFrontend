@@ -13,31 +13,40 @@ export type DetailModalProps = {
     value?: Partial<API.IssueInfo>,
 }
 
-const pictureGroup = (item: API.IssueInfo | undefined) => {
-    if (!item) return <></>
-    if (item.images!.length === 0) return <></>
-    const picGroup: ReactNode[] = []
-    for (let i = 0; i < item.images!.length; i++) {
-        picGroup.push(
-            <Image
-                className={styles.approvalModalPicture}
-                src={`http://43.139.11.85:3000/${item.images![i]}`}
-                alt=''
-            />)
-    }
-    return (
-        <Image.PreviewGroup>
-            <Space>
-                {picGroup}
-            </Space>
-        </Image.PreviewGroup>
-    )
-}
-
 const DetailCard: React.FC<DetailModalProps> = props => {
 
+    const textFormatter = () => {
+        const texts: ReactElement[] = []
+        props.value?.description?.split('\r\n')?.forEach((text) => {
+            texts.push(<>{text}<br /></>)
+        })
+        return texts
+    }
+
+    const pictureGroup = () => {
+        if (!props.value) return <></>
+        if (props.value.images!.length === 0) return <></>
+        const picGroup: ReactNode[] = []
+        for (let i = 0; i < props.value.images!.length; i++) {
+            picGroup.push(
+                <Image
+                    className={styles.approvalModalPicture}
+                    src={`http://43.139.11.85:3000/${props.value.images![i]}`}
+                    alt=''
+                />)
+        }
+        return <>
+            <br />
+            <Image.PreviewGroup>
+                <Space>
+                    {picGroup}
+                </Space>
+            </Image.PreviewGroup>
+        </>
+    }
+
     return (
-        <ProCard bordered>
+        <>
             <Title level={4}>{props.value?.title}</Title>
             <Text type='secondary'>
                 创建时间：{props.value?.create_time}
@@ -45,18 +54,9 @@ const DetailCard: React.FC<DetailModalProps> = props => {
                 创建人：{props.value?.create_person}
             </Text>
             <br /><br />
-            <Text>{
-                // 显示换行
-                function formatten() {
-                    const texts: ReactElement[] = []
-                    props.value?.description?.split('\r\n')?.forEach((text) => {
-                        texts.push(<>{text}<br /></>)
-                    })
-                    return texts
-                }()}</Text>
+            <Text>{textFormatter()}</Text>
 
-            <br />
-            {pictureGroup(props.value)}
+            {pictureGroup()}
 
             <Divider />
             <ProDescriptions
@@ -75,7 +75,7 @@ const DetailCard: React.FC<DetailModalProps> = props => {
                     fontWeight: 'bolder'
                 }}
             />
-        </ProCard>
+        </>
     )
 }
 

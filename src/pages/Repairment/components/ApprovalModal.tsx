@@ -511,12 +511,14 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             }}
             onFinish={onFinish}
             grid
-            // layout='horizontal'
+        // layout='horizontal'
         >
-            <DetailCard 
-                value={props.value}
-                responsive={props.responsive}
-            />
+            <ProCard bordered>
+                <DetailCard
+                    value={props.value}
+                    responsive={props.responsive}
+                />
+            </ProCard>
             <ProCard>
                 {changeModal}
             </ProCard>
