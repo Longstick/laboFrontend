@@ -36,12 +36,12 @@ export default [
     //         },
     //     ],
     // },
-    {
-        path: '/welcome',
-        name: 'welcome',
-        icon: 'smile',
-        component: './Welcome',
-    },
+    // {
+    //     path: '/welcome',
+    //     name: 'welcome',
+    //     icon: 'smile',
+    //     component: './Welcome',
+    // },
     // {
     //     path: '/admin',
     //     name: 'admin',
@@ -105,18 +105,20 @@ export default [
             {
                 name: 'Real-Time Statistics',
                 path: '/statistics/realtime',
+                icon: 'lineChart',
                 component: './Statistics/RealTimeStatistic'
             },
             {
                 name: 'Maintenance Data',
                 path: '/statistics/maintenancedata',
+                icon: 'sliders',
                 component: './Statistics/MaintenanceData'
             },
         ]
     },
     {
         path: '/',
-        redirect: '/welcome',
+        redirect: '/repair',
     },
     {
         path: '*',

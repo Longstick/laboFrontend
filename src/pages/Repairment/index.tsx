@@ -3,7 +3,7 @@
 import { getIssueDetail, getIssueList, getTodoList, issueTableRule } from '@/services/api';
 import { PageContainer, ProTable, ProCard, TableDropdown } from '@ant-design/pro-components';
 
-import { Button, Tag, Badge, Space } from 'antd';
+import { Button, Tag, Badge, Space, Modal } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
 import type { ProColumns, ActionType, ColumnsState } from '@ant-design/pro-components';
 
@@ -15,7 +15,7 @@ import CreateNew from './components/CreateNew';
 import styles from './index.less';
 import { failureTypeLabel, priorityList, staticGroup, statusList } from './struct';
 import ButtonGroup from 'antd/lib/button/button-group';
-import DetailModal from './components/DetailModal';
+import DetailCard from './components/DetailCard';
 import DraftsTable from './components/DraftsTable';
 import moment from 'moment';
 
@@ -81,11 +81,14 @@ const Repairment: React.FC = () => {
         //     search: false,
         // },
         {
-            key: 'resource_id',
+            key: 'resource',
             title: '工作对象',
             dataIndex: ['resource', 'name'],
             ellipsis: true,
             search: false,
+            render: (text, record, _, action) => {
+                return `${record.resource?.identifier} ${record.resource?.name}`
+            }
         },
         {
             key: 'type',
@@ -344,12 +347,18 @@ const Repairment: React.FC = () => {
                             value={currentRow!}
                         />
 
-                        <DetailModal
-                            isOpen={detailModalOpen}
-                            onClose={onCloseDetailModal}
-                            responsive={responsive}
-                            value={currentRow}
-                        />
+                        <Modal
+                            open={detailModalOpen}
+                            onCancel={onCloseDetailModal}
+                            footer={null}
+                            title={`工单 ${currentRow?.identifier} 详情`}
+                            width={800}
+                        >
+                            <DetailCard
+                                responsive={responsive}
+                                value={currentRow}
+                            />
+                        </Modal>
                     </>
                 ) : (
                     <DraftsTable />

@@ -89,6 +89,9 @@ const UserManage: React.FC = () => {
             dataIndex: 'manageType',
             valueType: 'select',
             valueEnum: manageType,
+            fieldProps:{
+                allowClear: false,
+            },
             render: (text, record, _, action) => {
                 return <Tag>{manageType[record.manageType!]}</Tag>
             }
