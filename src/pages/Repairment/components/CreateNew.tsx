@@ -14,10 +14,11 @@ import {
     ActionType,
     ProFormTimePicker,
     ProFormDateTimePicker,
+    ProForm,
 } from '@ant-design/pro-components';
 import type { ProFormInstance } from '@ant-design/pro-components';
 
-import { Button, message, Popconfirm } from 'antd';
+import { Button, message, Popconfirm, Upload } from 'antd';
 import { FormattedMessage } from '@umijs/max';
 
 import React, { useState, useRef } from 'react';
@@ -27,7 +28,7 @@ import moment from 'moment';
 import { createNewIssue, getApporver, getResourceID, getStaff } from '@/services/api';
 import { failureTypeLabel, priorityList } from '../struct';
 import type { UploadFile } from 'antd/es/upload';
-import { UploadChangeParam } from 'antd/lib/upload';
+import type { UploadChangeParam } from 'antd/lib/upload';
 
 export type CreateNewModalProps = {
     type?: 'newButton' | 'editLink';
@@ -48,6 +49,7 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
         await waitTime(1000);
         const value = formRef.current?.getFieldsFormatValue?.(true);
         setOpen(false);
+        setFileList([])
     };
 
     const onPicChange = (info: UploadChangeParam) => {
@@ -134,10 +136,12 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                         formData.append(file.uid, file.originFileObj!)
                     })
                     await createNewIssue(formData);
-                    
+
                     message.success('提交成功！');
                     setOpen(false);
+                    setFileList([]);
                     props.tableActionRef?.current?.reload?.()
+
                     return true;
                 } catch (e) {
                     message.error('提交失败！');
@@ -178,25 +182,42 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                         ]}
                     />
 
+
+                    {/* <ProForm.Item label='上传'>
+                        <Upload
+                            name='images'
+                            listType='picture-card'
+                            maxCount={3}
+                            fileList={fileList}
+                            multiple
+                            beforeUpload={(file, filelist) => {
+                                if (filelist.length + fileList.length > 6) {
+                                    message.error('只能上传六张')
+                                    return false
+                                }
+                                return false
+                            }}
+                            onChange={onPicChange}
+                            // accept="image/*"
+                        >
+                            123123
+                            </Upload></ProForm.Item> */}
+
                     <ProFormUploadButton
-                        // name="images"
+                        name="images"
                         label="上传相关图片"
                         key="images"
                         listType="picture-card"
+                        value={fileList}
                         max={6}
                         fieldProps={{
+                            maxCount: 6,
                             multiple: true,
-                            beforeUpload: () => false,
+                            beforeUpload: ()=>false,
                             onChange: onPicChange,
                         }}
                         accept="image/*"
-                        extra={
-                            <FormattedMessage id="component.uploadPic.limit3" defaultMessage="up to 6 photos" />
-                        }
-                    // rules={[{
-                    //     required: true,
-                    //     message: '此为必填项，请填写'
-                    // }]}
+                        extra='最多上传六张照片，图片格式支持 .jpg / .png / .jpeg'
                     />
                 </ProCard>
 
