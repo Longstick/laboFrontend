@@ -89,7 +89,7 @@ const UserManage: React.FC = () => {
             dataIndex: 'manageType',
             valueType: 'select',
             valueEnum: manageType,
-            fieldProps:{
+            fieldProps: {
                 allowClear: false,
             },
             render: (text, record, _, action) => {
@@ -209,8 +209,7 @@ const UserManage: React.FC = () => {
 
                             message.success('修改成功！')
                             actionRef.current?.reloadAndRest?.()
-                        }
-                        catch (error) {
+                        } catch (error) {
                             message.error('发生错误，修改失败！')
                         }
                     },
