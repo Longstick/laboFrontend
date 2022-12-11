@@ -48,7 +48,7 @@ const Signup = () => {
         } catch (error: any) {
             console.log(error)
             message.error(error.response?.data?.msg)
-            throw new Error('getCaptcha failed')
+
         }
     }
 
@@ -89,7 +89,6 @@ const Signup = () => {
             }
         } catch (error: any) {
             console.log(error?.response?.data?.data)
-            // message.error(error?.)
         }
         setloading(false)
     }

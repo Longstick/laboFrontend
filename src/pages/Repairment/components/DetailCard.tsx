@@ -38,9 +38,9 @@ const DetailCard: React.FC<DetailModalProps> = props => {
         return <>
             <br />
             <Image.PreviewGroup>
-                <Space>
+                {/* <Space> */}
                     {picGroup}
-                </Space>
+                {/* </Space> */}
             </Image.PreviewGroup>
         </>
     }

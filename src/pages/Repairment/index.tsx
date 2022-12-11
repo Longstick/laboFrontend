@@ -62,7 +62,7 @@ const Repairment: React.FC = () => {
             key: 'identifier',
             title: '工单ID',
             dataIndex: 'identifier',
-            search: false,
+            search: false,            
             // width: '10%',
         },
         {
@@ -146,6 +146,23 @@ const Repairment: React.FC = () => {
                 return atime - btime
             }
         },
+        {
+            key: 'create_time',
+            title: '创建时间',
+            dataIndex: 'create_time',
+            search: false,
+            valueType: 'dateTime',
+            sorter: (a, b) => {
+                const atime = new Date(a.create_time!).getTime();
+                const btime = new Date(b.create_time!).getTime();
+                return atime - btime
+            },
+            defaultSortOrder: 'descend',
+            hideInTable: true
+            
+        },
+        
+        
         // {
         //     key: 'updatedTime',
         //     title: (<FormattedMessage
@@ -351,7 +368,7 @@ const Repairment: React.FC = () => {
                             open={detailModalOpen}
                             onCancel={onCloseDetailModal}
                             footer={null}
-                            title={`工单 ${currentRow?.identifier} 详情`}
+                            // title={`工单 ${currentRow?.identifier} 详情`}
                             width={800}
                         >
                             <DetailCard
