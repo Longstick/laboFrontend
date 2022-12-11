@@ -4,7 +4,7 @@ import type { DatePickerProps } from 'antd';
 import moment from 'moment';
 import RcResizeObserver from 'rc-resize-observer';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
-import { NewIssues, NewUsers, TotalIssues, TotalUsers, UsersPie } from '../components/charts';
+import { NewIssues, NewUsers, TotalIssues, TotalUsers, UsersPie } from '../../../components/Charts/charts';
 import { RightOutlined } from '@ant-design/icons';
 import styles from '../index.less'
 

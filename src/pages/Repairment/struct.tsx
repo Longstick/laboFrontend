@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-key */
-import { ProCard, } from "@ant-design/pro-components";
+import { ProCard, StatisticCard, } from "@ant-design/pro-components";
 import type { ProDescriptionsItemProps } from "@ant-design/pro-components"
 import { FormattedMessage } from "@umijs/max"
 import { Typography, Statistic, Tag, Image, Space } from "antd";
 import type { ReactNode } from "react"
 import styles from "./index.less"
+import { NewIssues } from "@/components/Charts/charts";
 
 const { Title, Paragraph, Text } = Typography
 
@@ -148,95 +149,104 @@ export const popContent = {
 
 export const staticGroup = {
     'all': [
-        <ProCard>
+        <StatisticCard>
             <Statistic
                 title={<FormattedMessage id='pages.repairment.all.statisticsData.newIssuesToday' defaultMessage="New Issues Today" />}
                 value={34} />
-        </ProCard>,
-        <ProCard>
+        </StatisticCard>,
+        <StatisticCard>
             <Statistic
                 title={<FormattedMessage id='pages.repairment.all.statisticsData.totalIssues' defaultMessage="Total Issues" />}
                 value={10245} />
-        </ProCard>,
-        <ProCard>
+        </StatisticCard>,
+        <StatisticCard>
             <Statistic
                 title={<FormattedMessage id='pages.repairment.all.statisticsData.highPriority' defaultMessage='High Priority' />}
                 value={842} />
-        </ProCard>,
-        <ProCard>
+        </StatisticCard>,
+        <StatisticCard>
             <Statistic
                 title={<FormattedMessage id='pages.repairment.all.statisticsData.overdueIssue' defaultMessage="Overdue" />}
                 value={86} />
-        </ProCard>
+        </StatisticCard>
     ],
 
     'to-do': [
-        <ProCard>
-            <Statistic
-                title={<FormattedMessage id='pages.repairment.statisticsData.newIssueToday' defaultMessage="New To-do Issues Today" />}
-                value={15} />
-        </ProCard>,
-        <ProCard>
-            <Statistic
-                title={<FormattedMessage id='pages.repairment.statisticsData.totalTodoIssues' defaultMessage="Total To-do Issues" />}
-                value={7502} />
-        </ProCard>,
-        <ProCard>
-            <Statistic
-                title={<FormattedMessage id='pages.repairment.statisticsData.highPriority' defaultMessage='High Priority' />}
-                value={344} />
-        </ProCard>,
-        <ProCard>
+        <StatisticCard
+            statistic={{
+                title: '今日新增',
+                value: 15,
+            }}
+            chart={<NewIssues height={100} autoFit/>}
+            chartPlacement='right'
+        />,
+        <StatisticCard
+            statistic={{
+                title: '总计待处理',
+                value: 142,
+            }}
+            chart={<NewIssues height={100} autoFit/>}
+            chartPlacement='right'
+        />,
+        <StatisticCard
+            statistic={{
+                title: '高优先级',
+                value: 42,
+            }}
+            chart={<NewIssues height={100} autoFit/>}
+            chartPlacement='right'
+        />,
+        <StatisticCard>
             <Statistic
                 title={<FormattedMessage id='pages.repairment.statisticsData.overdueIssue' defaultMessage='Overdue' />}
                 value={75} />
-        </ProCard>
+        </StatisticCard>
     ],
 
     'mySubmission': [
-        <ProCard>
+        <StatisticCard>
             <Statistic
                 title='今日提交'
                 value={1} />
-        </ProCard>,
-        <ProCard>
+        </StatisticCard>,
+        <StatisticCard>
             <Statistic
                 title='累计提交'
                 value={70} />
-        </ProCard>,
-        <ProCard>
+        </StatisticCard>,
+        <StatisticCard>
             <Statistic
                 title='已完成'
                 value={65} />
-        </ProCard>,
-        <ProCard>
+        </StatisticCard>,
+        <StatisticCard>
             <Statistic
                 title='已逾期'
                 value={2} />
-        </ProCard>
+        </StatisticCard>
     ],
 
     'myCompleted': [
-        <ProCard>
+        <StatisticCard>
             <Statistic
                 title='今日已处理'
                 value={3} />
-        </ProCard>,
-        <ProCard>
+        </StatisticCard>,
+        <StatisticCard>
             <Statistic
                 title='累计已处理'
                 value={155} />
-        </ProCard>,
-        <ProCard>
+        </StatisticCard>,
+        <StatisticCard>
             <Statistic
                 title='高优先级'
                 value={61} />
-        </ProCard>,
-        <ProCard>
+        </StatisticCard>,
+        <StatisticCard>
             <Statistic
                 title='已逾期'
                 value={7} />
-        </ProCard>
+        </StatisticCard>
     ]
 }
 
