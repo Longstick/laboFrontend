@@ -3,7 +3,7 @@ import RcResizeObserver from 'rc-resize-observer';
 
 import moment from 'moment';
 import React, { useState } from 'react';
-import { MaintenanceLine } from '../components/charts';
+import { MaintenanceLine } from '../../../components/Charts/charts';
 
 const { Statistic } = StatisticCard
 

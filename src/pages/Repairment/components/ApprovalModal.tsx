@@ -51,7 +51,6 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 });
                 formData.append('orderId', props.value!.id!)
                 formData.append('status', '1')
-                // await waitTime(1000)
                 await submitOnAcceptance(formData);
             }
             // 前三个流程复用同一个API函数，通过currentStage控制接口地址
@@ -70,7 +69,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
             message.success('提交成功！')
             props.onDrawerClose?.()
-            props.tableActionRef?.current?.reload?.()
+            props.tableActionRef?.current?.reloadAndRest?.()
             return true
         } catch (err) {
             message.error(`提交失败！`)

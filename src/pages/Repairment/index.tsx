@@ -1,7 +1,7 @@
 // 维修管理系统主体
 
 import { getIssueDetail, getIssueList, getTodoList, issueTableRule } from '@/services/api';
-import { PageContainer, ProTable, ProCard, TableDropdown } from '@ant-design/pro-components';
+import { PageContainer, ProTable, ProCard, TableDropdown, StatisticCard } from '@ant-design/pro-components';
 
 import { Button, Tag, Badge, Space, Modal } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
@@ -17,7 +17,6 @@ import { failureTypeLabel, priorityList, staticGroup, statusList } from './struc
 import ButtonGroup from 'antd/lib/button/button-group';
 import DetailCard from './components/DetailCard';
 import DraftsTable from './components/DraftsTable';
-import moment from 'moment';
 
 const Repairment: React.FC = () => {
     const [responsive, setResponsive] = useState<boolean>(false);
@@ -308,14 +307,14 @@ const Repairment: React.FC = () => {
             >
                 {activeKey !== 'drafts' ? (
                     <>
-                        <ProCard.Group
+                        <StatisticCard.Group
                             direction={responsive ? 'column' : 'row'}
                             ghost
                             gutter={[12, 12]}
                             className={styles.statisticsBaseCard}
                         >
                             {staticGroup[activeKey]}
-                        </ProCard.Group>
+                        </StatisticCard.Group>
 
                         <ProTable<API.IssueInfo, API.PageParams>
                             columns={columns}
@@ -362,6 +361,7 @@ const Repairment: React.FC = () => {
                             drawerOpen={processDrawerOpen}
                             onClose={onCloseProcessDrawer}
                             value={currentRow!}
+                            tableActionRef={actionRef}
                         />
 
                         <Modal

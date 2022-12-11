@@ -276,6 +276,12 @@ export const setManageAuth = async (params: {
 	email: string
 	managetype: string,
 }) => {
+	//因后端逻辑，更改系统权限之前需要先调用一次接口取消掉之前的管理权限，否则权限会冲突
+	const cancelBody = {
+		...params,
+		isHaveMange: 0,
+		manageType: 0,
+	}
 	const body = {
 		...params,
 		isHaveMange: 0,
@@ -283,21 +289,35 @@ export const setManageAuth = async (params: {
 	}
 	switch (params.managetype) {
 		case 'systemManage': {
+			cancelBody['manageType'] = 2
+			cancelBody['isHaveMange'] = 0
 			body['manageType'] = 1
 			body['isHaveMange'] = 1
 			break;
 		}
 		case 'equipmentManage': {
+			cancelBody['manageType'] = 1
+			cancelBody['isHaveMange'] = 0
 			body['manageType'] = 2
 			body['isHaveMange'] = 1
 			break;
 		}
 		case 'none': {
-			body['manageType'] = 0
+			cancelBody['manageType'] = 1
+			cancelBody['isHaveMange'] = 0
+			body['manageType'] = 2
 			body['isHaveMange'] = 0
 			break;
 		}
 	}
+	await request<API.AsyncResult>(`${serverIP}/user/setManage`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		data: cancelBody,
+	})
+	
 	return request<API.AsyncResult>(`${serverIP}/user/setManage`, {
 		method: 'POST',
 		headers: {

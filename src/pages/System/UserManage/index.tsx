@@ -191,20 +191,20 @@ const UserManage: React.FC = () => {
                     editableKeys,
                     onSave: async (rowKey, data, row) => {
                         try {
-                            let res = await setProcessAuth({
-                                email: data.email!,
-                                authList: data.authList!,
-                            })
-                            if (res.code === -1) {
-                                throw new Error('设置流程处理权限错误')
-                            }
-
-                            res = await setManageAuth({
+                            let res = await setManageAuth({
                                 email: data.email!,
                                 managetype: data.manageType!
                             })
                             if (res.code === -1) {
                                 throw new Error('设置管理权限错误')
+                            }
+
+                            res = await setProcessAuth({
+                                email: data.email!,
+                                authList: data.authList!,
+                            })
+                            if (res.code === -1) {
+                                throw new Error('设置流程处理权限错误')
                             }
 
                             message.success('修改成功！')

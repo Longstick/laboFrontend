@@ -169,6 +169,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                                         value={props.value}
                                         responsive={props.responsive}
                                         onDrawerClose={props.onClose}
+                                        tableActionRef={props.tableActionRef}
                                     >{stepLabel[step - 1]}</ApprovalModal>
                                     &nbsp;&nbsp;
                                     <Button
@@ -258,37 +259,13 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             <Steps
                 direction="vertical"
                 current={(props.value?.orderNodes?.length ?? 1) - 1}
-            // status={{
-            //     0: 'error',
-            //     1: 'finish',
-            //     2: 'process',
-            // }[props.value.status!]}
             >
                 {stepItem(1)}
                 {stepItem(2)}
                 {stepItem(3)}
                 {stepItem(4)}
                 {stepItem(5)}
-                {/* <Step
-                    title={stepLabel[0]}
-                    description={stepItem(1)}
-                />
-                <Step
-                    title={stepLabel[1]}
-                    description={stepItem(2)}
-                />
-                <Step
-                    title={stepLabel[2]}
-                    description={stepItem(3)}
-                />
-                <Step
-                    title={stepLabel[3]}
-                    description={stepItem(4)}
-                />
-                <Step
-                    title={stepLabel[4]}
-                    description={stepItem(5)}
-                /> */}
+
             </Steps>
         </Drawer>
     );
