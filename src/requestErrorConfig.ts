@@ -30,7 +30,7 @@ export const errorConfig: RequestConfig = {
     // 错误抛出
     errorThrower: (res: API.AsyncResult) => {
       const { data, msg, code } = res 
-      if (code != 1) {
+      if (code === -1) {
         const error: any = new Error(msg);
         error.name = 'BizError';
         error.info = { code, msg, data };
@@ -69,7 +69,7 @@ export const errorConfig: RequestConfig = {
           }
         }
       } else if (error.response) {
-        message.error('内部错误，请稍后重试！')
+        message.error('服务器错误，请稍后重试！')
         // Axios 的错误
         // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
         // message.error('Response status:', error.response.status);
@@ -98,7 +98,7 @@ export const errorConfig: RequestConfig = {
       const authHeader = { Authorization: window.localStorage.getItem('token') };
       return {
         url: `${url}`,
-        options: { ...options, interceptors: true, headers: authHeader },
+        options: { ...options, interceptors: true, headers: authHeader, 'Access-Control-Allow-Origin': '*'},
       }
     },
   ],

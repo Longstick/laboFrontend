@@ -18,6 +18,8 @@ import ButtonGroup from 'antd/lib/button/button-group';
 import DetailCard from './components/DetailCard';
 import DraftsTable from './components/DraftsTable';
 
+const { Statistic } = StatisticCard
+
 const Repairment: React.FC = () => {
     const [responsive, setResponsive] = useState<boolean>(false);
     const [currentRow, setCurrentRow] = useState<API.IssueInfo>();
@@ -56,12 +58,40 @@ const Repairment: React.FC = () => {
         );
     };
 
+    const tabs = [
+        {
+            key: 'all',
+            title: '所有工单',
+            value: 12334,
+        },
+        {
+            key: 'to-do',
+            title: '我的待办',
+            value: 123,
+        },
+        {
+            key: 'myCompleted',
+            title: '我的已完成',
+            value: 213,
+        },
+        {
+            key: 'mySubmission',
+            title: '我的工单',
+            value: 152,
+        },
+        {
+            key: 'drafts',
+            title: '草稿箱',
+            value: 223,
+        },
+    ]
+
     const columns: ProColumns<API.IssueInfo>[] = [
         {
             key: 'identifier',
             title: '工单ID',
             dataIndex: 'identifier',
-            search: false,            
+            // search: false,            
             // width: '10%',
         },
         {
@@ -84,7 +114,7 @@ const Repairment: React.FC = () => {
             title: '工作对象',
             dataIndex: ['resource', 'name'],
             ellipsis: true,
-            search: false,
+            // search: false,
             render: (text, record, _, action) => {
                 return `${record.resource?.identifier} ${record.resource?.name}`
             }
@@ -158,10 +188,10 @@ const Repairment: React.FC = () => {
             },
             defaultSortOrder: 'descend',
             hideInTable: true
-            
+
         },
-        
-        
+
+
         // {
         //     key: 'updatedTime',
         //     title: (<FormattedMessage
@@ -252,32 +282,32 @@ const Repairment: React.FC = () => {
             }}
         >
             <PageContainer
-                onTabChange={(key) => {
-                    setActiveKey(key as string);
-                    actionRef.current?.reloadAndRest?.();
-                }}
-                tabList={[
-                    {
-                        key: 'all',
-                        tab: '所有工单',
-                    },
-                    {
-                        key: 'to-do',
-                        tab: <span>我的待办{renderBadge(15, activeKey === 'to-do')}</span>,
-                    },
-                    {
-                        key: 'myCompleted',
-                        tab: <span>我的已处理{renderBadge(35, activeKey === 'myCompleted')}</span>,
-                    },
-                    {
-                        key: 'mySubmission',
-                        tab: '我的工单',
-                    },
-                    {
-                        key: 'drafts',
-                        tab: '草稿箱',
-                    },
-                ]}
+                // onTabChange={(key) => {
+                //     setActiveKey(key as string);
+                //     actionRef.current?.reloadAndRest?.();
+                // }}
+                // tabList={[
+                //     {
+                //         key: 'all',
+                //         tab: '所有工单',
+                //     },
+                //     {
+                //         key: 'to-do',
+                //         tab: <span>我的待办{renderBadge(15, activeKey === 'to-do')}</span>,
+                //     },
+                //     {
+                //         key: 'myCompleted',
+                //         tab: <span>我的已处理{renderBadge(35, activeKey === 'myCompleted')}</span>,
+                //     },
+                //     {
+                //         key: 'mySubmission',
+                //         tab: '我的工单',
+                //     },
+                //     {
+                //         key: 'drafts',
+                //         tab: '草稿箱',
+                //     },
+                // ]}
                 extra={
                     <Space size={16}>
                         <CreateNew type="newButton" tableActionRef={actionRef} />
@@ -305,16 +335,37 @@ const Repairment: React.FC = () => {
                     </Space>
                 }
             >
+                <StatisticCard.Group ghost gutter={[12, 12]} className={styles.statisticsBaseCard}>
+                    {function tabsRender() {
+                        return tabs.map((item) =>
+                            <StatisticCard
+                                key='tabs'
+                                statistic={{
+                                    title: <div className={styles.StatisticTitle}>{item.title}</div>,
+                                    value: item.value,
+                                }}
+                                hoverable
+                                className={activeKey === item.key ? styles.isActive : styles.statisticsCard}
+                                onClick={() => {
+                                    setActiveKey(item.key)
+                                    actionRef.current?.reloadAndRest?.();
+                                }}
+                            />
+                        )
+
+                    }()}
+
+                </StatisticCard.Group>
                 {activeKey !== 'drafts' ? (
                     <>
-                        <StatisticCard.Group
+                        {/* <ProCard.Group
                             direction={responsive ? 'column' : 'row'}
-                            ghost
+                            // ghost
                             gutter={[12, 12]}
                             className={styles.statisticsBaseCard}
                         >
                             {staticGroup[activeKey]}
-                        </StatisticCard.Group>
+                        </ProCard.Group> */}
 
                         <ProTable<API.IssueInfo, API.PageParams>
                             columns={columns}
@@ -335,14 +386,34 @@ const Repairment: React.FC = () => {
                                         alwaysShowAlert: true,
                                     } : false}
                             search={{
-                                optionRender: false,
-                                collapsed: false,
-                                filterType: 'light',
-                                labelWidth: 'auto',
-                                // showHiddenNum: true,
+                                // filterType: 'light',
+
                             }}
                             toolbar={{
-                                search: true,
+                                title: <Space size={16}>
+                                    <CreateNew type="newButton" tableActionRef={actionRef} />
+                                    <ButtonGroup>
+                                        <Button key="outputAll" size="large">
+                                            导出全部
+                                        </Button>
+
+                                        {rowSelect ?
+                                            <Button
+                                                key='cancelOperate'
+                                                size='large'
+                                                danger
+                                                onClick={() => { setRowSelect(false) }}
+                                            >取消操作</Button>
+                                            :
+                                            <Button
+                                                key="outputSelected"
+                                                size="large"
+                                                onClick={() => { setRowSelect(true) }}
+                                            >批量操作</Button>
+                                        }
+
+                                    </ButtonGroup>
+                                </Space>
                             }}
                             tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
                                 <Space size={24}>
