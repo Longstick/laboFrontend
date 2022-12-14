@@ -66,7 +66,7 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                 props.type === 'newButton' ? (
                     <Button
                         type="primary"
-                        size="large"
+                        // size="large"
                         onClick={() => {
                             setOpen(true);
                         }}

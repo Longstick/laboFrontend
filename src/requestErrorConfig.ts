@@ -95,17 +95,20 @@ export const errorConfig: RequestConfig = {
 
   // 首部添加Auth
     (url: string, options: RequestConfig) => {
-      const authHeader = { Authorization: window.localStorage.getItem('token') };
+      const authHeader = { 
+        Authorization: window.localStorage.getItem('token'),
+        // 'Access-Control-Allow-Origin': '*'
+      };
       return {
         url: `${url}`,
-        options: { ...options, interceptors: true, headers: authHeader, 'Access-Control-Allow-Origin': '*'},
+        options: { ...options, interceptors: true, headers: authHeader},
       }
     },
   ],
 
   // 响应拦截器
   responseInterceptors: [
-    (response) => {
+    (response: ResponseStructure) => {
       // 拦截响应数据，进行个性化处理
       // const { data } = response as unknown as ResponseStructure;
       return response;

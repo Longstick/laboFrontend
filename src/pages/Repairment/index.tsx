@@ -223,6 +223,7 @@ const Repairment: React.FC = () => {
             search: false,
             width: responsive ? 60 : 200,
             fixed: 'right',
+            align: 'center',
             render: (text, record, _, action) => {
                 const len = record.has_person?.length
 
@@ -308,32 +309,32 @@ const Repairment: React.FC = () => {
                 //         tab: '草稿箱',
                 //     },
                 // ]}
-                extra={
-                    <Space size={16}>
-                        <CreateNew type="newButton" tableActionRef={actionRef} />
-                        <ButtonGroup>
-                            <Button key="outputAll" size="large">
-                                导出全部
-                            </Button>
+                // extra={
+                //     <Space size={16}>
+                //         <CreateNew type="newButton" tableActionRef={actionRef} />
+                //         <ButtonGroup>
+                //             <Button key="outputAll" size="large">
+                //                 导出全部
+                //             </Button>
 
-                            {rowSelect ?
-                                <Button
-                                    key='cancelOperate'
-                                    size='large'
-                                    danger
-                                    onClick={() => { setRowSelect(false) }}
-                                >取消操作</Button>
-                                :
-                                <Button
-                                    key="outputSelected"
-                                    size="large"
-                                    onClick={() => { setRowSelect(true) }}
-                                >批量操作</Button>
-                            }
+                //             {rowSelect ?
+                //                 <Button
+                //                     key='cancelOperate'
+                //                     size='large'
+                //                     danger
+                //                     onClick={() => { setRowSelect(false) }}
+                //                 >取消操作</Button>
+                //                 :
+                //                 <Button
+                //                     key="outputSelected"
+                //                     size="large"
+                //                     onClick={() => { setRowSelect(true) }}
+                //                 >批量操作</Button>
+                //             }
 
-                        </ButtonGroup>
-                    </Space>
-                }
+                //         </ButtonGroup>
+                //     </Space>
+                // }
             >
                 <StatisticCard.Group ghost gutter={[12, 12]} className={styles.statisticsBaseCard}>
                     {function tabsRender() {
@@ -393,21 +394,21 @@ const Repairment: React.FC = () => {
                                 title: <Space size={16}>
                                     <CreateNew type="newButton" tableActionRef={actionRef} />
                                     <ButtonGroup>
-                                        <Button key="outputAll" size="large">
+                                        <Button key="outputAll">
                                             导出全部
                                         </Button>
 
                                         {rowSelect ?
                                             <Button
                                                 key='cancelOperate'
-                                                size='large'
+                                                // size='large'
                                                 danger
                                                 onClick={() => { setRowSelect(false) }}
                                             >取消操作</Button>
                                             :
                                             <Button
                                                 key="outputSelected"
-                                                size="large"
+                                                // size="large"
                                                 onClick={() => { setRowSelect(true) }}
                                             >批量操作</Button>
                                         }
