@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { ProCard, ProTable, EditableProTable, PageContainer, ActionType } from "@ant-design/pro-components";
 import type { ProColumns } from "@ant-design/pro-components";
-import { Button, message, Popconfirm, Space, TableColumnType, Tag } from "antd";
+import { Button, message, Popconfirm, Space, TableColumnType, Tag, Typography } from "antd";
 import { waitTime } from "@/services/utils";
 import ButtonGroup from "antd/lib/button/button-group";
 import { authType, characterType, manageType } from "../struct";
@@ -102,31 +102,34 @@ const UserManage: React.FC = () => {
             title: '操作',
             dataIndex: 'operate',
             hideInSearch: true,
+            fixed: 'right',
+            align: 'center',
             render: (text, record, _, action) =>
-                <Space>
-                    <Button
-                        type='primary'
-                        key='editable'
-                        onClick={() => {
-                            action?.startEditable?.(record.id!)
-                        }}
-                    >修改</Button>
-                    <Popconfirm
-                        title={<>确认删除该用户吗？<br />将无法还原数据!</>}
-                        onConfirm={async () => {
-                            try {
-                                await waitTime(500)
-                                message.success('删除成功！')
-                            } catch (err) {
-                                message.error('删除失败！')
-                            }
-                        }}
-                    >
+                record.auth === 3 ? <>超管无法修改权限</> :
+                    <Space>
                         <Button
-                            key='delete'
-                        >删除</Button>
-                    </Popconfirm>
-                </Space>
+                            type='primary'
+                            key='editable'
+                            onClick={() => {
+                                action?.startEditable?.(record.id!)
+                            }}
+                        >修改</Button>
+                        <Popconfirm
+                            title={<>确认删除该用户吗？<br />将无法还原数据!</>}
+                            onConfirm={async () => {
+                                try {
+                                    await waitTime(500)
+                                    message.success('删除成功！')
+                                } catch (err) {
+                                    message.error('删除失败！')
+                                }
+                            }}
+                        >
+                            <Button
+                                key='delete'
+                            >删除</Button>
+                        </Popconfirm>
+                    </Space>
         },
     ]
     return (
@@ -135,6 +138,8 @@ const UserManage: React.FC = () => {
                 rowKey='id'
                 actionRef={actionRef}
                 columns={userTableColumns}
+                scroll={{ x: 1200 }}
+                tableLayout="fixed"
                 request={getAllUsers}
                 rowSelection={
                     rowSelect ?
@@ -156,7 +161,6 @@ const UserManage: React.FC = () => {
                     </Space>
                 }
 
-                scroll={{ x: 500 }}
                 toolbar={{
                     title:
                         <Space size={16}>
@@ -191,12 +195,12 @@ const UserManage: React.FC = () => {
                     editableKeys,
                     onSave: async (rowKey, data, row) => {
                         try {
-                            let res = await setManageAuth({
+                            let res: API.AsyncResult = await setManageAuth({
                                 email: data.email!,
                                 managetype: data.manageType!
                             })
                             if (res.code === -1) {
-                                throw new Error('设置管理权限错误')
+                                throw new Error(res.msg)
                             }
 
                             res = await setProcessAuth({
@@ -204,13 +208,13 @@ const UserManage: React.FC = () => {
                                 authList: data.authList!,
                             })
                             if (res.code === -1) {
-                                throw new Error('设置流程处理权限错误')
+                                throw new Error(res.msg)
                             }
 
                             message.success('修改成功！')
                             actionRef.current?.reloadAndRest?.()
-                        } catch (error) {
-                            message.error('发生错误，修改失败！')
+                        } catch (error: any) {
+                            message.error(error.message)
                         }
                     },
                     onChange: (rowKey, row) => {

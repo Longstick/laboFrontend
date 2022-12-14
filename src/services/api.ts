@@ -41,7 +41,7 @@ export const signupOutSchool = async (body: API.LoginParams, options?: { [key: s
 export const getCaptcha = async (email: string, options?: { [key: string]: any }) => {
 	return request<API.AsyncResult>(`${serverIP}/user/getCode`, {
 		method: 'GET',
-		params: email,
+		params: {email: email},
 	})
 }
 

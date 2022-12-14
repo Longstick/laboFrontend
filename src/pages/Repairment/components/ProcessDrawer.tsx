@@ -242,6 +242,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
 
     return (
         <Drawer
+            title={props.value?.identifier}
             width={props.responsive ? '100%' : 600}
             open={props.drawerOpen}
             onClose={props.onClose}

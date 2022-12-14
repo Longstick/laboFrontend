@@ -35,8 +35,7 @@ const Signup = () => {
 
     const onGetCaptcha = async () => {
         try {
-            const email = formRef?.current?.getFieldFormatValue?.()
-            console.log(email)
+            const email = formRef?.current?.getFieldFormatValue?.()?.email
             const res = await getCaptcha(email);
             if (res?.code === 1) {
                 message.success(res?.msg)
@@ -48,7 +47,6 @@ const Signup = () => {
         } catch (error: any) {
             console.log(error)
             message.error(error.response?.data?.msg)
-
         }
     }
 

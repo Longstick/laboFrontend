@@ -8,6 +8,7 @@ import styles from "./index.less"
 import { NewIssues } from "@/components/Charts/charts";
 
 const { Title, Paragraph, Text } = Typography
+const { Divider } = ProCard
 
 export const priorityList = {
     0: {
@@ -154,16 +155,19 @@ export const staticGroup = {
                 title={<FormattedMessage id='pages.repairment.all.statisticsData.newIssuesToday' defaultMessage="New Issues Today" />}
                 value={34} />
         </StatisticCard>,
+        <Divider />,
         <StatisticCard>
             <Statistic
                 title={<FormattedMessage id='pages.repairment.all.statisticsData.totalIssues' defaultMessage="Total Issues" />}
                 value={10245} />
         </StatisticCard>,
+        <Divider />,
         <StatisticCard>
             <Statistic
                 title={<FormattedMessage id='pages.repairment.all.statisticsData.highPriority' defaultMessage='High Priority' />}
                 value={842} />
         </StatisticCard>,
+        <Divider />,
         <StatisticCard>
             <Statistic
                 title={<FormattedMessage id='pages.repairment.all.statisticsData.overdueIssue' defaultMessage="Overdue" />}
@@ -174,33 +178,48 @@ export const staticGroup = {
     'to-do': [
         <StatisticCard
             statistic={{
-                title: '今日新增',
-                value: 15,
+                title: <div className={styles.StatisticTitle}>今日新增</div>,
+                value: 1555,
+                suffix: '项',
+                // status: 'processing'
             }}
-            chart={<NewIssues height={100} autoFit/>}
-            chartPlacement='right'
+            className={styles.statisticsCard}
+            // chart={<NewIssues height={100} autoFit/>}
+            // chartPlacement='right'
         />,
+        <Divider />,
         <StatisticCard
             statistic={{
                 title: '总计待处理',
                 value: 142,
             }}
-            chart={<NewIssues height={100} autoFit/>}
-            chartPlacement='right'
+            className={styles.statisticsCard}
+
+            // chart={<NewIssues height={100} autoFit/>}
+            // chartPlacement='right'
         />,
+        <Divider />,
         <StatisticCard
             statistic={{
                 title: '高优先级',
                 value: 42,
             }}
-            chart={<NewIssues height={100} autoFit/>}
-            chartPlacement='right'
+            className={styles.statisticsCard}
+
+            // chart={<NewIssues height={100} autoFit/>}
+            // chartPlacement='right'
         />,
-        <StatisticCard>
-            <Statistic
-                title={<FormattedMessage id='pages.repairment.statisticsData.overdueIssue' defaultMessage='Overdue' />}
-                value={75} />
-        </StatisticCard>
+        <Divider />,
+        <StatisticCard
+            statistic={{
+                title: '已逾期',
+                value: 12,
+            }}
+            className={styles.statisticsCard}
+
+            // chart={<NewIssues height={100} autoFit/>}
+        
+        />
     ],
 
     'mySubmission': [
