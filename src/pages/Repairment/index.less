@@ -42,11 +42,26 @@
 .isActive {
     // background-color: aqua;
     border-radius: 10px;
-    box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    border: 3px solid rgb(33, 129, 255);
+    animation: activating 0.5s;
+    animation-fill-mode: forwards;
+
+    // border: 3px solid rgb(33, 129, 255);
+    
+    outline-offset: -3px;
     background-color: rgb(238, 245, 255);
 
+}
+
+@keyframes activating
+{
+    from {
+        background-color: white;
+        outline: 3px solid white;
+    }
+    to {
+        background-color: rgb(215, 238, 255);
+        outline: 3px solid rgb(33,129,255);
+    }
 }
 
 .statisticsCard {
