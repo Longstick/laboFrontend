@@ -7,10 +7,17 @@ export const characterType = {
 }
 
 export const authType = {
-    dispatch: {label: '派发', color: 'red'},
-    maintain: {label: '维修', color: 'yellow'},
-    approve: {label: '审批', color: 'green'},
-    accept: {label: '验收', color: 'blue'},
+    dispatch: '派发',
+    maintain: '维修',
+    approve: '审批',
+    accept: '验收',
+}
+
+export const authColor = {
+    dispatch: 'red',
+    maintain: 'gold',
+    approve: 'green',
+    accept: 'cyan',
 }
 
 export const manageType = {

@@ -42,21 +42,6 @@ const Repairment: React.FC = () => {
         setModalOpen(false);
     };
 
-    const renderBadge = (count: number, active = false) => {
-        return count === 0 ? (
-            <></>
-        ) : (
-            <Badge
-                count={count}
-                style={{
-                    marginBlockStart: -2,
-                    marginInlineStart: 4,
-                    color: active ? '#1890FF' : '#999',
-                    backgroundColor: active ? '#E6F7FF' : '#eee',
-                }}
-            />
-        );
-    };
 
     const tabs = [
         {
@@ -67,7 +52,7 @@ const Repairment: React.FC = () => {
         {
             key: 'to-do',
             title: '我的待办',
-            value: 123,
+            value: 1151,
         },
         {
             key: 'myCompleted',
@@ -151,18 +136,7 @@ const Repairment: React.FC = () => {
                 dropdownMatchSelectWidth: false,
             },
         },
-        // {
-        //     key: 'remainingTime',
-        //     title: (<FormattedMessage
-        //         id="pages.repairment.issue.remainingTime"
-        //         defaultMessage='Remaining'
-        //     />),
-        //     dataIndex: 'remainingTime',
-        //     search: false,
-        //     valueType: 'fromNow',
-        //     width: '8%',
-        //     sorter: (a, b) => a.remainingTime - b.remainingTime,
-        // },
+
         {
             key: 'finish_date',
             title: '预期时限',
@@ -191,18 +165,6 @@ const Repairment: React.FC = () => {
 
         },
 
-
-        // {
-        //     key: 'updatedTime',
-        //     title: (<FormattedMessage
-        //         id="pages.repairment.issue.updatedTime"
-        //         defaultMessage='Updated'
-        //     />),
-        //     dataIndex: 'updatedTime',
-        //     search: false,
-        //     valueType: 'dateTime',
-        //     sorter: (a, b) => a.updatedTime - b.updatedTime,
-        // },
         {
             key: 'status',
             title: '状态',
@@ -336,7 +298,7 @@ const Repairment: React.FC = () => {
                 //     </Space>
                 // }
             >
-                <ProCard.Group ghost gutter={[12, 12]} className={styles.statisticsBaseCard}>
+                <ProCard.Group ghost gutter={[24, 12]} className={styles.statisticsBaseCard}>
                     {function tabsRender() {
                         return tabs.map((item) =>
                             <StatisticCard
@@ -344,6 +306,12 @@ const Repairment: React.FC = () => {
                                 statistic={{
                                     title: <div className={styles.StatisticTitle}>{item.title}</div>,
                                     value: item.value,
+                                    valueStyle: {
+                                        fontFamily: 'Alimama ShuHeiTi_Bold',
+                                        fontSize: 18,
+                                        // float: 'right',
+                                    },
+                                    suffix: <div style={{fontFamily: 'Alimama ShuHeiTi_Bold', fontSize: 18}}>项</div>,
                                 }}
                                 hoverable
                                 className={activeKey === item.key ? styles.isActive : styles.statisticsCard}
@@ -352,6 +320,8 @@ const Repairment: React.FC = () => {
                                     actionRef.current?.reloadAndRest?.();
                                 }}
                             />
+
+                           
                         )
 
                     }()}
@@ -376,6 +346,7 @@ const Repairment: React.FC = () => {
                             }[activeKey]}
                             tableLayout="fixed"
                             rowKey="identifier"
+                            defaultSize='large'
                             scroll={{ x: 1200 }}
                             rowSelection={
                                 rowSelect ?
@@ -439,7 +410,7 @@ const Repairment: React.FC = () => {
                             open={detailModalOpen}
                             onCancel={onCloseDetailModal}
                             footer={null}
-                            // title={`工单 ${currentRow?.identifier} 详情`}
+                            title={`工单 ${currentRow?.identifier}`}
                             width={800}
                         >
                             <DetailCard
