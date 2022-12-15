@@ -74,7 +74,7 @@ const UserManage: React.FC = () => {
                 }
                 record.authList?.forEach(element => {
                     taglist.push(
-                        <Tag>{authType[element]}</Tag>
+                        <Tag color={authType[element].color}>{authType[element].label}</Tag>
                     )
                 })
                 // return <Space direction='vertical'>
