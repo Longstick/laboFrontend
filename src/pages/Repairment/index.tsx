@@ -336,7 +336,7 @@ const Repairment: React.FC = () => {
                 //     </Space>
                 // }
             >
-                <StatisticCard.Group ghost gutter={[12, 12]} className={styles.statisticsBaseCard}>
+                <ProCard.Group ghost gutter={[12, 12]} className={styles.statisticsBaseCard}>
                     {function tabsRender() {
                         return tabs.map((item) =>
                             <StatisticCard
@@ -355,8 +355,7 @@ const Repairment: React.FC = () => {
                         )
 
                     }()}
-
-                </StatisticCard.Group>
+                </ProCard.Group>
                 {activeKey !== 'drafts' ? (
                     <>
                         {/* <ProCard.Group
