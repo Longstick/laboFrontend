@@ -4,7 +4,7 @@ import type { ProColumns } from "@ant-design/pro-components";
 import { Button, message, Popconfirm, Space, TableColumnType, Tag, Typography } from "antd";
 import { waitTime } from "@/services/utils";
 import ButtonGroup from "antd/lib/button/button-group";
-import { authType, characterType, manageType } from "../struct";
+import { authColor, authType, characterType, manageType } from "../struct";
 import { CreateUserForm } from "../components/CreateUserForm";
 import { getAllUsers, getApporver, getCharData, getUserData, setManageAuth, setProcessAuth } from "@/services/api";
 
@@ -64,8 +64,10 @@ const UserManage: React.FC = () => {
             dataIndex: 'authList',
             valueType: 'select',
             fieldProps: {
-                mode: 'multiple'
+                mode: 'multiple',
             },
+            width: 250,
+            align: 'center',
             valueEnum: authType,
             render: (text, record, _, action) => {
                 const taglist: React.ReactNode[] = []
@@ -74,10 +76,10 @@ const UserManage: React.FC = () => {
                 }
                 record.authList?.forEach(element => {
                     taglist.push(
-                        <Tag>{authType[element]}</Tag>
+                        <Tag color={authColor[element]}>{authType[element]}</Tag>
                     )
                 })
-                // return <Space direction='vertical'>
+                // return <Space direction='vertical' size='small'>
                 //     {taglist}
                 // </Space>
                 return <>{taglist}</>
@@ -87,6 +89,7 @@ const UserManage: React.FC = () => {
             key: 'manageType',
             title: '管理权限',
             dataIndex: 'manageType',
+            align: 'center',
             valueType: 'select',
             valueEnum: manageType,
             fieldProps: {
@@ -187,7 +190,7 @@ const UserManage: React.FC = () => {
 
                 }}
                 search={{
-                    defaultCollapsed: false,
+                    // defaultCollapsed: false,
                     showHiddenNum: true,
                 }}
                 editable={{

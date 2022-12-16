@@ -15,6 +15,7 @@ import { ProcesserDetailColumns, stepLabel } from '../struct';
 const { Step } = Steps;
 const { Item } = ProDescriptions;
 const { Title } = Typography;
+const { Divider } = ProCard
 
 export type ProcessDrawerProps = {
     drawerOpen?: boolean;
@@ -144,21 +145,24 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     const stepItem = (step: number) => {
         const orderNodeInfo = props.value?.orderNodes?.[step - 1]
         return <Step
-            title={stepLabel[step - 1]}
+            title={
+                <h1 className={
+                    orderNodeInfo ? styles.ProcessedStepTitle : styles.WaitingStepTitle
+                }>{stepLabel[step - 1]}</h1>
+            }
             description={
-                <ProCard>
+                <ProCard ghost>
                     {orderNodeInfo ? {
                         1: <>
                             {processerInfo(step - 1)}
-                            {step !== 1 &&
-                                <ProCard className={styles.processDrawerStepDetails}>
-                                    <ProDescriptions
-                                        column={1}
-                                        columns={ProcessDetailColumns[step - 1].columns}
-                                        labelStyle={{ fontWeight: 'bolder' }}
-                                        dataSource={props.value?.orderNodes![step - 1]}
-                                    />
-                                </ProCard>}
+                            <ProCard className={styles.processDrawerStepDetails}>
+                                <ProDescriptions
+                                    column={1}
+                                    columns={ProcessDetailColumns[step - 1].columns}
+                                    labelStyle={{ fontWeight: 'bolder' }}
+                                    dataSource={props.value?.orderNodes![step - 1]}
+                                />
+                            </ProCard>
                         </>,
                         2: <>
                             {processerInfo(step - 1)}
@@ -178,7 +182,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                                     >驳回</Button>
                                 </ProCard>
                                 :
-                                <ProCard layout='center'>请耐心等待处理哦</ProCard>
+                                <ProCard layout='center' className={styles.PatientWaiting}>请耐心等待处理哦</ProCard>
                             }
                         </>,
                     }[orderNodeInfo.status!]
@@ -257,11 +261,19 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             // }
             destroyOnClose
         >
+
+            <ProCard>
+                <div className={styles.SubmitDetailTitle}>提交信息</div>
+                <ProDescriptions 
+                    columns={ProcessDetailColumns[1].columns}
+                />
+            </ProCard>
+            <Divider type='horizontal' /><br />
             <Steps
                 direction="vertical"
                 current={(props.value?.orderNodes?.length ?? 1) - 1}
             >
-                {stepItem(1)}
+                {/* {stepItem(1)} */}
                 {stepItem(2)}
                 {stepItem(3)}
                 {stepItem(4)}

@@ -13,6 +13,13 @@ export const authType = {
     accept: '验收',
 }
 
+export const authColor = {
+    dispatch: 'red',
+    maintain: 'gold',
+    approve: 'green',
+    accept: 'cyan',
+}
+
 export const manageType = {
     none: '无管理权限',
     systemManage: '系统管理',
