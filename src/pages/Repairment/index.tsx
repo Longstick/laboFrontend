@@ -320,13 +320,11 @@ const Repairment: React.FC = () => {
                                     actionRef.current?.reloadAndRest?.();
                                 }}
                             />
-
-                           
                         )
-
                     }()}
                 </ProCard.Group>
                 {activeKey !== 'drafts' ? (
+                    // 草稿箱单独渲染
                     <>
                         {/* <ProCard.Group
                             direction={responsive ? 'column' : 'row'}
