@@ -31,7 +31,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     const [issueDetail, setIssueDetail] = useState<API.IssueInfo>()
     
     const GetIssueDetail = async () => {
-        console.log(props.recordId)
+        console.log(111)
         const res: API.AsyncResult = await getIssueDetail(props.recordId!)
         // 步骤顺序排序
         res.data.orderNodes.sort((a: API.OrderNode, b: API.OrderNode) => { return a.current_stage! - b.current_stage! })
@@ -43,8 +43,10 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     }
 
     useEffect(()=>{
-        console.log(111)
-    })
+        GetIssueDetail()
+        console.log(props.recordId)
+        // console.log(111)
+    }, [])
 
 
     const StatusEnum = {
