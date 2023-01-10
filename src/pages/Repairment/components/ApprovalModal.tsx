@@ -29,6 +29,7 @@ export type ModalProps = {
     currentStage?: number;
     value?: Partial<API.IssueInfo>;
     responsive?: boolean;
+    updateDrawerData?: () => void;
     onDrawerClose?: () => void;
     tableActionRef?: React.MutableRefObject<ActionType | undefined>;
 }
@@ -68,7 +69,8 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             }
 
             message.success('提交成功！')
-            props.onDrawerClose?.()
+            // props.onDrawerClose?.()
+            props.updateDrawerData?.()
             props.tableActionRef?.current?.reloadAndRest?.()
             return true
         } catch (err) {

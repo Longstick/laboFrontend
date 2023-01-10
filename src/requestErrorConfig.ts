@@ -29,7 +29,7 @@ export const errorConfig: RequestConfig = {
   errorConfig: {
     // 错误抛出
     errorThrower: (res: API.AsyncResult) => {
-      const { data, msg, code } = res 
+      const { data, msg, code } = res
       if (code === -1) {
         const error: any = new Error(msg);
         error.name = 'BizError';
@@ -69,7 +69,11 @@ export const errorConfig: RequestConfig = {
           }
         }
       } else if (error.response) {
-        message.error('服务器错误，请稍后重试！')
+        if (error.response.status === 401) {
+          message.warn('身份认证已过期')
+        } else {
+          message.error('服务器错误，请稍后重试！')
+        }
         // Axios 的错误
         // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
         // message.error('Response status:', error.response.status);
@@ -93,15 +97,15 @@ export const errorConfig: RequestConfig = {
     //   return { ...config, url };
     // },
 
-  // 首部添加Auth
+    // 首部添加Auth
     (url: string, options: RequestConfig) => {
-      const authHeader = { 
+      const authHeader = {
         Authorization: window.localStorage.getItem('token'),
         // 'Access-Control-Allow-Origin': '*'
       };
       return {
         url: `${url}`,
-        options: { ...options, interceptors: true, headers: authHeader},
+        options: { ...options, interceptors: true, headers: authHeader },
       }
     },
   ],

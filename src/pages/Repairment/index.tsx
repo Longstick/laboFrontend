@@ -76,6 +76,9 @@ const Repairment: React.FC = () => {
             key: 'identifier',
             title: '工单ID',
             dataIndex: 'identifier',
+            sorter: (a, b) => {
+                return Number(a.identifier) - Number(b.identifier)
+            }
             // search: false,            
             // width: '10%',
         },
@@ -244,60 +247,7 @@ const Repairment: React.FC = () => {
                 setResponsive(offset.width <= 576);
             }}
         >
-            <PageContainer
-                // onTabChange={(key) => {
-                //     setActiveKey(key as string);
-                //     actionRef.current?.reloadAndRest?.();
-                // }}
-                // tabList={[
-                //     {
-                //         key: 'all',
-                //         tab: '所有工单',
-                //     },
-                //     {
-                //         key: 'to-do',
-                //         tab: <span>我的待办{renderBadge(15, activeKey === 'to-do')}</span>,
-                //     },
-                //     {
-                //         key: 'myCompleted',
-                //         tab: <span>我的已处理{renderBadge(35, activeKey === 'myCompleted')}</span>,
-                //     },
-                //     {
-                //         key: 'mySubmission',
-                //         tab: '我的工单',
-                //     },
-                //     {
-                //         key: 'drafts',
-                //         tab: '草稿箱',
-                //     },
-                // ]}
-                // extra={
-                //     <Space size={16}>
-                //         <CreateNew type="newButton" tableActionRef={actionRef} />
-                //         <ButtonGroup>
-                //             <Button key="outputAll" size="large">
-                //                 导出全部
-                //             </Button>
-
-                //             {rowSelect ?
-                //                 <Button
-                //                     key='cancelOperate'
-                //                     size='large'
-                //                     danger
-                //                     onClick={() => { setRowSelect(false) }}
-                //                 >取消操作</Button>
-                //                 :
-                //                 <Button
-                //                     key="outputSelected"
-                //                     size="large"
-                //                     onClick={() => { setRowSelect(true) }}
-                //                 >批量操作</Button>
-                //             }
-
-                //         </ButtonGroup>
-                //     </Space>
-                // }
-            >
+            <PageContainer>
                 <ProCard.Group ghost gutter={[24, 12]} className={styles.statisticsBaseCard}>
                     {function tabsRender() {
                         return tabs.map((item) =>
@@ -311,7 +261,7 @@ const Repairment: React.FC = () => {
                                         fontSize: 18,
                                         // float: 'right',
                                     },
-                                    suffix: <div style={{fontFamily: 'Alimama ShuHeiTi_Bold', fontSize: 18}}>项</div>,
+                                    suffix: <div style={{ fontFamily: 'Alimama ShuHeiTi_Bold', fontSize: 18 }}>项</div>,
                                 }}
                                 hoverable
                                 className={activeKey === item.key ? styles.isActive : styles.statisticsCard}
@@ -326,15 +276,6 @@ const Repairment: React.FC = () => {
                 {activeKey !== 'drafts' ? (
                     // 草稿箱单独渲染
                     <>
-                        {/* <ProCard.Group
-                            direction={responsive ? 'column' : 'row'}
-                            // ghost
-                            gutter={[12, 12]}
-                            className={styles.statisticsBaseCard}
-                        >
-                            {staticGroup[activeKey]}
-                        </ProCard.Group> */}
-
                         <ProTable<API.IssueInfo, API.PageParams>
                             columns={columns}
                             actionRef={actionRef}
@@ -401,6 +342,7 @@ const Repairment: React.FC = () => {
                             drawerOpen={processDrawerOpen}
                             onClose={onCloseProcessDrawer}
                             value={currentRow!}
+                            recordId={currentRow?.id}
                             tableActionRef={actionRef}
                         />
 

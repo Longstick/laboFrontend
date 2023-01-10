@@ -21,24 +21,62 @@ export type ProcessDrawerProps = {
     drawerOpen?: boolean;
     onClose?: () => void;
     value: API.IssueInfo;
+    recordId?: string;
     responsive?: boolean;
     tableActionRef?: React.MutableRefObject<ActionType | undefined>;
 };
 
-const rejectdata = {
-    reason: 'this computer is available',
-    type: 1,
-}
-
 const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     const { initialState } = useModel("@@initialState")
     const [issueDetail, setIssueDetail] = useState<API.IssueInfo>()
+    
+    const GetIssueDetail = async () => {
+        console.log(props.recordId)
+        const res: API.AsyncResult = await getIssueDetail(props.recordId!)
+        // 步骤顺序排序
+        res.data.orderNodes.sort((a: API.OrderNode, b: API.OrderNode) => { return a.current_stage! - b.current_stage! })
+        setIssueDetail(res.data)
+    }
+
+    const updateData = () =>{
+        GetIssueDetail()
+    }
+
+    useEffect(()=>{
+        console.log(111)
+    })
+
 
     const StatusEnum = {
         1: '通过',
         2: '异常',
     }
     const ProcessDetailColumns = {
+        0: {
+            step: 'submit',
+            columns: [
+                {
+                    label: '创建人',
+                    key: 'username',
+                    dataIndex: ['orderNodes', 0, 'now_user', 'username'],
+                },
+                {
+                    label: '联系电话',
+                    key: 'phone',
+                    dataIndex: ['orderNodes', 0, 'now_user', 'phone'],
+                },
+                {
+                    label: '创建时间',
+                    key: 'create_time',
+                    dataIndex: 'create_time',
+                },
+                {
+                    label: '订单号',
+                    key: 'identifier',
+                    dataIndex: 'identifier',
+                },
+            ]
+        },
         1: {
             step: 'approval',
             columns: [
@@ -138,12 +176,12 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             columns={ProcesserDetailColumns}
             size="middle"
             labelStyle={{ fontWeight: 'bolder' }}
-            dataSource={props.value?.orderNodes?.[step]}
+            dataSource={issueDetail?.orderNodes?.[step]}
         />
 
 
     const stepItem = (step: number) => {
-        const orderNodeInfo = props.value?.orderNodes?.[step - 1]
+        const orderNodeInfo = issueDetail?.orderNodes?.[step - 1]
         return <Step
             title={
                 <h1 className={
@@ -160,13 +198,13 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                                     column={1}
                                     columns={ProcessDetailColumns[step - 1].columns}
                                     labelStyle={{ fontWeight: 'bolder' }}
-                                    dataSource={props.value?.orderNodes![step - 1]}
+                                    dataSource={issueDetail?.orderNodes![step - 1]}
                                 />
                             </ProCard>
                         </>,
                         2: <>
                             {processerInfo(step - 1)}
-                            {initialState?.userInfo?.id === props.value?.orderNodes![step - 1]?.now_user?.id ?
+                            {initialState?.userInfo?.id === issueDetail?.orderNodes![step - 1]?.now_user?.id ?
                                 <ProCard layout='center'>
                                     <ApprovalModal
                                         currentStage={step - 1}
@@ -174,6 +212,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                                         responsive={props.responsive}
                                         onDrawerClose={props.onClose}
                                         tableActionRef={props.tableActionRef}
+                                        updateDrawerData={updateData}
                                     >{stepLabel[step - 1]}</ApprovalModal>
                                     &nbsp;&nbsp;
                                     <Button
@@ -200,17 +239,18 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     const step_Item = (step: number) => (
         <ProCard>
             {function stepRender() {
-                const currentStep = props.value?.orderNodes?.length ?? 1
+                const currentStep = issueDetail?.orderNodes?.length ?? 1
                 if (step === currentStep) {
                     return <>
                         {processerInfo(step - 1)}
-                        {initialState?.userInfo?.id === props.value?.orderNodes![step - 1]?.now_user?.id ?
+                        {initialState?.userInfo?.id === issueDetail?.orderNodes![step - 1]?.now_user?.id ?
                             <ProCard layout='center'>
                                 <ApprovalModal
                                     currentStage={step - 1}
                                     value={props.value}
                                     responsive={props.responsive}
                                     onDrawerClose={props.onClose}
+                                    updateDrawerData={updateData}
                                 >{stepLabel[step - 1]}</ApprovalModal>
                                 &nbsp;&nbsp;
                                 <Button
@@ -232,7 +272,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                                     column={1}
                                     columns={ProcessDetailColumns[step - 1].columns}
                                     labelStyle={{ fontWeight: 'bolder' }}
-                                    dataSource={props.value?.orderNodes![step - 1]}
+                                    dataSource={issueDetail?.orderNodes![step - 1]}
                                 />
                             </ProCard>}
                     </>
@@ -246,7 +286,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
 
     return (
         <Drawer
-            title={props.value?.identifier}
+            title={issueDetail?.identifier}
             width={props.responsive ? '100%' : 600}
             open={props.drawerOpen}
             onClose={props.onClose}
@@ -262,16 +302,22 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             destroyOnClose
         >
 
-            <ProCard>
+            <ProCard direction='column' ghost className={styles.SubmitDetail}>
                 <div className={styles.SubmitDetailTitle}>提交信息</div>
-                <ProDescriptions 
-                    columns={ProcessDetailColumns[1].columns}
-                />
+                <ProCard ghost className={styles.SubmitDetailDesc}>
+                    <ProDescriptions
+                        columns={ProcessDetailColumns[0].columns}
+                        labelStyle={{ fontWeight: 'bolder' }}
+                        dataSource={props.value}
+                        column={2}
+                        size='small'
+                    />
+                </ProCard>
             </ProCard>
             <Divider type='horizontal' /><br />
             <Steps
                 direction="vertical"
-                current={(props.value?.orderNodes?.length ?? 1) - 1}
+                current={(issueDetail?.orderNodes?.length ?? 1) - 1}
             >
                 {/* {stepItem(1)} */}
                 {stepItem(2)}
