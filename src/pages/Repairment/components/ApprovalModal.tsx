@@ -26,11 +26,15 @@ import DetailCard from './DetailCard'
 const { Title } = Typography
 
 export type ModalProps = {
+    // 流程当前阶段
     currentStage?: number;
+    // 父组件传入的工单信息
     value?: Partial<API.IssueInfo>;
+    // 响应式
     responsive?: boolean;
-    updateDrawerData?: () => void;
-    onDrawerClose?: () => void;
+    // 调用父组件的更新函数
+    updateDrawerData?: () => Promise<void>;
+    // 表格组件的操作Ref
     tableActionRef?: React.MutableRefObject<ActionType | undefined>;
 }
 
@@ -69,7 +73,6 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             }
 
             message.success('提交成功！')
-            // props.onDrawerClose?.()
             props.updateDrawerData?.()
             props.tableActionRef?.current?.reloadAndRest?.()
             return true

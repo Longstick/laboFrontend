@@ -3,13 +3,13 @@
 
 import { getApporver, getIssueDetail, getUserInfo } from '@/services/api';
 import { ActionType, ProCard, ProDescriptions } from '@ant-design/pro-components';
-
-import { Button, Drawer, Space, Steps, Typography } from 'antd';
+import { Button, Drawer, Space, StepProps, Steps, Typography } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
 
 import React, { useEffect, useState } from 'react';
 import styles from '../index.less';
 import ApprovalModal from './ApprovalModal';
+import DetailCard from './DetailCard';
 import { ProcesserDetailColumns, stepLabel } from '../struct';
 
 const { Step } = Steps;
@@ -20,7 +20,6 @@ const { Divider } = ProCard
 export type ProcessDrawerProps = {
     drawerOpen?: boolean;
     onClose?: () => void;
-    value: API.IssueInfo;
     recordId?: string;
     responsive?: boolean;
     tableActionRef?: React.MutableRefObject<ActionType | undefined>;
@@ -29,30 +28,28 @@ export type ProcessDrawerProps = {
 const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     const { initialState } = useModel("@@initialState")
     const [issueDetail, setIssueDetail] = useState<API.IssueInfo>()
-    
+
+    // 请求流程信息函数
+    // 模态框确认后也会调用刷新函数，重新获取订单流程信息，更新State并刷新组件。
     const GetIssueDetail = async () => {
-        console.log(111)
         const res: API.AsyncResult = await getIssueDetail(props.recordId!)
         // 步骤顺序排序
         res.data.orderNodes.sort((a: API.OrderNode, b: API.OrderNode) => { return a.current_stage! - b.current_stage! })
         setIssueDetail(res.data)
     }
 
-    const updateData = () =>{
-        GetIssueDetail()
-    }
-
-    useEffect(()=>{
-        GetIssueDetail()
-        console.log(props.recordId)
-        // console.log(111)
-    }, [])
-
+    // 当recordId更改时，调用请求信息函数，刷新组件
+    useEffect(() => {
+        if (props.recordId) {
+            GetIssueDetail()
+        }
+    }, [props.recordId])
 
     const StatusEnum = {
         1: '通过',
         2: '异常',
     }
+
     const ProcessDetailColumns = {
         0: {
             step: 'submit',
@@ -210,11 +207,10 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                                 <ProCard layout='center'>
                                     <ApprovalModal
                                         currentStage={step - 1}
-                                        value={props.value}
+                                        value={issueDetail}
                                         responsive={props.responsive}
-                                        onDrawerClose={props.onClose}
                                         tableActionRef={props.tableActionRef}
-                                        updateDrawerData={updateData}
+                                        updateDrawerData={GetIssueDetail}
                                     >{stepLabel[step - 1]}</ApprovalModal>
                                     &nbsp;&nbsp;
                                     <Button
@@ -234,57 +230,9 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             status={orderNodeInfo ? {
                 1: 'finish',
                 2: 'process',
-            }[orderNodeInfo.status!] : 'wait'}
+            }[orderNodeInfo.status!] as API.Status : 'wait'}
         />
     }
-
-    const step_Item = (step: number) => (
-        <ProCard>
-            {function stepRender() {
-                const currentStep = issueDetail?.orderNodes?.length ?? 1
-                if (step === currentStep) {
-                    return <>
-                        {processerInfo(step - 1)}
-                        {initialState?.userInfo?.id === issueDetail?.orderNodes![step - 1]?.now_user?.id ?
-                            <ProCard layout='center'>
-                                <ApprovalModal
-                                    currentStage={step - 1}
-                                    value={props.value}
-                                    responsive={props.responsive}
-                                    onDrawerClose={props.onClose}
-                                    updateDrawerData={updateData}
-                                >{stepLabel[step - 1]}</ApprovalModal>
-                                &nbsp;&nbsp;
-                                <Button
-                                    size='large'
-                                    className={styles.StepItemButton}
-                                >驳回</Button>
-                            </ProCard>
-                            :
-                            <ProCard layout='center'>请耐心等待处理哦</ProCard>
-                        }
-                    </>
-                }
-                else if (step < currentStep) {
-                    return <>
-                        {processerInfo(step - 1)}
-                        {step !== 1 &&
-                            <ProCard className={styles.processDrawerStepDetails}>
-                                <ProDescriptions
-                                    column={1}
-                                    columns={ProcessDetailColumns[step - 1].columns}
-                                    labelStyle={{ fontWeight: 'bolder' }}
-                                    dataSource={issueDetail?.orderNodes![step - 1]}
-                                />
-                            </ProCard>}
-                    </>
-                }
-                else {
-                    return <></>
-                }
-            }()}
-        </ProCard>
-    );
 
     return (
         <Drawer
@@ -310,12 +258,18 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                     <ProDescriptions
                         columns={ProcessDetailColumns[0].columns}
                         labelStyle={{ fontWeight: 'bolder' }}
-                        dataSource={props.value}
+                        dataSource={issueDetail}
                         column={2}
                         size='small'
                     />
                 </ProCard>
             </ProCard>
+            <ProCard collapsible title={'工单详细'} defaultCollapsed>
+                    <DetailCard
+                        value={issueDetail}
+                        responsive={props.responsive}
+                    />
+                </ProCard>
             <Divider type='horizontal' /><br />
             <Steps
                 direction="vertical"

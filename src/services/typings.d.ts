@@ -214,6 +214,9 @@ declare namespace API {
     createUserPhone?: string;
     authGroup: string[];
   }
+  
+  type Status = 'error' | 'process' | 'finish' | 'wait'
+
 }
 
   

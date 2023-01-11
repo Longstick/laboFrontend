@@ -3,9 +3,7 @@ import { ProCard, StatisticCard, } from "@ant-design/pro-components";
 import type { ProDescriptionsItemProps } from "@ant-design/pro-components"
 import { FormattedMessage } from "@umijs/max"
 import { Typography, Statistic, Tag, Image, Space } from "antd";
-import type { ReactNode } from "react"
 import styles from "./index.less"
-import { NewIssues } from "@/components/Charts/charts";
 
 const { Title, Paragraph, Text } = Typography
 const { Divider } = ProCard

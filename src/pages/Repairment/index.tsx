@@ -144,12 +144,9 @@ const Repairment: React.FC = () => {
             key: 'finish_date',
             title: '预期时限',
             dataIndex: 'finish_date',
-            search: false,
             valueType: 'dateTime',
             sorter: (a, b) => {
-                const atime = new Date(a.finish_date!).getTime();
-                const btime = new Date(b.finish_date!).getTime();
-                return atime - btime
+                return new Date(a.finish_date!).getTime() - new Date(b.finish_date!).getTime()
             }
         },
         {
@@ -164,8 +161,7 @@ const Repairment: React.FC = () => {
                 return atime - btime
             },
             defaultSortOrder: 'descend',
-            hideInTable: true
-
+            // hideInTable: true
         },
 
         {
@@ -199,10 +195,8 @@ const Repairment: React.FC = () => {
                 }
 
                 const onProcessButtonClick = async () => {
-                    const res: API.AsyncResult = await getIssueDetail(record.id)
-                    // 步骤顺序排序
-                    res.data.orderNodes.sort((a: API.OrderNode, b: API.OrderNode) => { return a.current_stage! - b.current_stage! })
-                    setCurrentRow(res.data);
+                    console.log(record.id)
+                    setCurrentRow(record);
                     setProcessDrawer(true);
                 }
 
@@ -341,7 +335,6 @@ const Repairment: React.FC = () => {
                             responsive={responsive}
                             drawerOpen={processDrawerOpen}
                             onClose={onCloseProcessDrawer}
-                            value={currentRow!}
                             recordId={currentRow?.id}
                             tableActionRef={actionRef}
                         />
