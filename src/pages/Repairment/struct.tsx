@@ -182,8 +182,8 @@ export const staticGroup = {
                 // status: 'processing'
             }}
             className={styles.statisticsCard}
-            // chart={<NewIssues height={100} autoFit/>}
-            // chartPlacement='right'
+        // chart={<NewIssues height={100} autoFit/>}
+        // chartPlacement='right'
         />,
         <Divider />,
         <StatisticCard
@@ -193,8 +193,8 @@ export const staticGroup = {
             }}
             className={styles.statisticsCard}
 
-            // chart={<NewIssues height={100} autoFit/>}
-            // chartPlacement='right'
+        // chart={<NewIssues height={100} autoFit/>}
+        // chartPlacement='right'
         />,
         <Divider />,
         <StatisticCard
@@ -204,8 +204,8 @@ export const staticGroup = {
             }}
             className={styles.statisticsCard}
 
-            // chart={<NewIssues height={100} autoFit/>}
-            // chartPlacement='right'
+        // chart={<NewIssues height={100} autoFit/>}
+        // chartPlacement='right'
         />,
         <Divider />,
         <StatisticCard
@@ -215,8 +215,8 @@ export const staticGroup = {
             }}
             className={styles.statisticsCard}
 
-            // chart={<NewIssues height={100} autoFit/>}
-        
+        // chart={<NewIssues height={100} autoFit/>}
+
         />
     ],
 
@@ -289,10 +289,10 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
         title: <FormattedMessage id="pages.repairment.issue.failureType" defaultMessage='Failure Type' />,
         dataIndex: 'type',
         valueType: 'select',
-        render: (_, item) =>
-            <Tag color={failureTypeLabel[item.type].color}>
-                {failureTypeLabel[item.type].text}
-            </Tag>
+        // render: (_, item) =>
+        //     <Tag color={failureTypeLabel[item.type].color}>
+        //         {failureTypeLabel[item.type].text}
+        //     </Tag>
     },
     {
         title: <FormattedMessage id="pages.repairment.issue.Manufacturer" defaultMessage='manufacturer' />,
@@ -301,10 +301,10 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
     {
         title: <FormattedMessage id='pages.repairment.issue.priority' defaultMessage='Priority' />,
         dataIndex: 'priority',
-        render: (_, item) =>
-            <Tag color={priorityList[item.priority].color}>
-                {priorityList[item.priority].text}
-            </Tag>
+        // render: (_, item) =>
+        //     <Tag color={priorityList[item.priority].color}>
+        //         {priorityList[item.priority].text}
+        //     </Tag>
     },
     {
         title: <FormattedMessage id='pages.repairment.issue.estimatedTime' defaultMessage='Estimated Time' />,

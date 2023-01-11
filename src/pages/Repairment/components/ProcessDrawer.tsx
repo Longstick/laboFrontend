@@ -3,14 +3,15 @@
 
 import { getApporver, getIssueDetail, getUserInfo } from '@/services/api';
 import { ActionType, ProCard, ProDescriptions } from '@ant-design/pro-components';
-import { Button, Drawer, Space, StepProps, Steps, Typography } from 'antd';
+import { Button, Drawer, Space, StepProps, Steps, Tag, Typography } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from '../index.less';
 import ApprovalModal from './ApprovalModal';
 import DetailCard from './DetailCard';
 import { ProcesserDetailColumns, stepLabel } from '../struct';
+import { waitTime } from '@/services/utils';
 
 const { Step } = Steps;
 const { Item } = ProDescriptions;
@@ -28,9 +29,9 @@ export type ProcessDrawerProps = {
 const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     const { initialState } = useModel("@@initialState")
     const [issueDetail, setIssueDetail] = useState<API.IssueInfo>()
-
     // 请求流程信息函数
     // 模态框确认后也会调用刷新函数，重新获取订单流程信息，更新State并刷新组件。
+
     const GetIssueDetail = async () => {
         const res: API.AsyncResult = await getIssueDetail(props.recordId!)
         // 步骤顺序排序
@@ -39,11 +40,12 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     }
 
     // 当recordId更改时，调用请求信息函数，刷新组件
-    useEffect(() => {
-        if (props.recordId) {
-            GetIssueDetail()
-        }
-    }, [props.recordId])
+    // useEffect(() => {
+    //     if (props.recordId) {
+    //         console.log(111)
+    //         GetIssueDetail()
+    //     }
+    // }, [])
 
     const StatusEnum = {
         1: '通过',
@@ -70,7 +72,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                     dataIndex: 'create_time',
                 },
                 {
-                    label: '订单号',
+                    label: '工单号',
                     key: 'identifier',
                     dataIndex: 'identifier',
                 },
@@ -183,9 +185,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
         const orderNodeInfo = issueDetail?.orderNodes?.[step - 1]
         return <Step
             title={
-                <h1 className={
-                    orderNodeInfo ? styles.ProcessedStepTitle : styles.WaitingStepTitle
-                }>{stepLabel[step - 1]}</h1>
+                <h1 className={orderNodeInfo ? styles.ProcessedStepTitle : styles.WaitingStepTitle}>{stepLabel[step - 1]}</h1>
             }
             description={
                 <ProCard ghost>
@@ -236,7 +236,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
 
     return (
         <Drawer
-            title={issueDetail?.identifier}
+            title={`工单 ${issueDetail?.identifier}`}
             width={props.responsive ? '100%' : 600}
             open={props.drawerOpen}
             onClose={props.onClose}
@@ -250,6 +250,12 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
             //     >获取console信息</Button>
             // }
             destroyOnClose
+            afterOpenChange={(open: boolean)=>{
+                if (open) {
+                    GetIssueDetail()
+                    console.log(11)
+                }
+            }}
         >
 
             <ProCard direction='column' ghost className={styles.SubmitDetail}>
@@ -265,11 +271,11 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                 </ProCard>
             </ProCard>
             <ProCard collapsible title={'工单详细'} defaultCollapsed>
-                    <DetailCard
-                        value={issueDetail}
-                        responsive={props.responsive}
-                    />
-                </ProCard>
+                <DetailCard
+                    value={issueDetail}
+                    responsive={props.responsive}
+                />
+            </ProCard>
             <Divider type='horizontal' /><br />
             <Steps
                 direction="vertical"

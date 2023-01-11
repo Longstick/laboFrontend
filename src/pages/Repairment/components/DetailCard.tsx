@@ -1,6 +1,6 @@
 // 详细信息卡片
 
-import React, { ReactElement, ReactNode, useState } from 'react';
+import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { ProCard, ProDescriptions } from '@ant-design/pro-components';
 import { Modal, Typography, Divider, Image, Space } from 'antd'
 import { issueDescColumns } from '../struct';
@@ -16,6 +16,7 @@ export type DetailModalProps = {
 const DetailCard: React.FC<DetailModalProps> = props => {
 
     const textFormatter = () => {
+        console.log()
         const texts: ReactElement[] = []
         props.value?.description?.split('\r\n')?.forEach((text) => {
             texts.push(<>{text}<br /></>)

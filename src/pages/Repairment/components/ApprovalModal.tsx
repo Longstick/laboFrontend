@@ -16,12 +16,13 @@ import {
 } from '@ant-design/pro-components'
 import { FormattedMessage, useIntl } from '@umijs/max'
 
-import { Button, Form, message, Switch, Typography } from 'antd'
+import { Button, Form, message, Switch, Typography, UploadFile } from 'antd'
 import React, { useState } from 'react'
 import { stepLabel, issueDescColumns } from '../struct'
 import { getStaff, getDeliveryInfo, getApporver, submitOnProccess, submitOnAcceptance } from '@/services/api'
 import styles from '../index.less'
 import DetailCard from './DetailCard'
+import { UploadChangeParam } from 'antd/es/upload'
 
 const { Title } = Typography
 
@@ -42,9 +43,15 @@ const ApprovalModal: React.FC<ModalProps> = props => {
 
     const [currentuser, setuser] = useState<boolean>(true)
     const [isurged, clickUrge] = useState<boolean>(false)
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
 
     const [form] = Form.useForm()
     const intl = useIntl();
+
+    // 图片上传修改回调函数
+    const onPicChange = (info: UploadChangeParam) => {
+        setFileList(info.fileList)
+    }
 
     const onFinish = async (values: any) => {
         try {
@@ -54,6 +61,10 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                 Object.keys(values).map((item) => {
                     formData.append(item, values[item]);
                 });
+
+                fileList.forEach((file) => {
+                    formData.append(file.uid, file.originFileObj!)
+                })
                 formData.append('orderId', props.value!.id!)
                 formData.append('status', '1')
                 await submitOnAcceptance(formData);
@@ -442,21 +453,20 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                         }]}
                     />
                     <ProFormUploadButton
-                        name="a"
-                        label={<FormattedMessage id="pages.repairment.repairmentModal.receivingPhotos" defaultMessage='receipt photos' />}
-                        // required
-                        // rules={[{
-                        //     required: true,
-                        //     message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                        // }]}
+                        name="images"
+                        label="上传验收图片"
+                        key="images"
+                        listType="picture-card"
+                        value={fileList}
                         max={3}
                         fieldProps={{
-                            name: 'file',
-                            listType: 'picture-card',
+                            maxCount: 3,
                             multiple: true,
+                            beforeUpload: ()=>false,
+                            onChange: onPicChange,
                         }}
-                        action="/upload.do"
-                        extra={<FormattedMessage id="component.uploadPic.limit3" defaultMessage='up to 3 photos' />}
+                        accept="image/*"
+                        extra='最多上传三张照片，图片格式支持 .jpg / .png / .jpeg'
                     />
 
                 </ProCard>

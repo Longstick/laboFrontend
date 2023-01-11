@@ -280,7 +280,7 @@ const Repairment: React.FC = () => {
                             tableLayout="fixed"
                             rowKey="identifier"
                             defaultSize='large'
-                            scroll={{ x: 1200 }}
+                            scroll={{ x: 1500 }}
                             rowSelection={
                                 rowSelect ?
                                     {
