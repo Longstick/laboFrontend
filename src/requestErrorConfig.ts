@@ -1,5 +1,5 @@
 ﻿import type { RequestOptions } from '@@/plugin-request/request';
-import type { RequestConfig } from '@umijs/max';
+import { RequestConfig, history } from '@umijs/max';
 import { message, notification } from 'antd';
 
 // 错误处理方案： 错误类型
@@ -71,6 +71,7 @@ export const errorConfig: RequestConfig = {
       } else if (error.response) {
         if (error.response.status === 401) {
           message.warn('身份认证已过期')
+          history.push('/user/login')
         } else {
           message.error('服务器错误，请稍后重试！')
         }

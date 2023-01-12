@@ -2,7 +2,7 @@
 
 import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { ProCard, ProDescriptions } from '@ant-design/pro-components';
-import { Modal, Typography, Divider, Image, Space } from 'antd'
+import { Modal, Typography, Divider, Image, Space, Spin } from 'antd'
 import { issueDescColumns } from '../struct';
 import styles from '../index.less';
 
@@ -15,8 +15,17 @@ export type DetailModalProps = {
 
 const DetailCard: React.FC<DetailModalProps> = props => {
 
-    const textFormatter = () => {
-        console.log()
+    const loading = (
+        <Spin
+            size="small"
+            style={{
+                marginLeft: 8,
+                marginRight: 8,
+            }}
+        />
+    )
+
+    const TextFormatter = () => {
         const texts: ReactElement[] = []
         props.value?.description?.split('\r\n')?.forEach((text) => {
             texts.push(<>{text}<br /></>)
@@ -40,16 +49,20 @@ const DetailCard: React.FC<DetailModalProps> = props => {
             <br />
             <Image.PreviewGroup>
                 {/* <Space> */}
-                    {picGroup}
+                {picGroup}
                 {/* </Space> */}
             </Image.PreviewGroup>
         </>
     }
 
+    if (!props.value) {
+        return loading
+    }
+
     return (
         <>
             <Title level={4}>{props.value?.title}</Title>
-            <Text type='secondary' 
+            <Text type='secondary'
                 style={{
                     display: 'block',
                     marginBottom: 10,
@@ -59,7 +72,7 @@ const DetailCard: React.FC<DetailModalProps> = props => {
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 创建人：{props.value?.create_person}
             </Text>
-            <Text>{textFormatter()}</Text>
+            <Text>{TextFormatter()}</Text>
             {pictureGroup()}
             <Divider />
             <ProDescriptions

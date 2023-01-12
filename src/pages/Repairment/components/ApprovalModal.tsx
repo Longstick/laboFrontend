@@ -165,12 +165,9 @@ const ApprovalModal: React.FC<ModalProps> = props => {
             {/* 维修方式对应不同的表单项 */}
             <ProFormDependency name={['handle_method']}>
                 {({ handle_method }) => {
-                    if (handle_method === '厂商维修') {
-
-                    }
-                    switch (handle_method) {
-                        case '厂商维修':
-                            return <ProFormGroup grid>
+                    return <ProFormGroup grid>
+                        {handle_method === '厂商维修' ?
+                            <ProFormGroup>
                                 <ProFormRadio.Group
                                     name="repair_method"
                                     // width='md'
@@ -199,132 +196,48 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                                     width='md'
                                     name='repair_manufacturer'
                                     required
-                                    label={intl.formatMessage({
-                                        id: 'pages.repairment.dispatchModal.Manufacturer',
-                                        defaultMessage: "repairment manufacturer",
-                                    })}
+                                    label="维修厂商"
                                     rules={[{
                                         required: true,
                                         message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
                                     }]}
                                 />
+                            </ProFormGroup> : <></>
+                        }
 
-
-                                <ProFormSelect
-                                    colProps={{ sm: 12 }}
-                                    width='md'
-                                    name="next_person"
-                                    required
-                                    label={intl.formatMessage({
-                                        id: 'pages.repairment.dispatchModal.repairStaff',
-                                        defaultMessage: 'repair staff'
-                                    })}
-                                    rules={[{
-                                        required: true,
-                                        message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                                    }]}
-                                    request={getApporver}
-                                    params={{ orderAuthType: 1 }}
-                                    fieldProps={{
-                                        showSearch: true,
-                                        showArrow: false,
-                                    }}
-                                />
-                                <ProFormText
-                                    name="phone"
-                                    colProps={{ sm: 12 }}
-                                    width='md'
-                                    required
-                                    label="联系电话"
-                                    rules={[{
-                                        required: true,
-                                        message: '此为必填项',
-                                    }]}
-                                    fieldProps={{
-                                        allowClear: true,
-                                    }}
-                                />
-                            </ProFormGroup>
-
-
-                        case '学生维修':
-                            return <ProFormGroup grid>
-                                <ProFormSelect
-                                    colProps={{ sm: 12 }}
-                                    width='md'
-                                    name="next_person"
-                                    required
-                                    label={intl.formatMessage({
-                                        id: 'pages.repairment.dispatchModal.repairStaff',
-                                        defaultMessage: 'repair staff'
-                                    })}
-                                    rules={[{
-                                        required: true,
-                                        message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                                    }]}
-                                    request={getApporver}
-                                    params={{ orderAuthType: 1 }}
-                                    fieldProps={{
-                                        showSearch: true,
-                                        showArrow: false,
-                                    }}
-                                />
-                                <ProFormText
-                                    name="phone"
-                                    colProps={{ sm: 12 }}
-                                    width='md'
-                                    required
-                                    label="联系电话"
-                                    rules={[{
-                                        required: true,
-                                        message: '此为必填项',
-                                    }]}
-                                    fieldProps={{
-                                        allowClear: true,
-                                    }}
-                                />
-                            </ProFormGroup>
-                        case '教职维修':
-                            return <ProFormGroup grid>
-                                <ProFormSelect
-                                    colProps={{ sm: 12 }}
-                                    width='md'
-                                    name="next_person"
-                                    required
-                                    label={intl.formatMessage({
-                                        id: 'pages.repairment.dispatchModal.repairStaff',
-                                        defaultMessage: 'repair staff'
-                                    })}
-                                    rules={[{
-                                        required: true,
-                                        message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
-                                    }]}
-                                    fieldProps={{
-                                        showSearch: true,
-                                        showArrow: false,
-                                    }}
-                                    request={getApporver}
-                                    params={{ orderAuthType: 1 }}
-                                />
-                                <ProFormText
-                                    name="phone"
-                                    colProps={{ sm: 12 }}
-                                    width='md'
-                                    required
-                                    label="联系电话"
-                                    rules={[{
-                                        required: true,
-                                        message: '此为必填项',
-                                    }]}
-                                    fieldProps={{
-                                        allowClear: true,
-                                    }}
-                                />
-                            </ProFormGroup>
-                        default: return <></>
-                    }
-                }
-                }
+                        <ProFormSelect
+                            colProps={{ sm: 12 }}
+                            width='md'
+                            name="next_person"
+                            required
+                            label="维修人员"
+                            rules={[{
+                                required: true,
+                                message: <FormattedMessage id="component.formItem.required" defaultMessage='this is a required field' />
+                            }]}
+                            request={getApporver}
+                            params={{ orderAuthType: 1 }}
+                            fieldProps={{
+                                showSearch: true,
+                                showArrow: false,
+                            }}
+                        />
+                        <ProFormText
+                            name="phone"
+                            colProps={{ sm: 12 }}
+                            width='md'
+                            required
+                            label="联系电话"
+                            rules={[{
+                                required: true,
+                                message: '此为必填项',
+                            }]}
+                            fieldProps={{
+                                allowClear: true,
+                            }}
+                        />
+                    </ProFormGroup>
+                }}
             </ProFormDependency>
 
             {/* 备注信息 */}
@@ -462,7 +375,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                         fieldProps={{
                             maxCount: 3,
                             multiple: true,
-                            beforeUpload: ()=>false,
+                            beforeUpload: () => false,
                             onChange: onPicChange,
                         }}
                         accept="image/*"

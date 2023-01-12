@@ -38,10 +38,10 @@ const Repairment: React.FC = () => {
     const onCloseProcessDrawer = () => {
         setProcessDrawer(false);
     };
+
     const onCloseDetailModal = () => {
         setModalOpen(false);
     };
-
 
     const tabs = [
         {
@@ -51,17 +51,17 @@ const Repairment: React.FC = () => {
         },
         {
             key: 'to-do',
-            title: '我的待办',
+            title: '我待办的',
             value: 1151,
         },
         {
             key: 'myCompleted',
-            title: '我的已完成',
+            title: '我参与的',
             value: 213,
         },
         {
             key: 'mySubmission',
-            title: '我的工单',
+            title: '我创建的',
             value: 152,
         },
         {
@@ -194,8 +194,7 @@ const Repairment: React.FC = () => {
                     setModalOpen(true);
                 }
 
-                const onProcessButtonClick = async () => {
-                    console.log(record.id)
+                const onProcessButtonClick = () => {
                     setCurrentRow(record);
                     setProcessDrawer(true);
                 }
@@ -277,7 +276,7 @@ const Repairment: React.FC = () => {
                                 all: getIssueList,
                                 mySubmission: getTodoList,
                             }[activeKey]}
-                            tableLayout="fixed"
+                            tableLayout="auto"
                             rowKey="identifier"
                             defaultSize='large'
                             scroll={{ x: 1500 }}
@@ -288,11 +287,8 @@ const Repairment: React.FC = () => {
                                             setSelectedRows(selectedRows);
                                         },
                                         alwaysShowAlert: true,
-                                    } : false}
-                            search={{
-                                // filterType: 'light',
-
-                            }}
+                                    } : false
+                            }
                             toolbar={{
                                 title: <Space size={16}>
                                     <CreateNew type="newButton" tableActionRef={actionRef} />
