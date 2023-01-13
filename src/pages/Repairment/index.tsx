@@ -38,10 +38,10 @@ const Repairment: React.FC = () => {
     const onCloseProcessDrawer = () => {
         setProcessDrawer(false);
     };
+
     const onCloseDetailModal = () => {
         setModalOpen(false);
     };
-
 
     const tabs = [
         {
@@ -51,17 +51,17 @@ const Repairment: React.FC = () => {
         },
         {
             key: 'to-do',
-            title: '我的待办',
+            title: '我待办的',
             value: 1151,
         },
         {
             key: 'myCompleted',
-            title: '我的已完成',
+            title: '我参与的',
             value: 213,
         },
         {
             key: 'mySubmission',
-            title: '我的工单',
+            title: '我创建的',
             value: 152,
         },
         {
@@ -76,6 +76,9 @@ const Repairment: React.FC = () => {
             key: 'identifier',
             title: '工单ID',
             dataIndex: 'identifier',
+            sorter: (a, b) => {
+                return Number(a.identifier) - Number(b.identifier)
+            }
             // search: false,            
             // width: '10%',
         },
@@ -141,12 +144,9 @@ const Repairment: React.FC = () => {
             key: 'finish_date',
             title: '预期时限',
             dataIndex: 'finish_date',
-            search: false,
             valueType: 'dateTime',
             sorter: (a, b) => {
-                const atime = new Date(a.finish_date!).getTime();
-                const btime = new Date(b.finish_date!).getTime();
-                return atime - btime
+                return new Date(a.finish_date!).getTime() - new Date(b.finish_date!).getTime()
             }
         },
         {
@@ -161,8 +161,7 @@ const Repairment: React.FC = () => {
                 return atime - btime
             },
             defaultSortOrder: 'descend',
-            hideInTable: true
-
+            // hideInTable: true
         },
 
         {
@@ -195,11 +194,8 @@ const Repairment: React.FC = () => {
                     setModalOpen(true);
                 }
 
-                const onProcessButtonClick = async () => {
-                    const res: API.AsyncResult = await getIssueDetail(record.id)
-                    // 步骤顺序排序
-                    res.data.orderNodes.sort((a: API.OrderNode, b: API.OrderNode) => { return a.current_stage! - b.current_stage! })
-                    setCurrentRow(res.data);
+                const onProcessButtonClick = () => {
+                    setCurrentRow(record);
                     setProcessDrawer(true);
                 }
 
@@ -244,60 +240,7 @@ const Repairment: React.FC = () => {
                 setResponsive(offset.width <= 576);
             }}
         >
-            <PageContainer
-                // onTabChange={(key) => {
-                //     setActiveKey(key as string);
-                //     actionRef.current?.reloadAndRest?.();
-                // }}
-                // tabList={[
-                //     {
-                //         key: 'all',
-                //         tab: '所有工单',
-                //     },
-                //     {
-                //         key: 'to-do',
-                //         tab: <span>我的待办{renderBadge(15, activeKey === 'to-do')}</span>,
-                //     },
-                //     {
-                //         key: 'myCompleted',
-                //         tab: <span>我的已处理{renderBadge(35, activeKey === 'myCompleted')}</span>,
-                //     },
-                //     {
-                //         key: 'mySubmission',
-                //         tab: '我的工单',
-                //     },
-                //     {
-                //         key: 'drafts',
-                //         tab: '草稿箱',
-                //     },
-                // ]}
-                // extra={
-                //     <Space size={16}>
-                //         <CreateNew type="newButton" tableActionRef={actionRef} />
-                //         <ButtonGroup>
-                //             <Button key="outputAll" size="large">
-                //                 导出全部
-                //             </Button>
-
-                //             {rowSelect ?
-                //                 <Button
-                //                     key='cancelOperate'
-                //                     size='large'
-                //                     danger
-                //                     onClick={() => { setRowSelect(false) }}
-                //                 >取消操作</Button>
-                //                 :
-                //                 <Button
-                //                     key="outputSelected"
-                //                     size="large"
-                //                     onClick={() => { setRowSelect(true) }}
-                //                 >批量操作</Button>
-                //             }
-
-                //         </ButtonGroup>
-                //     </Space>
-                // }
-            >
+            <PageContainer>
                 <ProCard.Group ghost gutter={[24, 12]} className={styles.statisticsBaseCard}>
                     {function tabsRender() {
                         return tabs.map((item) =>
@@ -311,7 +254,7 @@ const Repairment: React.FC = () => {
                                         fontSize: 18,
                                         // float: 'right',
                                     },
-                                    suffix: <div style={{fontFamily: 'Alimama ShuHeiTi_Bold', fontSize: 18}}>项</div>,
+                                    suffix: <div style={{ fontFamily: 'Alimama ShuHeiTi_Bold', fontSize: 18 }}>项</div>,
                                 }}
                                 hoverable
                                 className={activeKey === item.key ? styles.isActive : styles.statisticsCard}
@@ -320,23 +263,12 @@ const Repairment: React.FC = () => {
                                     actionRef.current?.reloadAndRest?.();
                                 }}
                             />
-
-                           
                         )
-
                     }()}
                 </ProCard.Group>
                 {activeKey !== 'drafts' ? (
+                    // 草稿箱单独渲染
                     <>
-                        {/* <ProCard.Group
-                            direction={responsive ? 'column' : 'row'}
-                            // ghost
-                            gutter={[12, 12]}
-                            className={styles.statisticsBaseCard}
-                        >
-                            {staticGroup[activeKey]}
-                        </ProCard.Group> */}
-
                         <ProTable<API.IssueInfo, API.PageParams>
                             columns={columns}
                             actionRef={actionRef}
@@ -344,10 +276,10 @@ const Repairment: React.FC = () => {
                                 all: getIssueList,
                                 mySubmission: getTodoList,
                             }[activeKey]}
-                            tableLayout="fixed"
+                            tableLayout="auto"
                             rowKey="identifier"
                             defaultSize='large'
-                            scroll={{ x: 1200 }}
+                            scroll={{ x: 1500 }}
                             rowSelection={
                                 rowSelect ?
                                     {
@@ -355,11 +287,8 @@ const Repairment: React.FC = () => {
                                             setSelectedRows(selectedRows);
                                         },
                                         alwaysShowAlert: true,
-                                    } : false}
-                            search={{
-                                // filterType: 'light',
-
-                            }}
+                                    } : false
+                            }
                             toolbar={{
                                 title: <Space size={16}>
                                     <CreateNew type="newButton" tableActionRef={actionRef} />
@@ -402,7 +331,7 @@ const Repairment: React.FC = () => {
                             responsive={responsive}
                             drawerOpen={processDrawerOpen}
                             onClose={onCloseProcessDrawer}
-                            value={currentRow!}
+                            recordId={currentRow?.id}
                             tableActionRef={actionRef}
                         />
 

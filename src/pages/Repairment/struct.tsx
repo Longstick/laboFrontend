@@ -3,9 +3,7 @@ import { ProCard, StatisticCard, } from "@ant-design/pro-components";
 import type { ProDescriptionsItemProps } from "@ant-design/pro-components"
 import { FormattedMessage } from "@umijs/max"
 import { Typography, Statistic, Tag, Image, Space } from "antd";
-import type { ReactNode } from "react"
 import styles from "./index.less"
-import { NewIssues } from "@/components/Charts/charts";
 
 const { Title, Paragraph, Text } = Typography
 const { Divider } = ProCard
@@ -184,8 +182,8 @@ export const staticGroup = {
                 // status: 'processing'
             }}
             className={styles.statisticsCard}
-            // chart={<NewIssues height={100} autoFit/>}
-            // chartPlacement='right'
+        // chart={<NewIssues height={100} autoFit/>}
+        // chartPlacement='right'
         />,
         <Divider />,
         <StatisticCard
@@ -195,8 +193,8 @@ export const staticGroup = {
             }}
             className={styles.statisticsCard}
 
-            // chart={<NewIssues height={100} autoFit/>}
-            // chartPlacement='right'
+        // chart={<NewIssues height={100} autoFit/>}
+        // chartPlacement='right'
         />,
         <Divider />,
         <StatisticCard
@@ -206,8 +204,8 @@ export const staticGroup = {
             }}
             className={styles.statisticsCard}
 
-            // chart={<NewIssues height={100} autoFit/>}
-            // chartPlacement='right'
+        // chart={<NewIssues height={100} autoFit/>}
+        // chartPlacement='right'
         />,
         <Divider />,
         <StatisticCard
@@ -217,8 +215,8 @@ export const staticGroup = {
             }}
             className={styles.statisticsCard}
 
-            // chart={<NewIssues height={100} autoFit/>}
-        
+        // chart={<NewIssues height={100} autoFit/>}
+
         />
     ],
 
@@ -292,8 +290,8 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
         dataIndex: 'type',
         valueType: 'select',
         render: (_, item) =>
-            <Tag color={failureTypeLabel[item.type].color}>
-                {failureTypeLabel[item.type].text}
+            <Tag color={failureTypeLabel[item.type]?.color}>
+                {failureTypeLabel[item.type]?.text}
             </Tag>
     },
     {
@@ -304,8 +302,8 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
         title: <FormattedMessage id='pages.repairment.issue.priority' defaultMessage='Priority' />,
         dataIndex: 'priority',
         render: (_, item) =>
-            <Tag color={priorityList[item.priority].color}>
-                {priorityList[item.priority].text}
+            <Tag color={priorityList[item.priority]?.color}>
+                {priorityList[item.priority]?.text}
             </Tag>
     },
     {

@@ -61,20 +61,16 @@ const Signup = () => {
             }
             else {
                 message.success(res?.msg)
-                history.push('/user/login')
+                setSuccess(true)
             }
-            setSuccess(true)
         } catch (error: any) {
-            console.log(error?.response?.data?.data)
-            // message.error(error?.)
+            message.error(error.name)
         }
         setloading(false)
     }
 
     const outSchoolFinished = async (value: Partial<API.UserInfo>) => {
         try {
-            await waitTime(1000)
-            console.log(value)
             setloading(true);
             const res = await signupOutSchool(value)
             if (res?.code !== 1) {
@@ -83,10 +79,10 @@ const Signup = () => {
             }
             else {
                 message.success(res?.msg)
-                history.push('/user/login')
+                setSuccess(true)
             }
         } catch (error: any) {
-            console.log(error?.response?.data?.data)
+            message.error(error.name)
         }
         setloading(false)
     }
