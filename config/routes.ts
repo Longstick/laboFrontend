@@ -65,12 +65,18 @@ export default [
     //     path: '/list',
     //     component: './TableList',
     // },
+
+    {
+        path: '/home',
+        name: 'home',
+        icon: 'home',
+        component: './HomePage'
+    },
     {
         name: 'Repairment',
         icon: 'table',
         path: '/repair',
         component: './Repairment',
-
     },
     {
         name: 'System',
@@ -118,7 +124,7 @@ export default [
     },
     {
         path: '/',
-        redirect: '/repair',
+        redirect: '/home',
     },
     {
         path: '*',
