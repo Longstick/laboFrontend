@@ -48,26 +48,26 @@
 .isActive {
     // background-color: aqua;
     border-radius: 10px;
-    animation: activating 0.5s;
+    animation: activating 0.5s ;
     animation-fill-mode: forwards;
     // border: 3px solid rgb(33, 129, 255);
+    box-shadow: 3px 5px 10px #dddddd;
     font-family: 'Alimama ShuHeiTi_Bold';
-
     outline-offset: -3px;
-    background-color: rgb(238, 245, 255);
+    // background-color: rgb(238, 245, 255);
 
 }
 
 @keyframes activating
 {
     from {
-        background-color: white;
-        outline: 3px solid white;
+        background-image: none;
+        // outline: 3px solid white;
     }
     to {
-        background-color: rgb(215, 238, 255);
-        outline: 3px solid;
-        outline-color: @primary-color;
+        background-image: linear-gradient(to bottom right, rgba(255,0,0,0) 30%, @primary-color 80%);
+        // outline: 3px solid;
+        // outline-color: @primary-color;
     }
 }
 
