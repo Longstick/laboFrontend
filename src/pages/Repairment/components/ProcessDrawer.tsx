@@ -2,7 +2,7 @@
 
 
 import { getApporver, getIssueDetail, getUserInfo } from '@/services/api';
-import { ActionType, ProCard, ProColumnType, ProDescriptions, ProDescriptionsItemProps, ProSchema } from '@ant-design/pro-components';
+import { ActionType, ProCard, ProDescriptions } from '@ant-design/pro-components';
 import { Button, Drawer, Skeleton, Space, Spin, StepProps, Steps, Tag, Typography } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
 
@@ -55,108 +55,108 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     const ProcessDetailColumns = {
         0: {
             step: 'submit',
-                columns: [
-                    {
-                        label: '创建人',
-                        key: 'username',
-                        dataIndex: ['orderNodes', 0, 'now_user', 'username'],
-                    },
-                    {
-                        label: '联系电话',
-                        key: 'phone',
-                        dataIndex: ['orderNodes', 0, 'now_user', 'phone'],
-                    },
-                    {
-                        label: '创建时间',
-                        key: 'create_time',
-                        dataIndex: 'create_time',
-                    },
-                    {
-                        label: '工单号',
-                        key: 'identifier',
-                        dataIndex: 'identifier',
-                    },
-                ]
+            columns: [
+                {
+                    label: '创建人',
+                    key: 'username',
+                    dataIndex: ['orderNodes', 0, 'now_user', 'username'],
+                },
+                {
+                    label: '联系电话',
+                    key: 'phone',
+                    dataIndex: ['orderNodes', 0, 'now_user', 'phone'],
+                },
+                {
+                    label: '创建时间',
+                    key: 'create_time',
+                    dataIndex: 'create_time',
+                },
+                {
+                    label: '工单号',
+                    key: 'identifier',
+                    dataIndex: 'identifier',
+                },
+            ]
         },
         1: {
             step: 'approval',
-                columns: [
-                    {
-                        label: '审核结果',
-                        key: 'approvalResult',
-                        dataIndex: 'status',
-                        valueEnum: StatusEnum
-                    },
-                    {
-                        label: '备注',
-                        key: 'approvalComments',
-                        dataIndex: 'remark',
-                    },
-                ],
+            columns: [
+                {
+                    label: '审核结果',
+                    key: 'approvalResult',
+                    dataIndex: 'status',
+                    valueEnum: StatusEnum
+                },
+                {
+                    label: '备注',
+                    key: 'approvalComments',
+                    dataIndex: 'remark',
+                },
+            ],
         },
         2: {
             step: 'dispatch',
-                columns: [
-                    {
-                        label: '派发结果',
-                        key: 'dispatchResult',
-                        dataIndex: 'status',
-                        valueEnum: StatusEnum
-                    },
-                    {
-                        label: '维修人员',
-                        key: 'handle_method',
-                        dataIndex: 'handle_method',
-                    },
-                    {
-                        label: '维修方式',
-                        key: 'repair_method',
-                        dataIndex: 'repair_method',
-                    },
-                    {
-                        label: '备注',
-                        key: 'dispatchComments',
-                        dataIndex: 'remark',
-                    },
-                ],
+            columns: [
+                {
+                    label: '派发结果',
+                    key: 'dispatchResult',
+                    dataIndex: 'status',
+                    valueEnum: StatusEnum
+                },
+                {
+                    label: '维修人员',
+                    key: 'handle_method',
+                    dataIndex: 'handle_method',
+                },
+                {
+                    label: '维修方式',
+                    key: 'repair_method',
+                    dataIndex: 'repair_method',
+                },
+                {
+                    label: '备注',
+                    key: 'dispatchComments',
+                    dataIndex: 'remark',
+                },
+            ],
         },
         3: {
             step: 'repairment',
-                columns: [
-                    {
-                        label: '维修结果',
-                        key: 'repairResult',
-                        dataIndex: 'status',
-                        valueEnum: StatusEnum
-                    },
+            columns: [
+                {
+                    label: '维修结果',
+                    key: 'repairResult',
+                    dataIndex: 'status',
+                    valueEnum: StatusEnum
+                },
 
-                    {
-                        label: '故障原因',
-                        key: 'reason',
-                        dataIndex: 'reason',
-                    },
-                    {
-                        label: '解决方案',
-                        key: 'solution',
-                        dataIndex: 'solution',
-                    },
-                ],
+                {
+                    label: '故障原因',
+                    key: 'reason',
+                    dataIndex: 'reason',
+                },
+                {
+                    label: '解决方案',
+                    key: 'solution',
+                    dataIndex: 'solution',
+                },
+            ],
         },
         4: {
             step: 'acceptance',
-                columns: [
-                    {
-                        label: '评分',
-                        key: 'score',
-                        dataIndex: 'score',
-                        valueType: 'rate',
-                    },
-                    {
-                        label: '评论',
-                        key: 'remark',
-                        dataIndex: 'remark',
-                    },
-                ],
+            columns: [
+                {
+                    label: '评分',
+                    key: 'score',
+                    dataIndex: 'score',
+                    valueType: 'rate',
+                },
+                {
+                    label: '评论',
+                    key: 'remark',
+                    dataIndex: 'remark',
+                },
+            ],
         },
     };
 
@@ -244,6 +244,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
         />
     }
 
+
     return (
         <Drawer
             title={`工单 ${issueDetail?.identifier}`}
@@ -263,7 +264,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
         >
 
             {/* 骨架屏，当数据没有加载出来的时候占位 */}
-            <Skeleton loading={!issueDetail || !!loading} active paragraph={{ rows: 10 }}>
+            <Skeleton loading={!issueDetail || !!loading} active paragraph={{rows: 10}}>
                 <ProCard collapsible title={'工单详细'} defaultCollapsed bordered>
                     <DetailCard
                         value={issueDetail}
@@ -297,8 +298,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                     {StepItem(4)}
                     {StepItem(5)}
 
-                </Steps>
-            </Skeleton>
+                </Steps></Skeleton>
         </Drawer>
     );
 };

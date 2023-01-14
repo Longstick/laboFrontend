@@ -70,7 +70,7 @@ const DetailCard: React.FC<DetailModalProps> = props => {
             >
                 创建时间：{props.value?.create_time}
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                创建人：{props.value?.create_person}
+                创建人：{props.value?.orderNodes?.[0]?.now_user?.username}
             </Text>
             <Text>{TextFormatter()}</Text>
             {pictureGroup()}

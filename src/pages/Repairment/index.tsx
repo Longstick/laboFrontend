@@ -1,9 +1,9 @@
 // 维修管理系统主体
 
-import { getIssueDetail, getIssueList, getTodoList, issueTableRule } from '@/services/api';
+import { getIssueDetail, getIssueList, getResourceID, getTodoList, issueTableRule } from '@/services/api';
 import { PageContainer, ProTable, ProCard, TableDropdown, StatisticCard } from '@ant-design/pro-components';
 
-import { Button, Tag, Badge, Space, Modal } from 'antd';
+import { Button, Tag, Badge, Space, Modal, Popconfirm } from 'antd';
 import { FormattedMessage, useModel } from '@umijs/max';
 import type { ProColumns, ActionType, ColumnsState } from '@ant-design/pro-components';
 
@@ -88,6 +88,7 @@ const Repairment: React.FC = () => {
             dataIndex: 'title',
             ellipsis: true,
             search: false,
+            width: 300,
         },
         // {
         //     key: 'description',
@@ -103,6 +104,13 @@ const Repairment: React.FC = () => {
             dataIndex: ['resource', 'name'],
             ellipsis: true,
             // search: false,
+            request: getResourceID,
+            fieldProps: {
+
+                showSearch: true,
+                // showArrow: false,
+                debounceTime: 500,
+            },
             render: (text, record, _, action) => {
                 return `${record.resource?.identifier} ${record.resource?.name}`
             }
@@ -220,14 +228,17 @@ const Repairment: React.FC = () => {
                         ]}
                     />
                 ) : (
-                    <Space size={24}>
-                        <a onClick={onDetailButtonClick}>详细信息</a>
-
-                        <a onClick={onProcessButtonClick} >
+                    <>
+                        {/* <a onClick={onDetailButtonClick}>详细信息</a> */}
+                        <a onClick={onProcessButtonClick}>
                             {record.has_person[len - 1] === initialState?.userInfo?.id && record.status !== 1 ? '点击处理' : '查看流程'
                             }
                         </a>
-                    </Space>
+                        <Popconfirm title="确认要关闭订单吗">
+                            {initialState?.userInfo?.id === record.has_person[0] && record.status != 1
+                                && <>&nbsp;&nbsp;&nbsp;&nbsp;<a>关闭工单</a></>}
+                        </Popconfirm>
+                    </>
                 );
             },
         },
@@ -241,7 +252,12 @@ const Repairment: React.FC = () => {
             }}
         >
             <PageContainer>
-                <ProCard.Group ghost gutter={[24, 12]} className={styles.statisticsBaseCard}>
+                <ProCard.Group
+                    ghost
+                    gutter={[24, 12]}
+                    className={styles.statisticsBaseCard}
+                    direction={responsive ? 'column' : 'row'}
+                >
                     {function tabsRender() {
                         return tabs.map((item) =>
                             <StatisticCard
@@ -276,10 +292,10 @@ const Repairment: React.FC = () => {
                                 all: getIssueList,
                                 mySubmission: getTodoList,
                             }[activeKey]}
-                            tableLayout="auto"
+                            // tableLayout="auto"
                             rowKey="identifier"
                             defaultSize='large'
-                            scroll={{ x: 1500 }}
+                            scroll={{ x: 1600 }}
                             rowSelection={
                                 rowSelect ?
                                     {
