@@ -62,8 +62,8 @@ const HomePage: React.FC = (props) => {
     return (
         <PageContainer title={`欢迎回来，${initialState?.userInfo?.username}`}>
             <ProCard gutter={[24, 24]} ghost direction='column'>
-                <ProCard gutter={[24, 24]}>
-                    <ProCard direction='column' gutter={[24, 24]} colSpan={6}>
+                <ProCard gutter={[24, 24]} >
+                    <ProCard direction='column' gutter={[24, 24]} colSpan={8}>
                         <StatisticCard
                             className={styles.MainStatisticCard}
                             boxShadow
