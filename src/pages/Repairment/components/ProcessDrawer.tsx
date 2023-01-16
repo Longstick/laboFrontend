@@ -271,7 +271,6 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                         responsive={props.responsive}
                     />
                 </ProCard>
-                {/* <br /> */}
 
                 <ProCard direction='column' ghost className={styles.SubmitDetail}>
 
@@ -292,7 +291,6 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                     direction="vertical"
                     current={(issueDetail?.orderNodes?.length ?? 1) - 1}
                 >
-                    {/* {StepItem(1)} */}
                     {StepItem(2)}
                     {StepItem(3)}
                     {StepItem(4)}
