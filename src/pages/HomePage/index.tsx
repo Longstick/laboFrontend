@@ -4,7 +4,7 @@ import { useModel } from "@umijs/max"
 
 import styles from './index.less'
 import { TotalUsers } from '@/components/Charts/charts';
-import { Statistic } from 'antd';
+import { Select, Statistic } from 'antd';
 import StaffWorking from './components/StaffWorking';
 
 const { Divider } = ProCard
@@ -96,13 +96,8 @@ const HomePage: React.FC = (props) => {
                 <ProCard
                     gutter={[24, 24]}
                 >
-                    <ProCard colSpan={6} bordered>123213</ProCard>
-                    <ProCard
-                        title="人员能效表格"
-                        bordered
-                    >
-                        <StaffWorking />
-                    </ProCard>
+                    <ProCard colSpan={8} style={{minHeight: 300}}>123213</ProCard>
+                    <StaffWorking />
                 </ProCard>
             </ProCard>
         </PageContainer>
