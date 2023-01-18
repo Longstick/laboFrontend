@@ -1,4 +1,6 @@
 import { ProCard } from '@ant-design/pro-components';
+import { ReloadOutlined } from '@ant-design/icons'
+
 import React, { useEffect, useRef, useState } from 'react';
 import styles from '../index.less';
 import { Button, Checkbox, Popover, Select, Space, Transfer, Typography } from 'antd';
@@ -25,17 +27,21 @@ const StaffWorking: React.FC = () => {
             sl.push(staff)
             tk.push(staff.key!)
         }
-        return {sl, tk}
+        return { sl, tk }
     }
 
-    const setStaff = async () =>{
-        const {sl, tk} = await getAllStaff()
-        setStaffList(sl)
-        setTargetKeys(tk)    
-    }
+    // const setStaff = async () => {
+    //     const { sl, tk } = await getAllStaff()
+    //     setStaffList(sl)
+    //     setTargetKeys(tk)
+    // }
 
-    useEffect(()=>{
-        setStaff()
+    useEffect(() => {
+        (async function setStaff() {
+            const { sl, tk } = await getAllStaff()
+            setStaffList(sl)
+            setTargetKeys(tk)
+        }())
     }, [])
 
     const Staff = (name: string) =>
@@ -45,9 +51,10 @@ const StaffWorking: React.FC = () => {
             gutter={[12, 12]}
         >
             <ProCard
+                ghost
                 colSpan={3}
                 className={styles.WorkingStaffName}
-                style={{ fontSize: 16 }}
+                style={{ fontSize: 16, lineHeight: 3.5 }}
             >{name}</ProCard>
 
             {dateList.map((date) => {
@@ -55,25 +62,33 @@ const StaffWorking: React.FC = () => {
                 return <ProCard
                     hoverable
                     key={date}
-                    bordered
+                    ghost
                     colSpan={3}
-                    style={{
-                        fontFamily: 'Alimama ShuHeiTi_Bold',
-                        // fontSize: 16,
-                        textAlign: 'center',
-                    }}
-                    className={
-                        function cssChoose() {
-                            if (data <= 0.4) return styles.WorkingEfficiencyLow
-                            else if (data <= 0.7) return styles.WorkingEfficiencyMedium
-                            return styles.WorkingEfficiencyHigh
-                        }()
-                    }
-                >{data.toPrecision(2)}</ProCard>
+                // style={{height: 56}}
+                >
+                    <div
+                        className={
+                            function cssChoose() {
+                                if (data <= 0.4) return styles.WorkingEfficiencyLow
+                                else if (data <= 0.7) return styles.WorkingEfficiencyMedium
+                                return styles.WorkingEfficiencyHigh
+                            }()
+                        }
+                        style={{
+                            fontFamily: 'Alimama ShuHeiTi_Bold',
+                            // fontSize: 16,
+                            textAlign: 'center',
+                            height: 56,
+                            lineHeight: 4,
+                            borderRadius: 5,
+                        }}
+
+                    >{data.toPrecision(2)}</div>
+                </ProCard>
             })}
         </ProCard>
 
-    const DateColumn = () =>
+    const DateColumn =
         <ProCard
             direction='row'
             gutter={[12, 12]}
@@ -88,56 +103,50 @@ const StaffWorking: React.FC = () => {
             )}
         </ProCard>
 
-    return <>
-        <ProCard
-            // ghost
-            direction='column'
-            gutter={[12, 12]}
-            title={<div style={{ fontFamily: 'Alimama ShuHeiTi_Bold', fontSize: 18 }}>用户能效透视</div>}
-            extra={
-                <Space>
-                    <Button onClick={()=>{getAllStaff()}}>刷新</Button>
-                    <Popover
-                        placement='bottomRight'
-                        trigger="click"
-                        title="人员配置"
-                        content={
-                            <Transfer
-                                showSearch
-                                listStyle={{
-                                    width: 250,
-                                    height: 300,
-                                }}
-                                operations={['显示', '隐藏']}
-                                dataSource={staffList}
-                                targetKeys={targetKeys}
-                                onChange={async (keys) => { 
-                                    const {sl} = await getAllStaff()
-                                    setStaffList(sl)
-                                }}
-                                render={(item) => item.label!}
-                            />
-                        }
-                    >
-                        <Button type='primary' >配置</Button></Popover>
-                    {/* <Select
-                        mode="multiple"
-                        style={{ width: 200 }}
-                        allowClear
-                        labelInValue
-                        dropdownMatchSelectWidth
-                        placeholder="请选择员工"
-                        options={staffList}
-                    /> */}
-                </Space>
-            }
-        >
-            {DateColumn()}
-            {targetKeys.map((staff) => Staff(staff))}
-
-        </ProCard>
-
-    </>
+    return <ProCard
+        // ghost
+        direction='column'
+        gutter={[12, 12]}
+        title={<div style={{ fontFamily: 'Alimama ShuHeiTi_Bold', fontSize: 18 }}>用户能效透视</div>}
+        extra={
+            <Space>
+                <Button 
+                icon={<ReloadOutlined />} 
+                shape="circle"
+                onClick={async () => {
+                    const { sl } = await getAllStaff()
+                    setStaffList(sl)
+                }} />
+                <Popover
+                    placement='bottomRight'
+                    trigger="click"
+                    title="人员配置"
+                    content={
+                        <Transfer
+                            showSearch
+                            listStyle={{
+                                width: 250,
+                                height: 300,
+                            }}
+                            operations={['显示', '隐藏']}
+                            dataSource={staffList}
+                            targetKeys={targetKeys}
+                            onChange={async (keys) => {
+                                const { sl } = await getAllStaff()
+                                setStaffList(sl)
+                                setTargetKeys(keys)
+                            }}
+                            render={(item) => item.label!}
+                        />
+                    }
+                >
+                    <Button type='primary' >配置</Button></Popover>
+            </Space>
+        }
+    >
+        {DateColumn}
+        {targetKeys.length === 0 ? <Title level={3}>没有选择用户</Title> : targetKeys.map((staff) => Staff(staff))}
+    </ProCard>
 }
 
 export default StaffWorking

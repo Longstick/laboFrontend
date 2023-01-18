@@ -93,11 +93,12 @@ const HomePage: React.FC = (props) => {
                     // chart={<TotalUsers height={400} />}
                     />
                 </ProCard>
-                <ProCard
-                    gutter={[24, 24]}
-                >
-                    <ProCard colSpan={8} style={{minHeight: 300}}>123213</ProCard>
-                    <StaffWorking />
+                
+                <ProCard gutter={[24, 24]}>
+                    <ProCard style={{ minHeight: 300 }}>123213</ProCard>
+                    <ProCard ghost colSpan={16}>
+                        <StaffWorking />
+                    </ProCard>
                 </ProCard>
             </ProCard>
         </PageContainer>

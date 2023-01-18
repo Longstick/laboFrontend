@@ -9,23 +9,17 @@ import {
     ProFormSelect,
     ProFormRadio,
     ProFormGroup,
-    ProFormDatePicker,
-    ProTableProps,
-    ActionType,
-    ProFormTimePicker,
     ProFormDateTimePicker,
-    ProForm,
 } from '@ant-design/pro-components';
-import type { ProFormInstance } from '@ant-design/pro-components';
+import type { ProFormInstance, ActionType,
+} from '@ant-design/pro-components';
 
-import { Button, message, Popconfirm, Upload } from 'antd';
-import { FormattedMessage } from '@umijs/max';
-
+import { Button, message, Popconfirm } from 'antd';
 import React, { useState, useRef } from 'react';
 
 import { waitTime } from '@/services/utils';
 import moment from 'moment';
-import { createNewIssue, getApporver, getResourceID, getStaff } from '@/services/api';
+import { createNewIssue, getApporver, getResourceID } from '@/services/api';
 import { failureTypeLabel, priorityList } from '../struct';
 import type { UploadFile } from 'antd/es/upload';
 import type { UploadChangeParam } from 'antd/lib/upload';
@@ -47,7 +41,7 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
 
     const onSave = async () => {
         await waitTime(1000);
-        const value = formRef.current?.getFieldsFormatValue?.(true);
+        // const value = formRef.current?.getFieldsFormatValue?.(true);
         setOpen(false);
         setFileList([])
     };
@@ -66,7 +60,7 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                 props.type === 'newButton' ? (
                     <Button
                         type="primary"
-                        size="large"
+                        // size="large"
                         onClick={() => {
                             setOpen(true);
                         }}

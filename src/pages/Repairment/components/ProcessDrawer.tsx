@@ -85,12 +85,14 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                     label: '审核结果',
                     key: 'approvalResult',
                     dataIndex: 'status',
-                    valueEnum: StatusEnum
+                    valueEnum: StatusEnum,
+                    span: 2
                 },
                 {
                     label: '备注',
                     key: 'approvalComments',
                     dataIndex: 'remark',
+                    span: 2
                 },
             ],
         },
@@ -101,22 +103,26 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                     label: '派发结果',
                     key: 'dispatchResult',
                     dataIndex: 'status',
-                    valueEnum: StatusEnum
+                    valueEnum: StatusEnum,
+                    span: 1
                 },
                 {
                     label: '维修人员',
                     key: 'handle_method',
                     dataIndex: 'handle_method',
+                    span: 1,
                 },
                 {
                     label: '维修方式',
                     key: 'repair_method',
                     dataIndex: 'repair_method',
+                    span: 2
                 },
                 {
                     label: '备注',
                     key: 'dispatchComments',
                     dataIndex: 'remark',
+                    span: 2
                 },
             ],
         },
@@ -204,7 +210,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                             {processerInfo(step - 1)}
                             <ProCard className={styles.processDrawerStepDetails}>
                                 <ProDescriptions
-                                    column={1}
+                                    column={{xs: 1, md: 2}}
                                     columns={ProcessDetailColumns[step - 1].columns}
                                     labelStyle={{ fontWeight: 'bolder' }}
                                     dataSource={issueDetail?.orderNodes![step - 1]}
@@ -248,7 +254,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
     return (
         <Drawer
             title={`工单 ${issueDetail?.identifier}`}
-            width={props.responsive ? '100%' : 600}
+            width={props.responsive ? '100%' : 700}
             open={props.drawerOpen}
             onClose={props.onClose}
             // 调试信息

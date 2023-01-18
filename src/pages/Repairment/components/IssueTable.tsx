@@ -5,7 +5,7 @@ import { Button, Modal, Popconfirm, Space, Tag } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import CreateNew from './CreateNew';
 import ButtonGroup from 'antd/lib/button/button-group';
-import { FormattedMessage, useModel } from '@umijs/max';
+import { useModel } from '@umijs/max';
 
 import { failureTypeLabel, priorityList, statusList } from '../struct';
 
@@ -162,7 +162,7 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
             title: '操作',
             dataIndex: 'tableOptions',
             search: false,
-            // width: props.responsive ? 60 : 200,
+            width: props.responsive ? 60 : 150,
             fixed: 'right',
             align: 'center',
             render: (text, record, _, action) => {
@@ -192,8 +192,8 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                                 key: 'dropdownProcess',
                                 name:
                                     record.has_person[len - 1] === initialState?.userInfo?.id && record.status != 1
-                                        ? '点击处理'
-                                        : '查看流程',
+                                        ? '处理'
+                                        : '查看',
                                 onClick: onProcessButtonClick
                             },
                             {
@@ -207,13 +207,15 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                     <>
                         {/* <a onClick={onDetailButtonClick}>详细信息</a> */}
                         <a onClick={onProcessButtonClick}>
-                            {record.has_person[len - 1] === initialState?.userInfo?.id && record.status !== 1 ? '处理流程' : '查看流程'
+                            {record.has_person[len - 1] === initialState?.userInfo?.id && record.status !== 1 ? 
+                            <Button type='primary' onClick={onProcessButtonClick}>处理</Button>:
+                            <a onClick={onProcessButtonClick}>查看</a>
                             }
                         </a>
-                        <Popconfirm title="确认要关闭订单吗">
+                        {/* <Popconfirm title="确认要关闭订单吗">
                             {initialState?.userInfo?.id === record.has_person[0] && record.status != 1
                                 && <>&nbsp;&nbsp;&nbsp;&nbsp;<a>关闭工单</a></>}
-                        </Popconfirm>
+                        </Popconfirm> */}
                     </>
                 );
             },
@@ -247,8 +249,8 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                 }
                 toolbar={{
                     title: <Space size={16}>
-                        <CreateNew type="newButton" tableActionRef={actionRef} />
-                        <ButtonGroup>
+                        <CreateNew type="newButton" tableActionRef={actionRef} key="CreateNew" />
+                        <ButtonGroup key='ButtonGroup'>
                             <Button key="outputAll">
                                 导出全部
                             </Button>

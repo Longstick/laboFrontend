@@ -1,6 +1,6 @@
 // 维修管理页面
 
-import { PageContainer } from '@ant-design/pro-components';
+import { PageContainer, ProCard } from '@ant-design/pro-components';
 
 import { Button, Badge, Space } from 'antd';
 import type { ActionType } from '@ant-design/pro-components';
@@ -84,32 +84,32 @@ const Repairment: React.FC = () => {
                 onTabChange={(key) => {
                     setActiveKey(key)
                 }}
-                // tabBarExtraContent={
-                //     <Space size={16}>
-                //         <CreateNew type="newButton" tableActionRef={actionRef} />
-                //         <ButtonGroup>
-                //             <Button key="outputAll">
-                //                 导出全部
-                //             </Button>
+                tabBarExtraContent={
+                    <Space size={16}>
+                        <CreateNew type="newButton" tableActionRef={actionRef} />
+                        <ButtonGroup>
+                            <Button size="large" key="outputAll">
+                                导出全部
+                            </Button>
 
-                //             {rowSelect ?
-                //                 <Button
-                //                     key='cancelOperate'
-                //                     // size='large'
-                //                     danger
-                //                     onClick={() => { setRowSelect(false) }}
-                //                 >取消操作</Button>
-                //                 :
-                //                 <Button
-                //                     key="outputSelected"
-                //                     // size="large"
-                //                     onClick={() => { setRowSelect(true) }}
-                //                 >批量操作</Button>
-                //             }
+                            {rowSelect ?
+                                <Button
+                                    key='cancelOperate'
+                                    size='large'
+                                    danger
+                                    onClick={() => { setRowSelect(false) }}
+                                >取消操作</Button>
+                                :
+                                <Button
+                                    key="outputSelected"
+                                    size="large"
+                                    onClick={() => { setRowSelect(true) }}
+                                >批量操作</Button>
+                            }
 
-                //         </ButtonGroup>
-                //     </Space>
-                // }
+                        </ButtonGroup>
+                    </Space>
+                }
             >
                 {/* <ProCard.Group
                     ghost
@@ -142,7 +142,6 @@ const Repairment: React.FC = () => {
                     }()}
                 </ProCard.Group> */}
                 {activeKey !== 'drafts' ?
-
                     <IssueTable
                         responsive={responsive}
                         activeKey={activeKey}
