@@ -1,5 +1,5 @@
 import { ProCard } from '@ant-design/pro-components';
-import { ReloadOutlined } from '@ant-design/icons'
+import { ReloadOutlined, SettingOutlined } from '@ant-design/icons'
 
 import React, { useEffect, useRef, useState } from 'react';
 import styles from '../index.less';
@@ -12,7 +12,7 @@ const StaffWorking: React.FC = () => {
 
     const [targetKeys, setTargetKeys] = useState<string[]>([])
     const [staffList, setStaffList] = useState<API.WorkingStaff[]>([])
-    const dateList = [1, 2, 3, 4, 5, 6, 7]
+    const dateList = [1, 2, 3, 4, 5]
 
     const getAllStaff = async () => {
         const res: API.UserInfo[] = (await getAllUsers({})).data
@@ -52,7 +52,7 @@ const StaffWorking: React.FC = () => {
         >
             <ProCard
                 ghost
-                colSpan={3}
+                colSpan={4}
                 className={styles.WorkingStaffName}
                 style={{ fontSize: 16, lineHeight: 3.5 }}
             >{name}</ProCard>
@@ -63,7 +63,7 @@ const StaffWorking: React.FC = () => {
                     hoverable
                     key={date}
                     ghost
-                    colSpan={3}
+                    colSpan={4}
                 // style={{height: 56}}
                 >
                     <div
@@ -94,9 +94,9 @@ const StaffWorking: React.FC = () => {
             gutter={[12, 12]}
             ghost
         >
-            <ProCard colSpan={3} ghost />
+            <ProCard colSpan={4} ghost />
             {dateList.map((date) =>
-                <ProCard key={date} colSpan={3} ghost
+                <ProCard key={date} colSpan={4} ghost
                     style={{ height: 25 }}
                     className={styles.WorkingStaffName}
                 >{date}月</ProCard>
@@ -112,11 +112,11 @@ const StaffWorking: React.FC = () => {
             <Space>
                 <Button 
                 icon={<ReloadOutlined />} 
-                shape="circle"
+                type="link"
                 onClick={async () => {
                     const { sl } = await getAllStaff()
                     setStaffList(sl)
-                }} />
+                }} >刷新</Button>
                 <Popover
                     placement='bottomRight'
                     trigger="click"
@@ -140,7 +140,7 @@ const StaffWorking: React.FC = () => {
                         />
                     }
                 >
-                    <Button type='primary' >配置</Button></Popover>
+                    <Button type='primary' shape='round' icon={<SettingOutlined />} >配置</Button></Popover>
             </Space>
         }
     >
