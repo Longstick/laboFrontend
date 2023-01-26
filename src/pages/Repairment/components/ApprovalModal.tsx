@@ -198,7 +198,7 @@ const ApprovalModal: React.FC<ModalProps> = props => {
                         width='md'
                         name="next_person"
                         required
-                        label="维修人员"
+                        label="负责人"
                         rules={[{
                             required: true,
                             message: <FormattedMessage id="component.formItem.required" />

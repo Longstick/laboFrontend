@@ -217,6 +217,11 @@ declare namespace API {
   
   type Status = 'error' | 'process' | 'finish' | 'wait'
 
+  type WorkingStaff = {
+    label?: string;
+    key?: string;
+    value?: string;
+  }
 }
 
   

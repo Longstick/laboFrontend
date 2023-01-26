@@ -4,7 +4,8 @@ import { useModel } from "@umijs/max"
 
 import styles from './index.less'
 import { TotalUsers } from '@/components/Charts/charts';
-import { Statistic } from 'antd';
+import { Select, Statistic } from 'antd';
+import StaffWorking from './components/StaffWorking';
 
 const { Divider } = ProCard
 
@@ -44,12 +45,12 @@ const HomePage: React.FC = (props) => {
         >
             <div style={{ height: 30, width: 8, backgroundColor: SecondaryStatisticItem[itemKey].color, position: 'absolute' }} />
 
-            <ProCard ghost style={{ paddingLeft: 20, color: "#888888"}}>
+            <ProCard ghost style={{ paddingLeft: 20, color: "#888888" }}>
                 {SecondaryStatisticItem[itemKey].title}
             </ProCard>
 
-            <ProCard ghost style={{ display: 'flex', fontSize: 16 }}>
-                <div style={{ float: 'right', color: '#888888'}}>
+            <ProCard ghost style={{ display: 'flex' }}>
+                <div style={{ float: 'right', color: '#888888' }}>
                     <Statistic
                         value={SecondaryStatisticItem[itemKey].value}
                         valueStyle={{ fontSize: 18 }}
@@ -61,37 +62,45 @@ const HomePage: React.FC = (props) => {
 
     return (
         <PageContainer title={`欢迎回来，${initialState?.userInfo?.username}`}>
-            <ProCard gutter={[24, 24]} >
-                <ProCard direction='column' gutter={[24, 24]} colSpan={6}>
+            <ProCard gutter={[24, 24]} ghost direction='column'>
+                <ProCard gutter={[24, 24]} >
+                    <ProCard direction='column' gutter={[24, 24]} colSpan={8}>
+                        <StatisticCard
+                            className={styles.MainStatisticCard}
+                            boxShadow
+                            statistic={{
+                                value: 123312,
+                                title: <div style={{ color: 'white', fontSize: '16px' }}>
+                                    当前已获取金额</div>,
+                                // suffix: '元',
+                                prefix: '￥',
+                                valueStyle: {
+                                    fontFamily: 'Alimama ShuHeiTi_Bold',
+                                    color: 'white',
+                                },
+                            }}
+                        />
+                        <StatisticCard.Group direction='column'>
+                            {SecondaryStatistic('todayAll')}
+                            <Divider type='horizontal' />
+                            {SecondaryStatistic('todo')}
+                            <Divider type='horizontal' />
+                            {SecondaryStatistic('expired')}
+                        </StatisticCard.Group>
+                    </ProCard>
                     <StatisticCard
-                        className={styles.MainStatisticCard}
-                        boxShadow
-                        statistic={{
-                            value: 123312,
-                            title: <div style={{ color: 'white', fontSize: '16px' }}>
-                                当前已获取金额</div>,
-                            // suffix: '元',
-                            prefix: '￥',
-                            valueStyle: {
-                                fontFamily: 'Alimama ShuHeiTi_Bold',
-                                color: 'white',
-                            },
-                        }}
+                        title="本月统计数据"
+                    // chart={<TotalUsers height={400} />}
                     />
-                    <StatisticCard.Group direction='column'>
-                        {SecondaryStatistic('todayAll')}
-                        <Divider type='horizontal' />
-                        {SecondaryStatistic('todo')}
-                        <Divider type='horizontal' />
-                        {SecondaryStatistic('expired')}
-                    </StatisticCard.Group>
                 </ProCard>
-                <StatisticCard
-                    title="本月统计数据"
-                // chart={<TotalUsers height={400} />}
-                />
+                
+                <ProCard gutter={[24, 24]}>
+                    <ProCard style={{ minHeight: 300 }}>123213</ProCard>
+                    <ProCard ghost colSpan={16}>
+                        <StaffWorking />
+                    </ProCard>
+                </ProCard>
             </ProCard>
-
         </PageContainer>
     )
 }
