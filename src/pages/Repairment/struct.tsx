@@ -286,7 +286,7 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
         dataIndex: ['resource', 'specifications'],
     },
     {
-        title: <FormattedMessage id="pages.repairment.issue.failureType" defaultMessage='Failure Type' />,
+        title: '故障类型',
         dataIndex: 'type',
         valueType: 'select',
         render: (_, item) =>
@@ -295,11 +295,11 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
             </Tag>
     },
     {
-        title: <FormattedMessage id="pages.repairment.issue.Manufacturer" defaultMessage='manufacturer' />,
+        title: '制造商',
         dataIndex: 'manufacturer',
     },
     {
-        title: <FormattedMessage id='pages.repairment.issue.priority' defaultMessage='Priority' />,
+        title: '优先级',
         dataIndex: 'priority',
         render: (_, item) =>
             <Tag color={priorityList[item.priority]?.color}>
@@ -307,7 +307,7 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
             </Tag>
     },
     {
-        title: <FormattedMessage id='pages.repairment.issue.estimatedTime' defaultMessage='Estimated Time' />,
+        title: '预期时限',
         dataIndex: 'finish_date',
         valueType: 'dateTime',
     },

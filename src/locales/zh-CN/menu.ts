@@ -57,9 +57,11 @@ export default {
   'menu.Repairment.Drafts Box': '草稿箱',
   'menu.System': '系统维护管理',
   'menu.System.Character Management': '角色管理',
-  'menu.System.User Management': '用户管理',
+  'menu.System.User Management': '用户权限管理',
   'menu.Statistics': '数据统计',
   'menu.Statistics.Real-Time Statistics': '实时统计',
   'menu.Statistics.Maintenance Data': '维修数据',
+  'menu.Equipment': '设备资源维护',
+  'menu.Equipment.Equipment Management': '设备管理'
 
 };

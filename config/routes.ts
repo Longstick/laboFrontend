@@ -74,9 +74,26 @@ export default [
     },
     {
         name: 'Repairment',
-        icon: 'table',
+        icon: 'tool',
         path: '/repair',
         component: './Repairment',
+    },
+    {
+        name: 'Equipment',
+        icon: 'database',
+        path: '/equipment',
+        access: 'canAdmin',
+        routes: [
+            {
+                name: 'Equipment Management',
+                path: '/equipment/manage',
+                component: './Equipment/EquipmentManage',
+            },
+            {
+                path: '/equipment',
+                redirect: '/equipment/manage',
+            }
+        ]
     },
     {
         name: 'System',
@@ -84,12 +101,12 @@ export default [
         path: '/system',
         access: 'canAdmin',
         routes: [
-            {
-                name: 'Character Management',
-                path: '/system/character',
-                icon: 'team',
-                component: './System/Character'
-            },
+            // {
+            //     name: 'Character Management',
+            //     path: '/system/character',
+            //     icon: 'team',
+            //     component: './System/Character'
+            // },
             {
                 name: 'User Management',
                 path: '/system/user',
@@ -98,7 +115,7 @@ export default [
             },
             {
                 path: '/system',
-                redirect: '/system/character',
+                redirect: '/system/user',
             }
         ]
     },

@@ -41,7 +41,7 @@ export const signupOutSchool = async (body: API.LoginParams, options?: { [key: s
 export const getCaptcha = async (email: string, options?: { [key: string]: any }) => {
 	return request<API.AsyncResult>(`${serverIP}/user/getCode`, {
 		method: 'GET',
-		params: {email: email},
+		params: { email: email },
 	})
 }
 
@@ -88,7 +88,7 @@ export async function issueTableRule(
 }
 
 export const getIssueList = async (options?: { [key: string]: any }) => (
-	await request<API.AsyncResult>(`${serverIP}/order/getOrders`, {
+	await request<API.AsyncResult[]>(`${serverIP}/order/getOrders`, {
 		method: 'GET',
 		...(options || {}),
 	})
@@ -102,11 +102,7 @@ export const getIssueDetail = async (orderID: string) => (
 )
 
 export const getTodoList = async (options?: { [key: string]: any }) => (
-	await request<{
-		code: number,
-		data: API.IssueInfo,
-		msg: string,
-	}[]>(`${serverIP}/order/getOwnOrders`, {
+	await request<API.AsyncResult[]>(`${serverIP}/order/getOwnOrders`, {
 		method: 'GET',
 		...(options || {}),
 	})
@@ -141,10 +137,10 @@ export const getApporver = async (orderAuthType: number) => {
 	})
 }
 
-export const getResourceID = async (condition: number) => {
+export const getResourceID = async (params:{keyWords: string | undefined}) => {
 	const res = await request<API.AsyncResult>(`${serverIP}/resource/searchResource`, {
 		method: 'GET',
-		params: condition,
+		params: { condition: params?.keyWords },
 	})
 	const data: API.ResourceInfo[] = res.data
 	return data.map((value) => {
@@ -155,6 +151,14 @@ export const getResourceID = async (condition: number) => {
 		}
 	})
 }
+
+export const getAllResources = async (params?: {identifier?: string}, options?: { [key: string]: any }) => 
+	await request<API.AsyncResult[]>(`${serverIP}/resource/searchResource`, {
+		method: 'GET',
+		params: {condition: params?.identifier},
+		...(options || {}),
+	})
+
 
 export const submitOnProccess = async (currentStage: number, body: API.OrderNode, options?: { [key: string]: any }) => {
 	return request<API.AsyncResult>({
@@ -317,7 +321,7 @@ export const setManageAuth = async (params: {
 		},
 		data: cancelBody,
 	})
-	
+
 	return request<API.AsyncResult>(`${serverIP}/user/setManage`, {
 		method: 'POST',
 		headers: {

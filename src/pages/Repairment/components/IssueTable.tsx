@@ -207,9 +207,9 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                     <>
                         {/* <a onClick={onDetailButtonClick}>详细信息</a> */}
                         <a onClick={onProcessButtonClick}>
-                            {record.has_person[len - 1] === initialState?.userInfo?.id && record.status !== 1 ? 
-                            <Button type='primary' onClick={onProcessButtonClick}>处理</Button>:
-                            <a onClick={onProcessButtonClick}>查看</a>
+                            {record.has_person[len - 1] === initialState?.userInfo?.id && record.status !== 1 ?
+                                <Button type='primary' onClick={onProcessButtonClick}>处理</Button> :
+                                <a onClick={onProcessButtonClick}>查看</a>
                             }
                         </a>
                         {/* <Popconfirm title="确认要关闭订单吗">
@@ -222,78 +222,77 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
         },
     ];
 
-    return (
-        <>
-            <ProTable<API.IssueInfo, API.PageParams>
-                columns={columns}
-                actionRef={actionRef}
-                request={{
-                    all: getIssueList,
-                    mySubmission: getTodoList,
-                }[props.activeKey!]}
-                // tableLayout="auto"
-                rowKey="identifier"
-                defaultSize='large'
-                scroll={{ x: 1600 }}
-                search={{
-                    defaultCollapsed: false,
-                }}
-                rowSelection={
-                    rowSelect ?
-                        {
-                            onChange: (_, selectedRows) => {
-                                setSelectedRows(selectedRows);
-                            },
-                            alwaysShowAlert: true,
-                        } : false
-                }
-                toolbar={{
-                    title: <Space size={16}>
-                        <CreateNew type="newButton" tableActionRef={actionRef} key="CreateNew" />
-                        <ButtonGroup key='ButtonGroup'>
-                            <Button key="outputAll">
-                                导出全部
-                            </Button>
+    return (<>
+        <ProTable<API.IssueInfo, API.PageParams>
+            columns={columns}
+            actionRef={actionRef}
+            request={{
+                all: getIssueList,
+                mySubmission: getTodoList,
+            }[props.activeKey!]}
+            // tableLayout="auto"
+            rowKey="identifier"
+            defaultSize='large'
+            scroll={{ x: 1600 }}
+            search={{
+                defaultCollapsed: false,
+            }}
+            rowSelection={
+                rowSelect ?
+                    {
+                        onChange: (_, selectedRows) => {
+                            setSelectedRows(selectedRows);
+                        },
+                        alwaysShowAlert: true,
+                    } : false
+            }
+            toolbar={{
+                title: <Space size={16}>
+                    <CreateNew type="newButton" tableActionRef={actionRef} key="CreateNew" />
+                    <ButtonGroup key='ButtonGroup'>
+                        <Button key="outputAll">
+                            导出全部
+                        </Button>
 
-                            {rowSelect ?
-                                <Button
-                                    key='cancelOperate'
-                                    // size='large'
-                                    danger
-                                    onClick={() => { setRowSelect(false) }}
-                                >取消操作</Button>
-                                :
-                                <Button
-                                    key="outputSelected"
-                                    // size="large"
-                                    onClick={() => { setRowSelect(true) }}
-                                >批量操作</Button>
-                            }
+                        {rowSelect ?
+                            <Button
+                                key='cancelOperate'
+                                // size='large'
+                                danger
+                                onClick={() => { setRowSelect(false) }}
+                            >取消操作</Button>
+                            :
+                            <Button
+                                key="outputSelected"
+                                // size="large"
+                                onClick={() => { setRowSelect(true) }}
+                            >批量操作</Button>
+                        }
 
-                        </ButtonGroup>
-                    </Space>
-                }}
-                tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
-                    <Space size={24}>
-                        <a >批量导出</a>
-                        <a onClick={onCleanSelected}>取消选择</a>
-                    </Space>
-                )}
-                columnsState={{
-                    value: columnsStateMap,
-                    onChange: setColumnsStateMap,
-                }}
-            />
+                    </ButtonGroup>
+                </Space>
+            }}
+            tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+                <Space size={24}>
+                    <a >批量导出</a>
+                    <a onClick={onCleanSelected}>取消选择</a>
+                </Space>
+            )}
+            columnsState={{
+                value: columnsStateMap,
+                onChange: setColumnsStateMap,
+            }}
+        />
 
-            <ProcessDrawer
-                responsive={props.responsive}
-                drawerOpen={processDrawerOpen}
-                onClose={onCloseProcessDrawer}
-                recordId={currentRow?.id}
-                tableActionRef={actionRef}
-            />
+        <ProcessDrawer
+            responsive={props.responsive}
+            drawerOpen={processDrawerOpen}
+            onClose={onCloseProcessDrawer}
+            recordId={currentRow?.id}
+            tableActionRef={actionRef}
+        />
 
-            {/* <Modal
+        {/* <Modal
                 open={detailModalOpen}
                 onCancel={onCloseDetailModal}
                 footer={null}
@@ -305,7 +304,7 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                     value={currentRow}
                 />
             </Modal> */}
-        </>
+    </>
     )
 }
 
