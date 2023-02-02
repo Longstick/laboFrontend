@@ -30,20 +30,9 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
         object: { show: false },
         issueDescription: { show: false },
     });
+    let metaData: API.IssueInfo[] = []
     const { initialState } = useModel('@@initialState');
     const actionRef = useRef<ActionType>();
-
-    const onCloseProcessDrawer = () => {
-        setProcessDrawer(false);
-    };
-
-    // const onCloseDetailModal = () => {
-    //     setModalOpen(false);
-    // };
-
-    useEffect(() => {
-        actionRef.current?.reloadAndRest?.()
-    }, [props.activeKey])
 
     const columns: ProColumns<API.IssueInfo>[] = [
         {
@@ -161,6 +150,7 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
             key: 'tableOptions',
             title: '操作',
             dataIndex: 'tableOptions',
+            valueType: 'option',
             search: false,
             width: props.responsive ? 60 : 120,
             fixed: 'right',
@@ -183,11 +173,6 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                         key="actionGroup"
                         onSelect={() => action?.reload()}
                         menus={[
-                            // {
-                            //     key: 'dropdownDetail',
-                            //     name: '详细信息',
-                            //     onClick: onDetailButtonClick
-                            // },
                             {
                                 key: 'dropdownProcess',
                                 name:
@@ -205,7 +190,6 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                     />
                 ) : (
                     <>
-                        {/* <a onClick={onDetailButtonClick}>详细信息</a> */}
                         <a onClick={onProcessButtonClick}>
                             {record.has_person[len - 1] === initialState?.userInfo?.id && record.status !== 1 ?
                                 <Button type='primary' onClick={onProcessButtonClick}>处理</Button> :
@@ -222,6 +206,30 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
         },
     ];
 
+
+    const onCloseProcessDrawer = () => {
+        setProcessDrawer(false);
+    };
+
+    // const onCloseDetailModal = () => {
+    //     setModalOpen(false);
+    // };
+
+    useEffect(() => {
+        actionRef.current?.reloadAndRest?.()
+    }, [props.activeKey])
+
+    const downloadAllIssue = () => {
+        const outputHead = columns.filter((arr: any) => arr.valueType !== 'option').map((item: any)=>item.title);
+        console.log(outputHead);
+        const datagroup: any[] = []
+        metaData.forEach((data)=>{
+            const item = {}
+            
+        })
+    }
+
+
     return (<>
         <ProTable<API.IssueInfo, API.PageParams>
             columns={columns}
@@ -230,6 +238,9 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                 all: getIssueList,
                 mySubmission: getTodoList,
             }[props.activeKey!]}
+            onLoad={(dataSource)=>{
+                metaData = dataSource
+            }}
             // tableLayout="auto"
             rowKey="identifier"
             defaultSize='large'
@@ -250,7 +261,11 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                 title: <Space size={16}>
                     <CreateNew type="newButton" tableActionRef={actionRef} key="CreateNew" />
                     <ButtonGroup key='ButtonGroup'>
-                        <Button key="outputAll">
+                        <Button key="outputAll"
+                            onClick={()=>{
+                                downloadAllIssue()
+                            }}
+                        >
                             导出全部
                         </Button>
 
