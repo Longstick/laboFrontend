@@ -110,7 +110,6 @@ declare namespace API {
   };
   
   type IssueInfo = {
-    
     id: string;
     identifier: string;
     title?: string;
