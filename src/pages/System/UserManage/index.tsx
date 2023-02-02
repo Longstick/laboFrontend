@@ -190,8 +190,9 @@ const UserManage: React.FC = () => {
 
                 }}
                 search={{
-                    // defaultCollapsed: false,
-                    showHiddenNum: true,
+                    defaultCollapsed: false,
+                    // showHiddenNum: true,
+                    labelWidth: 100
                 }}
                 editable={{
                     type: 'single',
@@ -213,12 +214,11 @@ const UserManage: React.FC = () => {
                             if (res.code === -1) {
                                 throw new Error(res.msg)
                             }
-
                             message.success('修改成功！')
-                            actionRef.current?.reloadAndRest?.()
                         } catch (error: any) {
                             message.error(error.message)
                         }
+                        actionRef.current?.reload?.()
                     },
                     onChange: (rowKey, row) => {
                         setEditableKeys(rowKey)

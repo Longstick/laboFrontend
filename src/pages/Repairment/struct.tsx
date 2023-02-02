@@ -268,7 +268,7 @@ export const staticGroup = {
 }
 
 
-export const issueDescColumns: ProDescriptionsItemProps[] = [
+export const issueDescColumns: ProDescriptionsItemProps<API.IssueInfo>[] = [
     {
         title: '设备名称',
         dataIndex: ['resource', 'name'],
@@ -290,8 +290,8 @@ export const issueDescColumns: ProDescriptionsItemProps[] = [
         dataIndex: 'type',
         valueType: 'select',
         render: (_, item) =>
-            <Tag color={failureTypeLabel[item.type]?.color}>
-                {failureTypeLabel[item.type]?.text}
+            <Tag color={failureTypeLabel[item.type!].color}>
+                {failureTypeLabel[item.type!].text}
             </Tag>
     },
     {

@@ -1,6 +1,6 @@
 import { PageContainer, ProCard, StatisticCard } from '@ant-design/pro-components';
 import React from 'react';
-import { useModel } from "@umijs/max"
+import { useModel, useAccess } from "@umijs/max"
 
 import styles from './index.less'
 import { TotalUsers } from '@/components/Charts/charts';
@@ -11,6 +11,7 @@ const { Divider } = ProCard
 
 const HomePage: React.FC = (props) => {
     const { initialState } = useModel('@@initialState');
+    const access = useAccess()
 
     const SecondaryStatisticItem: Record<string, {
         color: string,
@@ -93,14 +94,16 @@ const HomePage: React.FC = (props) => {
                     // chart={<TotalUsers height={400} />}
                     />
                 </ProCard>
-                
+
                 <ProCard gutter={[24, 24]}>
                     <ProCard style={{ minHeight: 300 }}>123213</ProCard>
-                    <ProCard ghost colSpan={16}>
-                        <StaffWorking />
-                    </ProCard>
+                    {access.canSystem &&
+                        <ProCard ghost colSpan={16}>
+                            <StaffWorking />
+                        </ProCard>
+                    }
                 </ProCard>
-            </ProCard>
+            </ProCard>  
         </PageContainer>
     )
 }

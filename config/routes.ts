@@ -82,12 +82,17 @@ export default [
         name: 'Equipment',
         icon: 'database',
         path: '/equipment',
-        access: 'canAdmin',
+        access: 'canEquip',
         routes: [
             {
                 name: 'Equipment Management',
                 path: '/equipment/manage',
                 component: './Equipment/EquipmentManage',
+            },
+            {
+                name: '废弃管理',
+                path: '/equipment/discard',
+                component: './Equipment/DiscardManage',
             },
             {
                 path: '/equipment',
@@ -99,7 +104,7 @@ export default [
         name: 'System',
         icon: 'team',
         path: '/system',
-        access: 'canAdmin',
+        access: 'canSystem',
         routes: [
             // {
             //     name: 'Character Management',

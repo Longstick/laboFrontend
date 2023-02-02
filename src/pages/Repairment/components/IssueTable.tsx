@@ -162,7 +162,7 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
             title: '操作',
             dataIndex: 'tableOptions',
             search: false,
-            width: props.responsive ? 60 : 150,
+            width: props.responsive ? 60 : 120,
             fixed: 'right',
             align: 'center',
             render: (text, record, _, action) => {
