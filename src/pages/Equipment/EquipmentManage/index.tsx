@@ -8,6 +8,19 @@ import { ResourceInfoColumns, ResourceTypeEnum } from '../struct';
 import DetailDesc from '../components/EquipDetail';
 
 
+// 描述列配置
+const columnsFilter: string[] = [
+    'identifier',
+    'name',
+    'modelNumber',
+    'type',
+    'presentSituation',
+    'collectUnit',
+    'storagePlace',
+    'minServiceYear',
+
+]
+
 const EquipmentManage: React.FC = () => {
     const [currentRow, setCurrentRow] = useState<API.ResourceInfo>();
     const [selectedRowsState, setSelectedRows] = useState<API.ResourceInfo[]>([]);
@@ -41,7 +54,7 @@ const EquipmentManage: React.FC = () => {
                             
                         </Space>
                 },
-                ...ResourceInfoColumns
+                ...ResourceInfoColumns(columnsFilter)
                 ]}
                 actionRef={actionRef}
                 request={getAllResources}
@@ -106,12 +119,13 @@ const EquipmentManage: React.FC = () => {
                 title={`设备 ${currentRow?.identifier} 的详细信息`}
                 open={detailModalOpen}
                 onCancel={() => { setModalOpen(false) }}
+                footer={false}
                 width='50%'
             >
                 <ProDescriptions
                     bordered
                     column={{ xs: 1, md: 2 }}
-                    columns={ResourceInfoColumns}
+                    columns={ResourceInfoColumns([])}
                     dataSource={currentRow}
                     labelStyle={{
                         fontWeight: 'bolder',

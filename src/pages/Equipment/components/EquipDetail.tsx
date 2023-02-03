@@ -6,8 +6,12 @@ import { ResourceInfoColumns, ResourceTypeEnum } from '../struct';
 
 type EquipDetailProps = {
     equipment?: API.ResourceInfo
-
 }
+
+// 描述列配置
+const columnsFilter: string[] = [
+    
+]
 
 const EquipDetail: React.FC<EquipDetailProps> = (props) => {
     
@@ -15,7 +19,7 @@ const EquipDetail: React.FC<EquipDetailProps> = (props) => {
         <ProDescriptions 
             bordered
             column={{xs:1, md:2}}
-            columns={ResourceInfoColumns}
+            columns={ResourceInfoColumns(columnsFilter)}
             dataSource={props.equipment}
             
             labelStyle={{

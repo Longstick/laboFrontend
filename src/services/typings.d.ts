@@ -1,3 +1,4 @@
+declare module 'js-export-excel'
 declare namespace API {
 
   type LoginParams = {
