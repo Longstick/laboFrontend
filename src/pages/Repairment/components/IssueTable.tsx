@@ -229,7 +229,6 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
         })
     }
 
-
     return (<>
         <ProTable<API.IssueInfo, API.PageParams>
             columns={columns}
