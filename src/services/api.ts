@@ -2,6 +2,7 @@
 /* eslint-disable */
 
 import { request } from '@umijs/max';
+import { message } from 'antd';
 
 const serverIP = 'http://43.139.11.85:3000/api'
 
@@ -87,12 +88,35 @@ export async function issueTableRule(
 	});
 }
 
-export const getIssueList = async (options?: { [key: string]: any }) => (
-	await request<API.AsyncResult[]>(`${serverIP}/order/getOrders`, {
+export const getIssueList = async (
+	params: {
+		current?: number;
+		pageSize?: number;
+		activeKey?: string,
+	},
+	options?: { [key: string]: any }
+) => {
+	const apiMap = {
+		'all': "searchOrder",
+		'to-do': "getToDoOrders",
+		'myCompleted': 'getOwnOrders',
+		'mySubmission': "getSelfCreateOrders",
+	}
+	const res = await request<API.AsyncResult[]>(`${serverIP}/order/${apiMap[params.activeKey!]}`, {
 		method: 'GET',
-		...(options || {}),
+		params: { 
+			page: params.current, 
+			limit: params.pageSize,
+			...params
+		},
+		...(options || {}),	
 	})
-)
+	return {
+		data: res.data.orders,
+		success: true,
+		total: res.data.count,
+	}
+}
 
 export const getIssueDetail = async (orderID: string) => (
 	await request<API.AsyncResult>(`${serverIP}/order/getOrder`, {
@@ -101,12 +125,29 @@ export const getIssueDetail = async (orderID: string) => (
 	})
 )
 
-export const getTodoList = async (options?: { [key: string]: any }) => (
-	await request<API.AsyncResult[]>(`${serverIP}/order/getOwnOrders`, {
+export const getTodoList = async (
+	params: {
+		current?: number;
+		pageSize?: number;
+	},
+	options?: { [key: string]: any }
+) => {
+	const res = await request<API.AsyncResult[]>(`${serverIP}/order/getToDoOrders`, {
 		method: 'GET',
+		params: { 
+			page: params.current, 
+			limit: params.pageSize,
+			...params
+		},
 		...(options || {}),
 	})
-)
+	return {
+		data: res.data.orders,
+		success: true,
+		total: res.data.count,
+	}
+}
+
 
 export const createNewIssue = async (
 	body: FormData,
@@ -137,7 +178,7 @@ export const getApporver = async (orderAuthType: number) => {
 	})
 }
 
-export const getResourceID = async (params:{keyWords: string | undefined}) => {
+export const getResourceID = async (params: { keyWords: string | undefined }) => {
 	const res = await request<API.AsyncResult>(`${serverIP}/resource/searchResource`, {
 		method: 'GET',
 		params: { condition: params?.keyWords },
@@ -152,10 +193,10 @@ export const getResourceID = async (params:{keyWords: string | undefined}) => {
 	})
 }
 
-export const getAllResources = async (params?: {identifier?: string}, options?: { [key: string]: any }) => 
+export const getAllResources = async (params?: { identifier?: string }, options?: { [key: string]: any }) =>
 	await request<API.AsyncResult[]>(`${serverIP}/resource/searchResource`, {
 		method: 'GET',
-		params: {condition: params?.identifier},
+		params: { condition: params?.identifier },
 		...(options || {}),
 	})
 

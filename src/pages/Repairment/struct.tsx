@@ -35,18 +35,6 @@ export const statusList = {
     2: {
         text: '进行中',
         status: 'Default',
-    },
-    3: {
-        text: '待维修',
-        status: 'Default',
-    },
-    4: {
-        text: '待验收',
-        status: 'Default'
-    },
-    5: {
-        text: '已完成',
-        status: 'Success'
     }
 }
 
@@ -278,7 +266,8 @@ export const issueInfoColumns: (keywords: string[]) => ProColumns<API.IssueInfo>
             key: 'description',
             title: '工单描述',
             dataIndex: 'description',
-            hideInTable: true,
+            hideInTable: true, 
+            hideInSearch: true,
         },
         {
             key: 'resource',

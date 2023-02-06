@@ -18,7 +18,7 @@ export type IssueTableProps = {
     onClose?: () => void;
     recordId?: string;
     responsive?: boolean;
-    activeKey?: string;
+    activeKey: string;
 };
 
 const IssueTable: React.FC<IssueTableProps> = (props) => {
@@ -142,13 +142,11 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
     }
 
     return (<>
-        <ProTable<API.IssueInfo, API.PageParams>
+        <ProTable<API.IssueInfo, API.PageParams & { activeKey: string }>
             columns={columns}
             actionRef={actionRef}
-            request={{
-                all: getIssueList,
-                mySubmission: getTodoList,
-            }[props.activeKey!]}
+            request={getIssueList}
+            params={{activeKey: props.activeKey}}
             onLoad={onLoad}
             // tableLayout="auto"
             rowKey="identifier"
@@ -163,6 +161,10 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                     alwaysShowAlert: true,
                 } : false
             }
+            pagination={{
+                defaultPageSize: 10,
+                showSizeChanger: true,
+            }}
             toolbar={{
                 title: <Space size={16}>
                     <CreateNew type="newButton" tableActionRef={actionRef} key="CreateNew" />
