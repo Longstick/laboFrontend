@@ -86,13 +86,11 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                     key: 'approvalResult',
                     dataIndex: 'status',
                     valueEnum: StatusEnum,
-                    span: 2
                 },
                 {
                     label: '备注',
                     key: 'approvalComments',
                     dataIndex: 'remark',
-                    span: 2
                 },
             ],
         },
@@ -104,25 +102,21 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                     key: 'dispatchResult',
                     dataIndex: 'status',
                     valueEnum: StatusEnum,
-                    span: 1
                 },
                 {
                     label: '维修人员',
                     key: 'handle_method',
                     dataIndex: 'handle_method',
-                    span: 1,
                 },
                 {
                     label: '维修方式',
                     key: 'repair_method',
                     dataIndex: 'repair_method',
-                    span: 2
                 },
                 {
                     label: '备注',
                     key: 'dispatchComments',
                     dataIndex: 'remark',
-                    span: 2
                 },
             ],
         },
@@ -133,7 +127,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                     label: '维修结果',
                     key: 'repairResult',
                     dataIndex: 'status',
-                    valueEnum: StatusEnum
+                    valueEnum: StatusEnum,
                 },
 
                 {
@@ -210,7 +204,7 @@ const ProcessDrawer: React.FC<ProcessDrawerProps> = (props) => {
                             {processerInfo(step - 1)}
                             <ProCard className={styles.processDrawerStepDetails}>
                                 <ProDescriptions
-                                    column={{xs: 1, md: 2}}
+                                    column={1}
                                     columns={ProcessDetailColumns[step - 1].columns}
                                     labelStyle={{ fontWeight: 'bolder' }}
                                     dataSource={issueDetail?.orderNodes![step - 1]}

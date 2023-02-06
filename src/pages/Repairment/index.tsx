@@ -63,12 +63,12 @@ const Repairment: React.FC = () => {
             tab: <div className={styles.TabsTitle}>我的工单</div>,
             value: 152,
         },
-        {
-            key: 'drafts',
-            title: '草稿箱',
-            tab: <div className={styles.TabsTitle}>草稿箱</div>,
-            value: 223,
-        },
+        // {
+        //     key: 'drafts',
+        //     title: '草稿箱',
+        //     tab: <div className={styles.TabsTitle}>草稿箱</div>,
+        //     value: 223,
+        // },
     ]
 
     return (
@@ -84,32 +84,32 @@ const Repairment: React.FC = () => {
                 onTabChange={(key) => {
                     setActiveKey(key)
                 }}
-                tabBarExtraContent={
-                    <Space size={16}>
-                        <CreateNew type="newButton" tableActionRef={actionRef} />
-                        <ButtonGroup>
-                            <Button size="large" key="outputAll">
-                                导出全部
-                            </Button>
+                // tabBarExtraContent={
+                //     <Space size={16}>
+                //         <CreateNew type="newButton" tableActionRef={actionRef} />
+                //         <ButtonGroup>
+                //             <Button size="large" key="outputAll">
+                //                 导出全部
+                //             </Button>
 
-                            {rowSelect ?
-                                <Button
-                                    key='cancelOperate'
-                                    size='large'
-                                    danger
-                                    onClick={() => { setRowSelect(false) }}
-                                >取消操作</Button>
-                                :
-                                <Button
-                                    key="outputSelected"
-                                    size="large"
-                                    onClick={() => { setRowSelect(true) }}
-                                >批量操作</Button>
-                            }
+                //             {rowSelect ?
+                //                 <Button
+                //                     key='cancelOperate'
+                //                     size='large'
+                //                     danger
+                //                     onClick={() => { setRowSelect(false) }}
+                //                 >取消操作</Button>
+                //                 :
+                //                 <Button
+                //                     key="outputSelected"
+                //                     size="large"
+                //                     onClick={() => { setRowSelect(true) }}
+                //                 >批量操作</Button>
+                //             }
 
-                        </ButtonGroup>
-                    </Space>
-                }
+                //         </ButtonGroup>
+                //     </Space>
+                // }
             >
                 {/* <ProCard.Group
                     ghost
@@ -141,7 +141,7 @@ const Repairment: React.FC = () => {
                         )
                     }()}
                 </ProCard.Group> */}
-                {activeKey !== 'drafts' ?
+                {/* {activeKey !== 'drafts' ?
                     <IssueTable
                         responsive={responsive}
                         activeKey={activeKey}
@@ -149,8 +149,12 @@ const Repairment: React.FC = () => {
                     :
                     // 草稿箱单独渲染
                     <DraftsTable />
-                }
+                } */}
 
+                <IssueTable
+                    responsive={responsive}
+                    activeKey={activeKey}
+                />
             </PageContainer>
         </RcResizeObserver>
     );

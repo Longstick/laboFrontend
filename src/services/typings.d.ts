@@ -1,3 +1,4 @@
+declare module 'js-export-excel'
 declare namespace API {
 
   type LoginParams = {
@@ -170,22 +171,24 @@ declare namespace API {
   };
 
   type ResourceInfo = {
-    id: string;
-    identifier: string;
-    name: string;
-    storagePlace: string;
-    minServiceYear: number;
-    modelNumber: number;
-    remark: any;
-    supplier: string;
-    usedYear: string;
-    indate: string;
-    originalValue: number;
-    presentSituation: string;
-    collectUnit: string;
-    type: string;
-    specifications: string;
-    collectPerson: string;
+    id?: string;
+    identifier?: string;
+    name?: string;
+    storagePlace?: string;
+    minServiceYear?: number;
+    modelNumber?: number;
+    remark?: any;
+    supplier?: string;
+    usedYear?: string;
+    indate?: string;
+    originalValue?: number;
+    presentSituation?: string;
+    collectUnit?: string;
+    type?: string;
+    specifications?: string;
+    collectPerson?: string;
+    usePerson?: string;
+    usePersonEmail?: string;
   }
 
   type TrackingInfo = {

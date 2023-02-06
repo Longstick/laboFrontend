@@ -231,10 +231,10 @@ const CreateNew: React.FC<CreateNewModalProps> = (props) => {
                             fieldProps={{
                                 showSearch: true,
                                 showArrow: false,
+                                filterOption: false,
                             }}
-                            debounceTime={500}
+                            debounceTime={300}
                             request={getResourceID}
-                            params={{ condition: 102 }}
                         />
 
                         <ProFormSelect

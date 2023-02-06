@@ -2,12 +2,13 @@
 
 import { ActionType, ColumnsState, ProColumns, ProTable, TableDropdown } from '@ant-design/pro-components';
 import { Button, Modal, Popconfirm, Space, Tag } from 'antd';
+import ExportJsonExcel from 'js-export-excel';
 import React, { useEffect, useRef, useState } from 'react';
 import CreateNew from './CreateNew';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { useModel } from '@umijs/max';
 
-import { failureTypeLabel, priorityList, statusList } from '../struct';
+import { failureTypeLabel, issueInfoColumns, priorityList, statusList } from '../struct';
 
 import { getIssueList, getTodoList, getResourceID } from '@/services/api';
 import ProcessDrawer from './ProcessDrawer';
@@ -30,139 +31,20 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
         object: { show: false },
         issueDescription: { show: false },
     });
+    const [metaData, setMetaData] = useState<API.IssueInfo[]>([])
     const { initialState } = useModel('@@initialState');
     const actionRef = useRef<ActionType>();
 
-    const onCloseProcessDrawer = () => {
-        setProcessDrawer(false);
-    };
-
-    // const onCloseDetailModal = () => {
-    //     setModalOpen(false);
-    // };
-
-    useEffect(() => {
-        actionRef.current?.reloadAndRest?.()
-    }, [props.activeKey])
-
+    // 表格列配置
     const columns: ProColumns<API.IssueInfo>[] = [
-        {
-            key: 'identifier',
-            title: '工单ID',
-            dataIndex: 'identifier',
-            sorter: (a, b) => {
-                return Number(a.identifier) - Number(b.identifier)
-            }
-        },
-        {
-            key: 'title',
-            title: '工单标题',
-            dataIndex: 'title',
-            ellipsis: true,
-            search: false,
-            width: 300,
-        },
-        {
-            key: 'resource',
-            title: '工作对象',
-            dataIndex: ['resource', 'name'],
-            ellipsis: true,
-            // search: false,
-            request: getResourceID,
-            fieldProps: {
-
-                showSearch: true,
-                // showArrow: false,
-                debounceTime: 500,
-            },
-            render: (text, record, _, action) => {
-                return `${record.resource?.identifier} ${record.resource?.name}`
-            }
-        },
-        {
-            key: 'type',
-            title: '故障类型',
-            dataIndex: 'type',
-            valueType: 'select',
-            valueEnum: failureTypeLabel,
-            width: '8%',
-            render: (_, record) => (
-                <Tag color={failureTypeLabel[record.type!].color}>
-                    {failureTypeLabel[record.type!].text}
-                </Tag>
-            ),
-            fieldProps: {
-                dropdownMatchSelectWidth: false,
-            },
-        },
-        {
-            key: 'priority',
-            title: '优先级',
-            dataIndex: 'priority',
-            valueType: 'select',
-            valueEnum: priorityList,
-            width: '8%',
-            render: (_, record) => (
-                <Tag color={priorityList[record?.priority ?? 0].color}>
-                    {priorityList[record?.priority ?? 0].text}
-                </Tag>
-            ),
-            fieldProps: {
-                dropdownMatchSelectWidth: false,
-            },
-        },
-        {
-            key: 'finish_date',
-            title: '预期时限',
-            dataIndex: 'finish_date',
-            valueType: 'dateTime',
-            sorter: (a, b) => {
-                return new Date(a.finish_date!).getTime() - new Date(b.finish_date!).getTime()
-            },
-            render: (dom, record, _, action) => {
-                const finish_date = new Date(record.finish_date!).getTime()
-                if (finish_date < Date.now() && record.status !== 1) {
-                    return <div style={{
-                        color: 'red'
-                    }}>
-                        {record.finish_date}
-                    </div>
-                }
-                return record.finish_date
-            }
-        },
-        {
-            key: 'create_time',
-            title: '创建时间',
-            dataIndex: 'create_time',
-            search: false,
-            valueType: 'dateTime',
-            sorter: (a, b) => {
-                const atime = new Date(a.create_time!).getTime();
-                const btime = new Date(b.create_time!).getTime();
-                return atime - btime
-            },
-            defaultSortOrder: 'descend',
-            // hideInTable: true
-        },
-
-        {
-            key: 'status',
-            title: '状态',
-            dataIndex: 'status',
-            valueType: 'select',
-            valueEnum: statusList,
-            width: 120,
-            fieldProps: {
-                dropdownMatchSelectWidth: false,
-            }
-        },
+        ...issueInfoColumns([]),
         {
             key: 'tableOptions',
             title: '操作',
             dataIndex: 'tableOptions',
+            valueType: 'option',
             search: false,
-            width: props.responsive ? 60 : 150,
+            width: props.responsive ? 60 : 120,
             fixed: 'right',
             align: 'center',
             render: (text, record, _, action) => {
@@ -183,11 +65,6 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                         key="actionGroup"
                         onSelect={() => action?.reload()}
                         menus={[
-                            // {
-                            //     key: 'dropdownDetail',
-                            //     name: '详细信息',
-                            //     onClick: onDetailButtonClick
-                            // },
                             {
                                 key: 'dropdownProcess',
                                 name:
@@ -202,98 +79,136 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                                 name: '关闭工单',
                             }
                         ]}
-                    />
-                ) : (
-                    <>
-                        {/* <a onClick={onDetailButtonClick}>详细信息</a> */}
+                    />) : (<>
                         <a onClick={onProcessButtonClick}>
-                            {record.has_person[len - 1] === initialState?.userInfo?.id && record.status !== 1 ? 
-                            <Button type='primary' onClick={onProcessButtonClick}>处理</Button>:
-                            <a onClick={onProcessButtonClick}>查看</a>
+                            {record.has_person[len - 1] === initialState?.userInfo?.id && record.status !== 1 ?
+                                <Button type='primary' onClick={onProcessButtonClick}>处理</Button> :
+                                <a onClick={onProcessButtonClick}>查看</a>
                             }
                         </a>
                         {/* <Popconfirm title="确认要关闭订单吗">
                             {initialState?.userInfo?.id === record.has_person[0] && record.status != 1
                                 && <>&nbsp;&nbsp;&nbsp;&nbsp;<a>关闭工单</a></>}
                         </Popconfirm> */}
-                    </>
-                );
+                    </>);
             },
         },
     ];
 
-    return (
-        <>
-            <ProTable<API.IssueInfo, API.PageParams>
-                columns={columns}
-                actionRef={actionRef}
-                request={{
-                    all: getIssueList,
-                    mySubmission: getTodoList,
-                }[props.activeKey!]}
-                // tableLayout="auto"
-                rowKey="identifier"
-                defaultSize='large'
-                scroll={{ x: 1600 }}
-                search={{
-                    defaultCollapsed: false,
-                }}
-                rowSelection={
-                    rowSelect ?
-                        {
-                            onChange: (_, selectedRows) => {
-                                setSelectedRows(selectedRows);
-                            },
-                            alwaysShowAlert: true,
-                        } : false
+    // 关闭抽屉
+    const onCloseProcessDrawer = () => {setProcessDrawer(false)}
+
+    // 表格加载数据后回调，将数据存入state中，留给导出功能调用
+    const onLoad = (dataSource: API.IssueInfo[]) => {setMetaData(dataSource)}
+
+    // 选择行时回调
+    const onSelectRowChange = (_: any, selectedRows: API.IssueInfo[]) => {setSelectedRows(selectedRows)}
+
+    // const onCloseDetailModal = () => {
+    //     setModalOpen(false);
+    // };
+
+    // 切换模块时触发表格刷新
+    useEffect(() => {
+        actionRef.current?.reloadAndRest?.()
+    }, [props.activeKey])
+
+    // 导出全部
+    const downloadAllIssue = () => {
+        const outputHead = columns.filter((arr: any) => arr.valueType !== 'option')
+        const sheetData: any[] = []
+        metaData.forEach((item: API.IssueInfo, index: number) => {
+            const data = {}
+            outputHead.forEach((el: any, i: number) => {
+                if (el.title) {
+                    if (el.valueEnum) data[el.title] = el.valueEnum[metaData[index][el.dataIndex]].text
+                    else data[el.title] = metaData[index][el.dataIndex]
                 }
-                toolbar={{
-                    title: <Space size={16}>
-                        <CreateNew type="newButton" tableActionRef={actionRef} key="CreateNew" />
-                        <ButtonGroup key='ButtonGroup'>
-                            <Button key="outputAll">
-                                导出全部
-                            </Button>
+            })
+            sheetData.push(data)
+        })
+        const OutputHead = outputHead.map((item) => item.title)
+        const outputOptions = {
+            fileName: `导出${Date.now()}`,
+            datas: [{
+                sheetData: sheetData, // 数据
+                sheetName: 'sheet',
+                sheetFilter: OutputHead, // 表头
+                sheetHeader: OutputHead, // 表头
+            }]
+        }
+        const toExcel = new ExportJsonExcel(outputOptions)
+        toExcel.saveExcel()
+    }
 
-                            {rowSelect ?
-                                <Button
-                                    key='cancelOperate'
-                                    // size='large'
-                                    danger
-                                    onClick={() => { setRowSelect(false) }}
-                                >取消操作</Button>
-                                :
-                                <Button
-                                    key="outputSelected"
-                                    // size="large"
-                                    onClick={() => { setRowSelect(true) }}
-                                >批量操作</Button>
-                            }
+    return (<>
+        <ProTable<API.IssueInfo, API.PageParams>
+            columns={columns}
+            actionRef={actionRef}
+            request={{
+                all: getIssueList,
+                mySubmission: getTodoList,
+            }[props.activeKey!]}
+            onLoad={onLoad}
+            // tableLayout="auto"
+            rowKey="identifier"
+            defaultSize='large'
+            scroll={{ x: 1600 }}
+            search={{
+                defaultCollapsed: false,
+            }}
+            rowSelection={
+                rowSelect ? {
+                    onChange: onSelectRowChange,
+                    alwaysShowAlert: true,
+                } : false
+            }
+            toolbar={{
+                title: <Space size={16}>
+                    <CreateNew type="newButton" tableActionRef={actionRef} key="CreateNew" />
+                    <ButtonGroup key='ButtonGroup'>
+                        <Button key="outputAll" onClick={() => {downloadAllIssue()}}>
+                            导出全部
+                        </Button>
 
-                        </ButtonGroup>
-                    </Space>
-                }}
-                tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
-                    <Space size={24}>
-                        <a >批量导出</a>
-                        <a onClick={onCleanSelected}>取消选择</a>
-                    </Space>
-                )}
-                columnsState={{
-                    value: columnsStateMap,
-                    onChange: setColumnsStateMap,
-                }}
-            />
+                        {rowSelect ?
+                            <Button
+                                key='cancelOperate'
+                                // size='large'
+                                danger
+                                onClick={() => { setRowSelect(false) }}
+                            >取消操作</Button>
+                            :
+                            <Button
+                                key="outputSelected"
+                                // size="large"
+                                onClick={() => { setRowSelect(true) }}
+                            >批量操作</Button>
+                        }
+                    </ButtonGroup>
+                </Space>
+            }}
+            tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+                <Space size={24}>
+                    <a >批量导出</a>
+                    <a onClick={onCleanSelected}>取消选择</a>
+                </Space>
+            )}
+            columnsState={{
+                value: columnsStateMap,
+                onChange: setColumnsStateMap,
+            }}
+        />
 
-            <ProcessDrawer
-                responsive={props.responsive}
-                drawerOpen={processDrawerOpen}
-                onClose={onCloseProcessDrawer}
-                recordId={currentRow?.id}
-                tableActionRef={actionRef}
-            />
+        <ProcessDrawer
+            responsive={props.responsive}
+            drawerOpen={processDrawerOpen}
+            onClose={onCloseProcessDrawer}
+            recordId={currentRow?.id}
+            tableActionRef={actionRef}
+        />
 
-            {/* <Modal
+        {/* <Modal
                 open={detailModalOpen}
                 onCancel={onCloseDetailModal}
                 footer={null}
@@ -305,7 +220,7 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                     value={currentRow}
                 />
             </Modal> */}
-        </>
+    </>
     )
 }
 

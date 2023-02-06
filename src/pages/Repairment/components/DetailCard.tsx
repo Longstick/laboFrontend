@@ -3,18 +3,30 @@
 import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { ProCard, ProDescriptions } from '@ant-design/pro-components';
 import { Modal, Typography, Divider, Image, Space, Spin } from 'antd'
-import { issueDescColumns } from '../struct';
+import { issueDescColumns, issueInfoColumns } from '../struct';
 import styles from '../index.less';
 
 const { Title, Text, Paragraph } = Typography
 
+// 配置需要展示的列项key
+const columnsFilter = [
+    'resource_name',
+    'resource_identifier',
+    'resource_modelNumber',
+    'resource_specifications',
+    'type',
+    'priority',
+    'finish_date'
+]
+
 export type DetailModalProps = {
     responsive?: boolean,
-    value?: Partial<API.IssueInfo>,
+    value?: API.IssueInfo,
 }
 
 const DetailCard: React.FC<DetailModalProps> = props => {
 
+    // 加载时显示的组件
     const loading = (
         <Spin
             size="small"
@@ -25,6 +37,7 @@ const DetailCard: React.FC<DetailModalProps> = props => {
         />
     )
 
+    // 文本格式转换，将工单描述文本中的换行显示出来
     const TextFormatter = () => {
         const texts: ReactElement[] = []
         props.value?.description?.split('\r\n')?.forEach((text) => {
@@ -33,6 +46,7 @@ const DetailCard: React.FC<DetailModalProps> = props => {
         return texts
     }
 
+    // 照片组
     const pictureGroup = () => {
         if (!props.value) return <></>
         if (props.value.images!.length === 0) return <></>
@@ -55,6 +69,7 @@ const DetailCard: React.FC<DetailModalProps> = props => {
         </>
     }
 
+    // 父组件的数据没有传入时，显示加载
     if (!props.value) {
         return loading
     }
@@ -76,7 +91,7 @@ const DetailCard: React.FC<DetailModalProps> = props => {
             {pictureGroup()}
             <Divider />
             <ProDescriptions
-                columns={issueDescColumns}
+                columns={issueInfoColumns(columnsFilter)}
                 column={{
                     xs: 1,
                     sm: 2,

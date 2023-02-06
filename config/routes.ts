@@ -74,22 +74,44 @@ export default [
     },
     {
         name: 'Repairment',
-        icon: 'table',
+        icon: 'tool',
         path: '/repair',
         component: './Repairment',
+    },
+    {
+        name: 'Equipment',
+        icon: 'database',
+        path: '/equipment',
+        access: 'canEquip',
+        routes: [
+            {
+                name: 'Equipment Management',
+                path: '/equipment/manage',
+                component: './Equipment/EquipmentManage',
+            },
+            {
+                name: '废弃管理',
+                path: '/equipment/discard',
+                component: './Equipment/DiscardManage',
+            },
+            {
+                path: '/equipment',
+                redirect: '/equipment/manage',
+            }
+        ]
     },
     {
         name: 'System',
         icon: 'team',
         path: '/system',
-        access: 'canAdmin',
+        access: 'canSystem',
         routes: [
-            {
-                name: 'Character Management',
-                path: '/system/character',
-                icon: 'team',
-                component: './System/Character'
-            },
+            // {
+            //     name: 'Character Management',
+            //     path: '/system/character',
+            //     icon: 'team',
+            //     component: './System/Character'
+            // },
             {
                 name: 'User Management',
                 path: '/system/user',
@@ -98,7 +120,7 @@ export default [
             },
             {
                 path: '/system',
-                redirect: '/system/character',
+                redirect: '/system/user',
             }
         ]
     },
