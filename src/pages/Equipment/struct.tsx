@@ -1,4 +1,4 @@
-import type { ProColumns } from "@ant-design/pro-components";
+import type { ProColumns, ProSchema } from "@ant-design/pro-components";
 import { Tag } from "antd";
 
 export const ResourceTypeEnum = {
@@ -20,7 +20,7 @@ export const ResourceTypeEnum = {
     },
 }
 
-export const ResourceInfoColumns: (keywords: string[]) => ProColumns<API.ResourceInfo>[] = (keywords) => {
+export const ResourceInfoColumns: (keywords: string[]) => ProSchema<API.ResourceInfo>[] = (keywords) => {
     const columns: ProColumns<API.ResourceInfo>[] = [
         {
             key: 'identifier',

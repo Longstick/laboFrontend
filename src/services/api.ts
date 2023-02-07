@@ -102,7 +102,7 @@ export const getIssueList = async (
 		'myCompleted': 'getOwnOrders',
 		'mySubmission': "getSelfCreateOrders",
 	}
-	const res = await request<API.AsyncResult[]>(`${serverIP}/order/${apiMap[params.activeKey!]}`, {
+	const res = await request<API.AsyncResult>(`${serverIP}/order/${apiMap[params.activeKey!]}`, {
 		method: 'GET',
 		params: { 
 			page: params.current, 
@@ -132,7 +132,7 @@ export const getTodoList = async (
 	},
 	options?: { [key: string]: any }
 ) => {
-	const res = await request<API.AsyncResult[]>(`${serverIP}/order/getToDoOrders`, {
+	const res = await request<API.AsyncResult>(`${serverIP}/order/getToDoOrders`, {
 		method: 'GET',
 		params: { 
 			page: params.current, 

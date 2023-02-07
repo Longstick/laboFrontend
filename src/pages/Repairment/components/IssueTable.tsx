@@ -8,9 +8,8 @@ import CreateNew from './CreateNew';
 import ButtonGroup from 'antd/lib/button/button-group';
 import { useModel } from '@umijs/max';
 
-import { failureTypeLabel, issueInfoColumns, priorityList, statusList } from '../struct';
-
-import { getIssueList, getTodoList, getResourceID } from '@/services/api';
+import { issueInfoColumns } from '../struct';
+import { getIssueList } from '@/services/api';
 import ProcessDrawer from './ProcessDrawer';
 // import DetailCard from './DetailCard';
 
@@ -21,6 +20,11 @@ export type IssueTableProps = {
     activeKey: string;
 };
 
+// 描述列配置
+const columnsFilter: string[] = [
+
+]
+
 const IssueTable: React.FC<IssueTableProps> = (props) => {
     const [currentRow, setCurrentRow] = useState<API.IssueInfo>();
     const [selectedRowsState, setSelectedRows] = useState<API.IssueInfo[]>([]);
@@ -29,7 +33,7 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
     // const [detailModalOpen, setModalOpen] = useState<boolean>(false);
     const [columnsStateMap, setColumnsStateMap] = useState<Record<string, ColumnsState>>({
         object: { show: false },
-        issueDescription: { show: false },
+        description: { show: false },
     });
     const [metaData, setMetaData] = useState<API.IssueInfo[]>([])
     const { initialState } = useModel('@@initialState');
@@ -37,7 +41,7 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
 
     // 表格列配置
     const columns: ProColumns<API.IssueInfo>[] = [
-        ...issueInfoColumns([]),
+        ...issueInfoColumns(columnsFilter),
         {
             key: 'tableOptions',
             title: '操作',
@@ -96,13 +100,13 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
     ];
 
     // 关闭抽屉
-    const onCloseProcessDrawer = () => {setProcessDrawer(false)}
+    const onCloseProcessDrawer = () => { setProcessDrawer(false) }
 
     // 表格加载数据后回调，将数据存入state中，留给导出功能调用
-    const onLoad = (dataSource: API.IssueInfo[]) => {setMetaData(dataSource)}
+    const onLoad = (dataSource: API.IssueInfo[]) => { setMetaData(dataSource) }
 
     // 选择行时回调
-    const onSelectRowChange = (_: any, selectedRows: API.IssueInfo[]) => {setSelectedRows(selectedRows)}
+    const onSelectRowChange = (_: any, selectedRows: API.IssueInfo[]) => { setSelectedRows(selectedRows) }
 
     // const onCloseDetailModal = () => {
     //     setModalOpen(false);
@@ -119,11 +123,18 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
         const sheetData: any[] = []
         metaData.forEach((item: API.IssueInfo, index: number) => {
             const data = {}
-            outputHead.forEach((el: any, i: number) => {
-                if (el.title) {
-                    if (el.valueEnum) data[el.title] = el.valueEnum[metaData[index][el.dataIndex]].text
-                    else data[el.title] = metaData[index][el.dataIndex]
-                }
+            outputHead.forEach((el: ProColumns, i: number) => {
+                const { dataIndex, valueEnum, title }: { dataIndex?: any, valueEnum?: object, title?: any } = el
+
+                let value: any = undefined
+                // 如果是一个二级的字段
+                if (dataIndex instanceof Array) {
+                    value = metaData[index][dataIndex[0]][dataIndex[1]]
+                } else value = metaData[index][dataIndex]
+                // 如果有枚举需要转化
+                if (valueEnum) {
+                    data[title] = valueEnum[value].text
+                } else data[title] = value
             })
             sheetData.push(data)
         })
@@ -146,11 +157,11 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
             columns={columns}
             actionRef={actionRef}
             request={getIssueList}
-            params={{activeKey: props.activeKey}}
+            params={{ activeKey: props.activeKey }}
             onLoad={onLoad}
             // tableLayout="auto"
             rowKey="identifier"
-            defaultSize='large'
+            // defaultSize='large'
             scroll={{ x: 1600 }}
             search={{
                 defaultCollapsed: false,
@@ -169,7 +180,7 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                 title: <Space size={16}>
                     <CreateNew type="newButton" tableActionRef={actionRef} key="CreateNew" />
                     <ButtonGroup key='ButtonGroup'>
-                        <Button key="outputAll" onClick={() => {downloadAllIssue()}}>
+                        <Button key="outputAll" onClick={() => { downloadAllIssue() }}>
                             导出全部
                         </Button>
 

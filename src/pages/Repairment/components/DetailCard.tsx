@@ -3,7 +3,7 @@
 import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { ProCard, ProDescriptions } from '@ant-design/pro-components';
 import { Modal, Typography, Divider, Image, Space, Spin } from 'antd'
-import { issueDescColumns, issueInfoColumns } from '../struct';
+import { issueInfoColumns } from '../struct';
 import styles from '../index.less';
 
 const { Title, Text, Paragraph } = Typography
