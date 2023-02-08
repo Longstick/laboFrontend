@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { ProCard, ProColumns, StatisticCard, } from "@ant-design/pro-components";
+import { ProCard, ProColumns, ProSchema, StatisticCard, } from "@ant-design/pro-components";
 import type { ProDescriptionsItemProps } from "@ant-design/pro-components"
 import { FormattedMessage } from "@umijs/max"
 import { Typography, Statistic, Tag, Image, Space } from "antd";
@@ -35,18 +35,6 @@ export const statusList = {
     2: {
         text: '进行中',
         status: 'Default',
-    },
-    3: {
-        text: '待维修',
-        status: 'Default',
-    },
-    4: {
-        text: '待验收',
-        status: 'Default'
-    },
-    5: {
-        text: '已完成',
-        status: 'Success'
     }
 }
 
@@ -256,7 +244,7 @@ export const staticGroup = {
 }
 
 
-export const issueInfoColumns: (keywords: string[]) => ProColumns<API.IssueInfo>[] = (keywords) => {
+export const issueInfoColumns: (keywords: string[]) => ProSchema<API.IssueInfo>[] = (keywords) => {
     const columns: ProColumns<API.IssueInfo>[] = [
         {
             key: 'identifier',
@@ -271,14 +259,14 @@ export const issueInfoColumns: (keywords: string[]) => ProColumns<API.IssueInfo>
             title: '工单标题',
             dataIndex: 'title',
             ellipsis: true,
-            search: false,
-            width: 300,
+            hideInSearch: true,
+            // width: 300,
         },
         {
             key: 'description',
             title: '工单描述',
             dataIndex: 'description',
-            hideInTable: true,
+            hideInSearch: true,
         },
         {
             key: 'resource',
