@@ -97,16 +97,17 @@ export const getIssueList = async (
 	options?: { [key: string]: any }
 ) => {
 	const apiMap = {
-		'all': "searchOrder",
-		'to-do': "getToDoOrders",
-		'myCompleted': 'getOwnOrders',
-		'mySubmission': "getSelfCreateOrders",
+		'all': 1,
+		'to-do': 2,
+		'myCompleted': 3,
+		'mySubmission': 4,
 	}
-	const res = await request<API.AsyncResult>(`${serverIP}/order/${apiMap[params.activeKey!]}`, {
+	const res = await request<API.AsyncResult>(`${serverIP}/order/searchOrder`, {
 		method: 'GET',
 		params: { 
 			page: params.current, 
 			limit: params.pageSize,
+			order_type: apiMap[params.activeKey!],
 			...params
 		},
 		...(options || {}),	
