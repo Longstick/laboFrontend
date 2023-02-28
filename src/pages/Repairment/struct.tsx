@@ -266,17 +266,17 @@ export const issueInfoColumns: (keywords: string[]) => ProSchema<API.IssueInfo>[
             key: 'description',
             title: '工单描述',
             dataIndex: 'description',
+            ellipsis: true,
             hideInSearch: true,
         },
         {
-            key: 'resource',
+            key: 'resource_id',
             title: '工作对象',
-            dataIndex: ['resource', 'name'],
+            dataIndex: 'resource_id',
             ellipsis: true,
             // search: false,
             request: getResourceID,
             fieldProps: {
-
                 showSearch: true,
                 // showArrow: false,
                 debounceTime: 500,

@@ -153,7 +153,7 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
     }
 
     return (<>
-        <ProTable<API.IssueInfo, API.PageParams & { activeKey: string }>
+        <ProTable<API.IssueInfo, {activeKey: string}>
             columns={columns}
             actionRef={actionRef}
             request={getIssueList}
