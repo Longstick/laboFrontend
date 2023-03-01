@@ -374,7 +374,7 @@ export const issueInfoColumns: (keywords: string[]) => ProSchema<API.IssueInfo>[
             key: 'finish_date',
             title: '预期时限',
             dataIndex: 'finish_date',
-            valueType: 'dateTime',
+            valueType: 'dateTimeRange',
             sorter: (a, b) => {
                 return new Date(a.finish_date!).getTime() - new Date(b.finish_date!).getTime()
             },

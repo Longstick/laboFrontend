@@ -11,6 +11,7 @@ import { useModel } from '@umijs/max';
 import { issueInfoColumns } from '../struct';
 import { getIssueList } from '@/services/api';
 import ProcessDrawer from './ProcessDrawer';
+import moment from 'moment';
 // import DetailCard from './DetailCard';
 
 export type IssueTableProps = {
@@ -41,7 +42,6 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
 
     // 表格列配置
     const columns: ProColumns<API.IssueInfo>[] = [
-        ...issueInfoColumns(columnsFilter),
         {
             key: 'tableOptions',
             title: '操作',
@@ -97,6 +97,9 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
                     </>);
             },
         },
+        
+        // 筛选的列配置
+        ...issueInfoColumns(columnsFilter),
     ];
 
     // 关闭抽屉
@@ -140,7 +143,7 @@ const IssueTable: React.FC<IssueTableProps> = (props) => {
         })
         const OutputHead = outputHead.map((item) => item.title)
         const outputOptions = {
-            fileName: `导出${Date.now()}`,
+            fileName: `${moment().format('YYYY_MM_DD_hh_mm_ss')}`,
             datas: [{
                 sheetData: sheetData, // 数据
                 sheetName: 'sheet',
