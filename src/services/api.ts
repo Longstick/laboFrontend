@@ -104,13 +104,13 @@ export const getIssueList = async (
 	}
 	const res = await request<API.AsyncResult>(`${serverIP}/order/searchOrder`, {
 		method: 'GET',
-		params: { 
-			page: params.current, 
+		params: {
+			page: params.current,
 			limit: params.pageSize,
 			order_type: apiMap[params.activeKey!],
 			...params
 		},
-		...(options || {}),	
+		...(options || {}),
 	})
 	return {
 		data: res.data.orders,
@@ -135,8 +135,8 @@ export const getTodoList = async (
 ) => {
 	const res = await request<API.AsyncResult>(`${serverIP}/order/getToDoOrders`, {
 		method: 'GET',
-		params: { 
-			page: params.current, 
+		params: {
+			page: params.current,
 			limit: params.pageSize,
 			...params
 		},
@@ -373,17 +373,12 @@ export const setManageAuth = async (params: {
 	})
 }
 
-
-
-
-
-
-
-
-
-
-
-
+export const discardResource = async (identifier: string) => {
+	return request(`${serverIP}/resource/setResourceAbandonment`, {
+		method: 'POST',
+		data: { identifier: identifier },
+	})
+}
 
 
 //------------------------------------------------------------------------------

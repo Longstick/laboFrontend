@@ -1,9 +1,9 @@
 import { ActionType, ColumnsState, PageContainer, ProCard, ProColumns, ProDescriptions, ProDescriptionsItemProps, ProTable } from '@ant-design/pro-components';
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from '@umijs/max';
-import { Button, Modal, Space, Tag } from 'antd';
+import { Button, Modal, Popconfirm, Space, Tag } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-import { getAllResources, getResourceID } from '@/services/api';
+import { discardResource, getAllResources, getResourceID } from '@/services/api';
 import { ResourceInfoColumns, ResourceTypeEnum } from '../struct';
 
 // 描述列配置
@@ -48,8 +48,15 @@ const EquipmentManage: React.FC = () => {
                                 setCurrentRow(record)
                                 setModalOpen(true)
                             }}>详细</a>
-                            { record.presentSituation !== '废弃' && <a>废弃</a>}
-                            
+                            {record.presentSituation !== '废弃' &&
+                                <Popconfirm
+                                    title="确定要废除吗？设备废除后将无法复原！"
+                                    onConfirm={() => {
+                                        discardResource(record.identifier!)
+                                        actionRef.current?.reloadAndRest?.()
+                                    }}
+                                ><a>废弃</a></Popconfirm>}
+
                         </Space>
                 },
                 ...ResourceInfoColumns(columnsFilter)
