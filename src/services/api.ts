@@ -194,12 +194,25 @@ export const getResourceID = async (params: { keyWords: string | undefined }) =>
 	})
 }
 
-export const getAllResources = async (params?: { identifier?: string }, options?: { [key: string]: any }) =>
-	await request<API.AsyncResult[]>(`${serverIP}/resource/searchResource`, {
+export const searchResources = async (params: {
+	current?: number;
+	pageSize?: number;
+}, options?: { [key: string]: any }) => {
+	const res = await request<API.AsyncResult[]>(`${serverIP}/resource/searchResources`, {
 		method: 'GET',
-		params: { condition: params?.identifier },
+		params: {
+			page: params.current,
+			limit: params.pageSize,
+			...params
+		},
 		...(options || {}),
 	})
+	return {
+		data: res.data.resources,
+		success: true,
+		total: res.data.count,
+	}
+}
 
 
 export const submitOnProccess = async (currentStage: number, body: API.OrderNode, options?: { [key: string]: any }) => {

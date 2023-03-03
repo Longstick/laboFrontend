@@ -33,7 +33,7 @@ const EquipmentManage: React.FC = () => {
 
     return (
         <PageContainer>
-            <ProTable<API.ResourceInfo, API.PageParams & API.ResourceInfo>
+            <ProTable<API.ResourceInfo, API.ResourceInfo>
                 columns={[{
                     key: 'tableOptions',
                     title: '操作',
@@ -59,19 +59,21 @@ const EquipmentManage: React.FC = () => {
 
                         </Space>
                 },
+                // 筛选的列配置
                 ...ResourceInfoColumns(columnsFilter)
                 ]}
                 actionRef={actionRef}
-                request={getAllResources}
+                request={searchResources}
+                pagination={{
+                    defaultPageSize: 10,
+                    showSizeChanger: true,
+                }}
                 tableLayout="auto"
                 rowKey="identifier"
                 scroll={{ x: 1600 }}
                 search={{
                     defaultCollapsed: false,
                     labelWidth: 80
-                }}
-                pagination={{
-                    defaultPageSize: 10
                 }}
                 rowSelection={
                     rowSelect ?
