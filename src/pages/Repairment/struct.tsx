@@ -28,6 +28,10 @@ export const priorityList = {
 }
 
 export const statusList = {
+    0: {
+        text: '已终止',
+        status: 'Warning'
+    },
     1: {
         text: '已完成',
         status: 'Success',
@@ -266,17 +270,17 @@ export const issueInfoColumns: (keywords: string[]) => ProSchema<API.IssueInfo>[
             key: 'description',
             title: '工单描述',
             dataIndex: 'description',
+            ellipsis: true,
             hideInSearch: true,
         },
         {
-            key: 'resource',
+            key: 'resource_id',
             title: '工作对象',
-            dataIndex: ['resource', 'name'],
+            dataIndex: 'resource_id',
             ellipsis: true,
             // search: false,
             request: getResourceID,
             fieldProps: {
-
                 showSearch: true,
                 // showArrow: false,
                 debounceTime: 500,
@@ -353,10 +357,24 @@ export const issueInfoColumns: (keywords: string[]) => ProSchema<API.IssueInfo>[
             },
         },
         {
+            key: 'status',
+            title: '状态',
+            dataIndex: 'status',
+            valueType: 'select',
+            valueEnum: statusList,
+            width: 120,
+            fieldProps: {
+                dropdownMatchSelectWidth: false,
+            },
+            formItemProps: {
+                normalize: (value) => statusList[value]?.text
+            }
+        },
+        {
             key: 'finish_date',
             title: '预期时限',
             dataIndex: 'finish_date',
-            valueType: 'dateTime',
+            valueType: 'dateTimeRange',
             sorter: (a, b) => {
                 return new Date(a.finish_date!).getTime() - new Date(b.finish_date!).getTime()
             },
@@ -386,17 +404,6 @@ export const issueInfoColumns: (keywords: string[]) => ProSchema<API.IssueInfo>[
             defaultSortOrder: 'descend',
             // hideInTable: true
         },
-        {
-            key: 'status',
-            title: '状态',
-            dataIndex: 'status',
-            valueType: 'select',
-            valueEnum: statusList,
-            width: 120,
-            fieldProps: {
-                dropdownMatchSelectWidth: false,
-            }
-        }
     ]
     // 通过配置关键词过滤出需要的列项
     if (!keywords.length) return columns

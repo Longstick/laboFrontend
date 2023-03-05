@@ -16,15 +16,15 @@
   float: right;
   height: 48px;
   margin-left: auto;
-  overflow: hidden;
+  // overflow: hidden;
 
   .name {
-    width: 40px;
-    height: 48px;
-    overflow: hidden;
+    // width: 40px;
+    // height: 48px;
+    overflow: auto;
     line-height: 48px;
     white-space: nowrap;
-    text-overflow: ellipsis;
+    text-overflow:clip;
   }
   .action {
     display: flex;
@@ -51,14 +51,13 @@
   }
   .account {
     .avatar {
-      margin-right: 6px;
+      margin-right: 10px;
       background: @primary-color;
       vertical-align: top;
       // background: rgba(255, 255, 255, 0.85);
     }
     .name {
       font-weight: bolder;
-      width: 5vw;
       // font-size: 16px;
     }
   }

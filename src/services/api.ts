@@ -97,19 +97,20 @@ export const getIssueList = async (
 	options?: { [key: string]: any }
 ) => {
 	const apiMap = {
-		'all': "searchOrder",
-		'to-do': "getToDoOrders",
-		'myCompleted': 'getOwnOrders',
-		'mySubmission': "getSelfCreateOrders",
+		'all': 1,
+		'to-do': 2,
+		'myCompleted': 3,
+		'mySubmission': 4,
 	}
-	const res = await request<API.AsyncResult>(`${serverIP}/order/${apiMap[params.activeKey!]}`, {
+	const res = await request<API.AsyncResult>(`${serverIP}/order/searchOrder`, {
 		method: 'GET',
-		params: { 
-			page: params.current, 
+		params: {
+			page: params.current,
 			limit: params.pageSize,
+			order_type: apiMap[params.activeKey!],
 			...params
 		},
-		...(options || {}),	
+		...(options || {}),
 	})
 	return {
 		data: res.data.orders,
@@ -134,8 +135,8 @@ export const getTodoList = async (
 ) => {
 	const res = await request<API.AsyncResult>(`${serverIP}/order/getToDoOrders`, {
 		method: 'GET',
-		params: { 
-			page: params.current, 
+		params: {
+			page: params.current,
 			limit: params.pageSize,
 			...params
 		},
@@ -193,12 +194,25 @@ export const getResourceID = async (params: { keyWords: string | undefined }) =>
 	})
 }
 
-export const getAllResources = async (params?: { identifier?: string }, options?: { [key: string]: any }) =>
-	await request<API.AsyncResult[]>(`${serverIP}/resource/searchResource`, {
+export const searchResources = async (params: {
+	current?: number;
+	pageSize?: number;
+}, options?: { [key: string]: any }) => {
+	const res = await request<API.AsyncResult>(`${serverIP}/resource/searchResources`, {
 		method: 'GET',
-		params: { condition: params?.identifier },
+		params: {
+			page: params.current,
+			limit: params.pageSize,
+			...params
+		},
 		...(options || {}),
 	})
+	return {
+		data: res.data.resources,
+		success: true,
+		total: res.data.count,
+	}
+}
 
 
 export const submitOnProccess = async (currentStage: number, body: API.OrderNode, options?: { [key: string]: any }) => {
@@ -372,17 +386,12 @@ export const setManageAuth = async (params: {
 	})
 }
 
-
-
-
-
-
-
-
-
-
-
-
+export const discardResource = async (identifier: string) => {
+	return request(`${serverIP}/resource/setResourceAbandonment`, {
+		method: 'POST',
+		data: { identifier: identifier },
+	})
+}
 
 
 //------------------------------------------------------------------------------

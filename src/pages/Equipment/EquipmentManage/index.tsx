@@ -1,10 +1,12 @@
 import { ActionType, ColumnsState, PageContainer, ProCard, ProColumns, ProDescriptions, ProDescriptionsItemProps, ProTable } from '@ant-design/pro-components';
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from '@umijs/max';
-import { Button, Modal, Space, Tag } from 'antd';
+import { Button, Modal, Popconfirm, Space, Tag, Upload } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-import { getAllResources, getResourceID } from '@/services/api';
+import { discardResource, getResourceID, searchResources } from '@/services/api';
 import { ResourceInfoColumns, ResourceTypeEnum } from '../struct';
+
+const { Dragger } = Upload
 
 // 描述列配置
 const columnsFilter: string[] = [
@@ -33,7 +35,7 @@ const EquipmentManage: React.FC = () => {
 
     return (
         <PageContainer>
-            <ProTable<API.ResourceInfo, API.PageParams & API.ResourceInfo>
+            <ProTable<API.ResourceInfo, API.ResourceInfo>
                 columns={[{
                     key: 'tableOptions',
                     title: '操作',
@@ -48,23 +50,32 @@ const EquipmentManage: React.FC = () => {
                                 setCurrentRow(record)
                                 setModalOpen(true)
                             }}>详细</a>
-                            { record.presentSituation !== '废弃' && <a>废弃</a>}
-                            
+                            {record.presentSituation !== '废弃' &&
+                                <Popconfirm
+                                    title="确定要废除吗？设备废除后将无法复原！"
+                                    onConfirm={() => {
+                                        discardResource(record.identifier!)
+                                        actionRef.current?.reloadAndRest?.()
+                                    }}
+                                ><a>废弃</a></Popconfirm>}
+
                         </Space>
                 },
+                // 筛选的列配置
                 ...ResourceInfoColumns(columnsFilter)
                 ]}
                 actionRef={actionRef}
-                request={getAllResources}
+                request={searchResources}
+                pagination={{
+                    defaultPageSize: 10,
+                    showSizeChanger: true,
+                }}
                 tableLayout="auto"
                 rowKey="identifier"
                 scroll={{ x: 1600 }}
                 search={{
                     defaultCollapsed: false,
                     labelWidth: 80
-                }}
-                pagination={{
-                    defaultPageSize: 10
                 }}
                 rowSelection={
                     rowSelect ?
@@ -118,7 +129,7 @@ const EquipmentManage: React.FC = () => {
                 open={detailModalOpen}
                 onCancel={() => { setModalOpen(false) }}
                 footer={false}
-                width='50%'
+                width={1000}
             >
                 <ProDescriptions
                     bordered
@@ -129,6 +140,10 @@ const EquipmentManage: React.FC = () => {
                         fontWeight: 'bolder',
                     }}
                 />
+            </Modal>
+
+            <Modal>
+                <Upload></Upload>
             </Modal>
 
         </PageContainer >

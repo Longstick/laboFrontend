@@ -51,9 +51,9 @@ const Repairment: React.FC = () => {
         },
         {
             key: 'myCompleted',
-            title: '已流转工单',
+            title: '我参与的',
             tab: <div className={styles.TabsTitle}>
-                已流转工单{renderBadge(219, activeKey === 'myCompleted')}
+                我参与的{renderBadge(219, activeKey === 'myCompleted')}
             </div>,
             value: 213,
         },
