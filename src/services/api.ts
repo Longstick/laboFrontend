@@ -198,7 +198,7 @@ export const searchResources = async (params: {
 	current?: number;
 	pageSize?: number;
 }, options?: { [key: string]: any }) => {
-	const res = await request<API.AsyncResult[]>(`${serverIP}/resource/searchResources`, {
+	const res = await request<API.AsyncResult>(`${serverIP}/resource/searchResources`, {
 		method: 'GET',
 		params: {
 			page: params.current,

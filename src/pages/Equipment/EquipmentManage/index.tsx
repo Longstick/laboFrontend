@@ -1,10 +1,12 @@
 import { ActionType, ColumnsState, PageContainer, ProCard, ProColumns, ProDescriptions, ProDescriptionsItemProps, ProTable } from '@ant-design/pro-components';
 import React, { useEffect, useRef, useState } from 'react';
 import { useModel } from '@umijs/max';
-import { Button, Modal, Popconfirm, Space, Tag } from 'antd';
+import { Button, Modal, Popconfirm, Space, Tag, Upload } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-import { discardResource, getAllResources, getResourceID } from '@/services/api';
+import { discardResource, getResourceID, searchResources } from '@/services/api';
 import { ResourceInfoColumns, ResourceTypeEnum } from '../struct';
+
+const { Dragger } = Upload
 
 // 描述列配置
 const columnsFilter: string[] = [
@@ -127,7 +129,7 @@ const EquipmentManage: React.FC = () => {
                 open={detailModalOpen}
                 onCancel={() => { setModalOpen(false) }}
                 footer={false}
-                width='50%'
+                width={1000}
             >
                 <ProDescriptions
                     bordered
@@ -138,6 +140,10 @@ const EquipmentManage: React.FC = () => {
                         fontWeight: 'bolder',
                     }}
                 />
+            </Modal>
+
+            <Modal>
+                <Upload></Upload>
             </Modal>
 
         </PageContainer >
