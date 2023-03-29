@@ -73,80 +73,96 @@ export default [
         component: './HomePage'
     },
     {
-        name: 'Repairment',
+        name: '维修工单管理',
         icon: 'tool',
         path: '/repair',
         component: './Repairment',
     },
+    // {
+    //     name: 'Equipment',
+    //     icon: 'database',
+    //     path: '/equipment',
+    //     access: 'canEquip',
+    //     routes: [
+    //         {
+    //             name: 'Equipment Management',
+    //             path: '/equipment/manage',
+    //             component: './Equipment/EquipmentManage',
+    //         },
+    //         {
+    //             name: '废弃管理',
+    //             path: '/equipment/discard',
+    //             component: './Equipment/DiscardManage',
+    //         },
+    //         {
+    //             path: '/equipment',
+    //             redirect: '/equipment/manage',
+    //         }
+    //     ]
+    // },
     {
-        name: 'Equipment',
-        icon: 'database',
+        name: '设备信息列表',
         path: '/equipment',
+        icon: 'database',
         access: 'canEquip',
-        routes: [
-            {
-                name: 'Equipment Management',
-                path: '/equipment/manage',
-                component: './Equipment/EquipmentManage',
-            },
-            {
-                name: '废弃管理',
-                path: '/equipment/discard',
-                component: './Equipment/DiscardManage',
-            },
-            {
-                path: '/equipment',
-                redirect: '/equipment/manage',
-            }
-        ]
+        component: './Equipment/EquipmentManage'
     },
+    // {
+    //     name: 'System',
+    //     icon: 'team',
+    //     path: '/system',
+    //     access: 'canSystem',
+    //     routes: [
+    //         // {
+    //         //     name: 'Character Management',
+    //         //     path: '/system/character',
+    //         //     icon: 'team',
+    //         //     component: './System/Character'
+    //         // },
+    //         {
+    //             name: 'User Management',
+    //             path: '/system/user',
+    //             icon: 'user',
+    //             component: './System/UserManage'
+    //         },
+    //         {
+    //             path: '/system',
+    //             redirect: '/system/user',
+    //         }
+    //     ]
+    // },
     {
-        name: 'System',
+
+        name: '用户权限管理',
+        path: '/system/user',
         icon: 'team',
-        path: '/system',
-        access: 'canSystem',
-        routes: [
-            // {
-            //     name: 'Character Management',
-            //     path: '/system/character',
-            //     icon: 'team',
-            //     component: './System/Character'
-            // },
-            {
-                name: 'User Management',
-                path: '/system/user',
-                icon: 'user',
-                component: './System/UserManage'
-            },
-            {
-                path: '/system',
-                redirect: '/system/user',
-            }
-        ]
+        component: './System/UserManage'
+
     },
     {
         name: 'Statistics',
         path: '/statistics',
         icon: 'pieChart',
         access: 'canAdmin',
-        routes: [
-            {
-                name: 'Real-Time Statistics',
-                path: '/statistics/realtime',
-                icon: 'lineChart',
-                component: './Statistics/RealTimeStatistic'
-            },
-            {
-                name: 'Maintenance Data',
-                path: '/statistics/maintenancedata',
-                icon: 'sliders',
-                component: './Statistics/MaintenanceData'
-            },
-        ]
+        component: './Statistics/RealTimeStatistic',
+        // routes: [
+        //     {
+        //         name: 'Real-Time Statistics',
+        //         path: '/statistics/realtime',
+        //         icon: 'lineChart',
+        //         component: './Statistics/RealTimeStatistic'
+        //     },
+        //     {
+        //         name: 'Maintenance Data',
+        //         path: '/statistics/maintenancedata',
+        //         icon: 'sliders',
+        //         component: './Statistics/MaintenanceData'
+        //     },
+        // ]
     },
     {
         path: '/',
-        redirect: '/home',
+        redirect: '/repair',
     },
     {
         path: '*',
